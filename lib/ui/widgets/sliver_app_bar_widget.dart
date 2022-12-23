@@ -5,7 +5,14 @@ import 'package:wallrio/ui/theme/theme_data.dart';
 import 'package:wallrio/ui/widgets/search_bar_widget.dart';
 
 class SliverAppBarWidget extends StatelessWidget {
-  const SliverAppBarWidget({super.key});
+  final bool showLogo;
+  final bool showSearchBar;
+  final String text;
+  const SliverAppBarWidget(
+      {super.key,
+      required this.showLogo,
+      required this.text,
+      required this.showSearchBar});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +20,8 @@ class SliverAppBarWidget extends StatelessWidget {
       snap: false,
       pinned: false,
       floating: true,
-      toolbarHeight: MediaQuery.of(context).size.height * 0.14,
+      toolbarHeight:
+          MediaQuery.of(context).size.height * (showLogo ? 0.14 : 0.10),
       title: Padding(
         padding: const EdgeInsets.symmetric(vertical: 4),
         child: Column(
@@ -24,21 +32,22 @@ class SliverAppBarWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     GradientText(
-                      'Wallpapers',
+                      text,
                       style: Theme.of(context).textTheme.headline1,
                       colors: const [Color(0xFFFF4949), Color(0xFF5344FF)],
                     ),
                     const SizedBox(height: 4),
-                    Row(
-                      children: [
-                        const SizedBox(width: 4),
-                        Text("by",
-                            style: Theme.of(context).textTheme.bodyText1),
-                        const SizedBox(width: 4),
-                        SvgPicture.asset("assets/team_logo.svg",
-                            color: blackColor, height: 10)
-                      ],
-                    )
+                    if (showLogo)
+                      Row(
+                        children: [
+                          const SizedBox(width: 4),
+                          Text("by",
+                              style: Theme.of(context).textTheme.bodyText1),
+                          const SizedBox(width: 4),
+                          SvgPicture.asset("assets/team_logo.svg",
+                              color: blackColor, height: 10)
+                        ],
+                      )
                   ],
                 ),
               ],
@@ -46,8 +55,13 @@ class SliverAppBarWidget extends StatelessWidget {
           ],
         ),
       ),
-      bottom: const PreferredSize(
-          preferredSize: Size.fromHeight(40), child: SearchBarWidget()),
+      bottom: showSearchBar
+          ? const PreferredSize(
+              preferredSize: Size.fromHeight(40), child: SearchBarWidget())
+          : const PreferredSize(
+              preferredSize: Size.fromHeight(0),
+              child: SizedBox(),
+            ),
     );
   }
 }

@@ -4,6 +4,8 @@ import 'package:wallrio/services/api_services.dart';
 
 class WallRio extends ChangeNotifier {
   List<Walls> wallList = [];
+  Map<String, List<Walls?>>? categories = <String, List<Walls?>>{};
+
   String error = "";
   bool isLoading = false;
 
@@ -26,10 +28,25 @@ class WallRio extends ChangeNotifier {
     getListFromAPI();
   }
 
-  getListFromAPI() async {
+  void getListFromAPI() async {
     setIsLoading = true;
     WallRioModel model = await ApiServices.getData();
-    model.error.isEmpty ? setWallList = model.walls! : setError = model.error;
+    if (model.error.isEmpty) {
+      setWallList = model.walls!;
+      _buildCategoryWalls();
+    } else {
+      setError = model.error;
+    }
     setIsLoading = false;
+  }
+
+  void _buildCategoryWalls() {
+    for (Walls? wall in wallList) {
+      if (!categories!.containsKey(wall!.category!)) {
+        categories![wall.category!] = [];
+      }
+      categories![wall.category!]!.add(wall);
+    }
+    notifyListeners();
   }
 }
