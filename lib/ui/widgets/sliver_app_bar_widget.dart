@@ -4,15 +4,19 @@ import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:wallrio/ui/theme/theme_data.dart';
 import 'package:wallrio/ui/widgets/search_bar_widget.dart';
 
+import 'back_btn_widget.dart';
+
 class SliverAppBarWidget extends StatelessWidget {
   final bool showLogo;
   final bool showSearchBar;
   final String text;
+  final bool showBackBtn;
   const SliverAppBarWidget(
       {super.key,
       required this.showLogo,
       required this.text,
-      required this.showSearchBar});
+      required this.showSearchBar,
+      this.showBackBtn = false});
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +24,11 @@ class SliverAppBarWidget extends StatelessWidget {
       snap: false,
       pinned: false,
       floating: true,
+      automaticallyImplyLeading: showBackBtn,
+      leadingWidth: showBackBtn ? 60 : 0,
+      leading: showBackBtn
+          ? const BackBtnWidget(color: Colors.black)
+          : const SizedBox(),
       toolbarHeight:
           MediaQuery.of(context).size.height * (showLogo ? 0.14 : 0.10),
       title: Padding(

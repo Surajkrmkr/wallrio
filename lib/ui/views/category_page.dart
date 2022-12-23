@@ -11,6 +11,7 @@ import '../widgets/shimmer_widget.dart';
 import '../widgets/sliver_app_bar_widget.dart';
 import 'package:wallrio/model/wall_rio_model.dart';
 
+import 'grid_page.dart';
 import 'image_view_page.dart';
 
 class CategoryPage extends StatelessWidget {
@@ -64,7 +65,8 @@ class CategoryPage extends StatelessWidget {
                   final categoryWalls =
                       provider.categories!.values.elementAt(index);
                   return Column(children: [
-                    _buildCategoryHeaderUI(categoryName, context),
+                    _buildCategoryHeaderUI(
+                        categoryName, categoryWalls, context),
                     _buildListViewUI(categoryWalls),
                     if (index == provider.categories!.length - 1)
                       const SizedBox(height: 20)
@@ -137,11 +139,18 @@ class CategoryPage extends StatelessWidget {
     );
   }
 
-  ListTile _buildCategoryHeaderUI(String categoryName, BuildContext context) {
+  ListTile _buildCategoryHeaderUI(
+      String categoryName, List<Walls?> walls, BuildContext context) {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 25),
       title: Text(categoryName, style: Theme.of(context).textTheme.bodyMedium),
-      onTap: () {},
+      onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => GridPage(
+                    categoryName: categoryName,
+                    walls: walls,
+                  ))),
       trailing: const Icon(
         Icons.navigate_next_rounded,
         color: blackColor,

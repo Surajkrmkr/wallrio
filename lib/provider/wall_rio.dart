@@ -30,6 +30,7 @@ class WallRio extends ChangeNotifier {
 
   void getListFromAPI() async {
     setIsLoading = true;
+    setWallList = [];
     WallRioModel model = await ApiServices.getData();
     if (model.error.isEmpty) {
       setWallList = model.walls!;
@@ -37,10 +38,12 @@ class WallRio extends ChangeNotifier {
     } else {
       setError = model.error;
     }
+    await Future.delayed(const Duration(seconds: 2));
     setIsLoading = false;
   }
 
   void _buildCategoryWalls() {
+    categories!.clear();
     for (Walls? wall in wallList) {
       if (!categories!.containsKey(wall!.category!)) {
         categories![wall.category!] = [];

@@ -18,7 +18,10 @@ class ImageViewPage extends StatelessWidget {
       SizedBox(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          child: CNImage(imageUrl: wallModel.url)),
+          child: CNImage(
+            imageUrl: wallModel.url,
+            isOriginalImg: true,
+          )),
       const Padding(
           padding: EdgeInsets.only(left: 8.0),
           child: BackBtnWidget(color: Colors.white)),
