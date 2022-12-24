@@ -4,13 +4,16 @@ import 'package:wallrio/provider/wall_rio.dart';
 import 'package:wallrio/ui/theme/theme_data.dart';
 import 'package:wallrio/ui/widgets/image_bottom_sheet.dart';
 import 'package:wallrio/ui/widgets/image_widget.dart';
-import 'package:wallrio/ui/widgets/refresh_indicator_widget.dart';
 
+import '../../model/wall_rio_model.dart';
 import '../views/image_view_page.dart';
 import 'shimmer_widget.dart';
 
 class TrendingWallGridWidget extends StatelessWidget {
-  const TrendingWallGridWidget({super.key});
+  final bool isShuffled;
+  final bool isActionGrid;
+  const TrendingWallGridWidget(
+      {super.key, this.isShuffled = false, this.isActionGrid = false});
 
   void _onLongPressHandler(context, model) {
     showModalBottomSheet(
@@ -49,37 +52,48 @@ class TrendingWallGridWidget extends StatelessWidget {
               ),
             )
           : provider.error.isEmpty
-              ? SliverPadding(
-                  padding:
-                      const EdgeInsets.only(left: 15, right: 15, bottom: 15),
-                  sliver: SliverGrid(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              mainAxisSpacing: 15,
-                              crossAxisSpacing: 15,
-                              childAspectRatio: 0.7),
-                      delegate: SliverChildBuilderDelegate(
-                          childCount: provider.wallList.length,
-                          (context, index) => ClipRRect(
-                                borderRadius: BorderRadius.circular(25),
-                                child: Stack(fit: StackFit.expand, children: [
-                                  CNImage(
-                                      imageUrl:
-                                          provider.wallList[index].thumbnail),
-                                  Material(
-                                    color: Colors.transparent,
-                                    child: InkWell(
-                                      onTap: () => _onTapHandler(
-                                          context, provider.wallList[index]),
-                                      onLongPress: () => _onLongPressHandler(
-                                          context, provider.wallList[index]),
-                                      splashColor: blackColor.withOpacity(0.3),
-                                    ),
+              ? isActionGrid && provider.actionWallList.isEmpty
+                  ? SliverFillRemaining(
+                      child: Center(
+                          child: Text(
+                      "No Wallpapers Found",
+                      style: TextStyle(color: blackColor.withOpacity(0.5)),
+                    )))
+                  : SliverPadding(
+                      padding: const EdgeInsets.only(
+                          left: 20, right: 20, bottom: 20),
+                      sliver: SliverGrid(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  mainAxisSpacing: 15,
+                                  crossAxisSpacing: 15,
+                                  childAspectRatio: 0.7),
+                          delegate: SliverChildBuilderDelegate(
+                              childCount: isActionGrid
+                                  ? provider.actionWallList.length
+                                  : provider.originalWallList.length,
+                              (context, index) {
+                            final Walls wall = isActionGrid
+                                ? provider.actionWallList[index]
+                                : provider.originalWallList[index];
+                            return ClipRRect(
+                              borderRadius: BorderRadius.circular(25),
+                              child: Stack(fit: StackFit.expand, children: [
+                                CNImage(imageUrl: wall.thumbnail),
+                                Material(
+                                  color: Colors.transparent,
+                                  child: InkWell(
+                                    onTap: () => _onTapHandler(context, wall),
+                                    onLongPress: () =>
+                                        _onLongPressHandler(context, wall),
+                                    splashColor: blackColor.withOpacity(0.3),
                                   ),
-                                ]),
-                              ))),
-                )
+                                ),
+                              ]),
+                            );
+                          })),
+                    )
               : SliverFillRemaining(child: Center(child: Text(provider.error)));
     });
   }

@@ -15,6 +15,11 @@ class WallRioThemeData {
         selectedItemColor: blackColor,
         elevation: 0,
       ),
+      chipTheme: ChipThemeData(
+          backgroundColor: blackColor.withOpacity(0.05),
+          selectedColor: blackColor,
+          surfaceTintColor: whiteColor,
+          showCheckmark: false),
       textTheme: const TextTheme(
           headline1: TextStyle(
               fontSize: 25,

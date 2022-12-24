@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:wallrio/provider/navigation.dart';
 import 'package:wallrio/provider/wall_rio.dart';
 import 'package:wallrio/ui/theme/theme_data.dart';
-import 'package:wallrio/ui/views/home_page.dart';
 import 'package:wallrio/ui/views/navigation_page.dart';
 
 void main() {
@@ -44,6 +43,7 @@ class MyApp extends StatelessWidget {
           theme: WallRioThemeData.getLightThemeData(),
           darkTheme: WallRioThemeData.getDarkThemeData(),
           themeMode: ThemeMode.light,
+          debugShowCheckedModeBanner: false,
           home: const NavigationPage()),
     );
   }

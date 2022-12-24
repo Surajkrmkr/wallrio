@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:wallrio/model/wall_rio_model.dart';
 import 'package:wallrio/services/api_services.dart';
 
+import '../model/tag_model.dart';
+
 class WallRio extends ChangeNotifier {
-  List<Walls> wallList = [];
+  List<Walls> originalWallList = [];
+  List<Walls> actionWallList = [];
   Map<String, List<Walls?>>? categories = <String, List<Walls?>>{};
+  Tag tag = Tag(selectedTags: [], unSelectedTags: []);
 
   String error = "";
   bool isLoading = false;
@@ -15,12 +19,25 @@ class WallRio extends ChangeNotifier {
   }
 
   set setWallList(List<Walls> list) {
-    wallList = list;
+    originalWallList = list;
+    notifyListeners();
+  }
+
+  set setActionWallList(List<Walls> list) {
+    actionWallList = list;
     notifyListeners();
   }
 
   set setError(String msg) {
     error = msg;
+    notifyListeners();
+  }
+
+  void clearSelectedTags() {
+    for (String eachTag in tag.selectedTags) {
+      tag.unSelectedTags.insert(0, eachTag);
+    }
+    tag.selectedTags.clear();
     notifyListeners();
   }
 
@@ -31,10 +48,12 @@ class WallRio extends ChangeNotifier {
   void getListFromAPI() async {
     setIsLoading = true;
     setWallList = [];
+    setActionWallList = [];
     WallRioModel model = await ApiServices.getData();
     if (model.error.isEmpty) {
       setWallList = model.walls!;
-      _buildCategoryWalls();
+      setActionWallList = model.walls!;
+      _buildCategoryAndTags();
     } else {
       setError = model.error;
     }
@@ -42,14 +61,69 @@ class WallRio extends ChangeNotifier {
     setIsLoading = false;
   }
 
-  void _buildCategoryWalls() {
+  void _buildCategoryAndTags() {
     categories!.clear();
-    for (Walls? wall in wallList) {
+    tag.selectedTags.clear();
+    tag.unSelectedTags.clear();
+    for (Walls? wall in originalWallList) {
       if (!categories!.containsKey(wall!.category!)) {
-        categories![wall.category!] = [];
+        categories![wall.category!] =
+            []; // Initiating a Empty list of a category
       }
-      categories![wall.category!]!.add(wall);
+      for (String? eachTag in wall.tags!) {
+        if (!tag.unSelectedTags.contains(eachTag)) {
+          tag.unSelectedTags.add(eachTag!); // Adding a tag to TagList
+
+        }
+      }
+      categories![wall.category!]!.add(wall); // Adding a Wall to CategoryList
     }
     notifyListeners();
+  }
+
+  bool getTagIsSelected(String tagName) {
+    return tag.unSelectedTags.contains(tagName) ? false : true;
+  }
+
+  void onSelectedTag(String selectedTag) {
+    if (tag.unSelectedTags.contains(selectedTag)) {
+      tag.unSelectedTags.remove(selectedTag);
+      tag.selectedTags.add(selectedTag);
+    } else {
+      tag.selectedTags.remove(selectedTag);
+      tag.unSelectedTags.insert(0, selectedTag);
+    }
+
+    setActionWallList = getFilteredWallList();
+    notifyListeners();
+  }
+
+  List<Walls> getFilteredWallList() {
+    List<Walls> wall = [];
+    if (tag.selectedTags.isEmpty) {
+      return originalWallList;
+    }
+    for (String tag in tag.selectedTags) {
+      final eachTagwall =
+          originalWallList.where((wall) => wall.tags!.contains(tag)).toList();
+      wall.insertAll(0, eachTagwall);
+    }
+    return wall;
+  }
+
+  void onSearchTap(String query) {
+    if (query.isNotEmpty) {
+      setActionWallList = originalWallList
+          .where(
+              (wall) => wall.name!.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    } else {
+      setActionWallList = originalWallList;
+    }
+  }
+
+  void resetToDefault() {
+    setActionWallList = originalWallList;
+    clearSelectedTags();
   }
 }

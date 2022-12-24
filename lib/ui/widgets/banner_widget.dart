@@ -8,7 +8,7 @@ class BannerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 120,
-      margin: const EdgeInsets.symmetric(horizontal: 15),
+      margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
           color: blackColor.withOpacity(0.05),
           image: const DecorationImage(
