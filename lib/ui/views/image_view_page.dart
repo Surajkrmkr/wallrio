@@ -1,18 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:shimmer/shimmer.dart';
-import 'package:wallrio/ui/theme/theme_data.dart';
+import 'package:provider/provider.dart';
 
 import '../../model/wall_rio_model.dart';
+import '../../provider/wall_details.dart';
 import '../widgets/back_btn_widget.dart';
 import '../widgets/image_widget.dart';
 import '../widgets/primary_btn_widget.dart';
+import '../widgets/shimmer_widget.dart';
 
 class ImageViewPage extends StatelessWidget {
   final Walls wallModel;
-  const ImageViewPage({super.key, required this.wallModel});
+  ImageViewPage({super.key, required this.wallModel});
+
+  bool _isInitialized = false;
 
   @override
   Widget build(BuildContext context) {
+    if (!_isInitialized) {
+      Future.delayed(Duration.zero, () {
+        Provider.of<WallDetails>(context, listen: false)
+            .getColorPalette(wallModel.thumbnail!);
+        Provider.of<WallDetails>(context, listen: false)
+            .getWallDetails(wallModel.url!);
+      });
+      _isInitialized = false;
+    }
     return Scaffold(
         body: Stack(children: [
       SizedBox(
@@ -65,31 +77,66 @@ class ImageViewPage extends StatelessWidget {
         Text("Tap swatches to copy",
             style: Theme.of(context).textTheme.bodyText1),
         const SizedBox(height: 10),
-        Shimmer.fromColors(
-            baseColor: blackColor.withOpacity(0.2),
-            highlightColor: blackColor.withOpacity(0.7),
-            child: Container(
-              height: 60,
-              decoration: BoxDecoration(
-                  color: blackColor.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(15)),
-            ))
+        Consumer<WallDetails>(
+            builder: (context, provider, _) => provider.isColorPaletteLoading
+                ? const ShimmerWidget(height: 60, width: double.infinity)
+                : SizedBox(
+                    height: 60,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: provider.colorSwatch
+                          .map((color) => Padding(
+                                padding: const EdgeInsets.only(right: 10.0),
+                                child: InkWell(
+                                    onTap: () {},
+                                    borderRadius: BorderRadius.circular(15),
+                                    child: Container(
+                                      height: 60,
+                                      width: 60,
+                                      decoration: BoxDecoration(
+                                          color: color,
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                    )),
+                              ))
+                          .toList(),
+                    ),
+                  ))
       ],
     );
   }
 
-  Column _buildDetailsUI(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text("Details", style: Theme.of(context).textTheme.headline2),
-        const SizedBox(height: 10),
-        Text("Category : ${wallModel.category!}",
-            style: Theme.of(context).textTheme.bodyText1),
-        Text("Size : ", style: Theme.of(context).textTheme.bodyText1),
-        Text("Dimension : ", style: Theme.of(context).textTheme.bodyText1),
-      ],
-    );
+  Widget _buildDetailsUI(BuildContext context) {
+    return Consumer<WallDetails>(builder: (context, provider, _) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("Details", style: Theme.of(context).textTheme.headline2),
+          const SizedBox(height: 10),
+          Text("Category : ${wallModel.category}",
+              style: Theme.of(context).textTheme.bodyText1),
+          Row(
+            children: [
+              Text("Size : ", style: Theme.of(context).textTheme.bodyText1),
+              provider.isImageDetailsLoading
+                  ? const ShimmerWidget(height: 13, width: 70)
+                  : Text(provider.size,
+                      style: Theme.of(context).textTheme.bodyText1),
+            ],
+          ),
+          Row(
+            children: [
+              Text("Dimension : ",
+                  style: Theme.of(context).textTheme.bodyText1),
+              provider.isImageDetailsLoading
+                  ? const ShimmerWidget(height: 13, width: 70)
+                  : Text("${provider.width} * ${provider.height}",
+                      style: Theme.of(context).textTheme.bodyText1),
+            ],
+          ),
+        ],
+      );
+    });
   }
 
   Row _buildActionBtnUI() {

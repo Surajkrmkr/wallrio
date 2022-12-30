@@ -15,7 +15,7 @@ class CNImage extends StatelessWidget {
       // errorWidget: (context, url, error) => errorWidget(),
       fit: BoxFit.cover,
       memCacheHeight:
-          isOriginalImg ? MediaQuery.of(context).size.height.toInt() : 400,
+          isOriginalImg ? 1080 : 800,
       imageUrl: imageUrl!,
       placeholder: (context, url) {
         return const ShimmerWidget(
