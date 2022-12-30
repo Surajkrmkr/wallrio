@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:wallrio/provider/wall_action.dart';
 import 'package:wallrio/provider/wall_details.dart';
 import 'package:wallrio/provider/navigation.dart';
 import 'package:wallrio/provider/wall_rio.dart';
@@ -41,6 +42,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: ((context) => WallDetails()),
         ),
+        ChangeNotifierProvider(
+          create: ((context) => WallActionProvider()),
+        )
       ],
       child: MaterialApp(
           title: 'Wall Rio',

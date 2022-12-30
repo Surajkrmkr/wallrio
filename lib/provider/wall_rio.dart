@@ -7,6 +7,8 @@ import '../model/tag_model.dart';
 class WallRio extends ChangeNotifier {
   List<Walls> originalWallList = [];
   List<Walls> actionWallList = [];
+  List<Banners> bannerList = [];
+
   Map<String, List<Walls?>>? categories = <String, List<Walls?>>{};
   Tag tag = Tag(selectedTags: [], unSelectedTags: []);
 
@@ -20,6 +22,11 @@ class WallRio extends ChangeNotifier {
 
   set setWallList(List<Walls> list) {
     originalWallList = list;
+    notifyListeners();
+  }
+
+  set setBannerList(List<Banners> list) {
+    bannerList = list;
     notifyListeners();
   }
 
@@ -49,10 +56,12 @@ class WallRio extends ChangeNotifier {
     setIsLoading = true;
     setWallList = [];
     setActionWallList = [];
+    setBannerList = [];
     WallRioModel model = await ApiServices.getData();
     if (model.error.isEmpty) {
       setWallList = model.walls!;
       setActionWallList = model.walls!;
+      setBannerList = model.banners!;
       _buildCategoryAndTags();
     } else {
       setError = model.error;

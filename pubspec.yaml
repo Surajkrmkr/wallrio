@@ -43,6 +43,9 @@ dependencies:
   palette_generator: ^0.3.3+2
   flutter_cache_manager: ^3.3.0
   async_wallpaper: ^2.0.1
+  android_path_provider: ^0.3.0
+  fluttertoast: ^8.1.2
+  url_launcher: ^6.1.7
 
 dev_dependencies:
   flutter_test:

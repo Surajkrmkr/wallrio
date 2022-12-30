@@ -16,6 +16,7 @@ class GridPage extends StatelessWidget {
   void _onLongPressHandler(context, model) {
     showModalBottomSheet(
         context: context,
+        isScrollControlled: true,
         backgroundColor: whiteColor,
         enableDrag: true,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
@@ -61,17 +62,22 @@ class GridPage extends StatelessWidget {
                 childAspectRatio: 0.7),
             delegate: SliverChildBuilderDelegate(
                 childCount: walls.length,
-                (context, index) => ClipRRect(
-                    borderRadius: BorderRadius.circular(25),
-                    child: Stack(fit: StackFit.expand, children: [
-                      CNImage(imageUrl: walls[index]!.thumbnail),
-                      Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                              onTap: () => _onTapHandler(context, walls[index]),
-                              onLongPress: () =>
-                                  _onLongPressHandler(context, walls[index]),
-                              splashColor: blackColor.withOpacity(0.3)))
-                    ])))));
+                (context, index) => Hero(
+                      tag: walls[index]!.url!,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(25),
+                        child: Stack(fit: StackFit.expand, children: [
+                          CNImage(imageUrl: walls[index]!.thumbnail),
+                          Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                  onTap: () =>
+                                      _onTapHandler(context, walls[index]),
+                                  onLongPress: () => _onLongPressHandler(
+                                      context, walls[index]),
+                                  splashColor: blackColor.withOpacity(0.3)))
+                        ]),
+                      ),
+                    ))));
   }
 }

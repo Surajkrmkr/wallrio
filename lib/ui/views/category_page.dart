@@ -20,6 +20,7 @@ class CategoryPage extends StatelessWidget {
   void _onLongPressHandler(context, model) {
     showModalBottomSheet(
         context: context,
+        isScrollControlled: true,
         backgroundColor: whiteColor,
         enableDrag: true,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
@@ -113,23 +114,26 @@ class CategoryPage extends StatelessWidget {
                 itemCount: categoryWalls.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, i) {
-                  return ClipRRect(
-                    borderRadius: BorderRadius.circular(25),
-                    child: SizedBox(
-                      width: 120,
-                      child: Stack(fit: StackFit.expand, children: [
-                        CNImage(imageUrl: categoryWalls[i]!.thumbnail),
-                        Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            onTap: () =>
-                                _onTapHandler(context, categoryWalls[i]),
-                            onLongPress: () =>
-                                _onLongPressHandler(context, categoryWalls[i]),
-                            splashColor: blackColor.withOpacity(0.3),
+                  return Hero(
+                    tag: categoryWalls[i]!.url!,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(25),
+                      child: SizedBox(
+                        width: 120,
+                        child: Stack(fit: StackFit.expand, children: [
+                          CNImage(imageUrl: categoryWalls[i]!.thumbnail),
+                          Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: () =>
+                                  _onTapHandler(context, categoryWalls[i]),
+                              onLongPress: () => _onLongPressHandler(
+                                  context, categoryWalls[i]),
+                              splashColor: blackColor.withOpacity(0.3),
+                            ),
                           ),
-                        ),
-                      ]),
+                        ]),
+                      ),
                     ),
                   );
                 }),

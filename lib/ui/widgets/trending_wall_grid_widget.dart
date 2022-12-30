@@ -20,6 +20,7 @@ class TrendingWallGridWidget extends StatelessWidget {
         context: context,
         backgroundColor: whiteColor,
         enableDrag: true,
+        isScrollControlled: true,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
         barrierColor: Colors.black12,
         builder: (context) => ImageBottomSheet(wallModel: model));
@@ -77,20 +78,23 @@ class TrendingWallGridWidget extends StatelessWidget {
                             final Walls wall = isActionGrid
                                 ? provider.actionWallList[index]
                                 : provider.originalWallList[index];
-                            return ClipRRect(
-                              borderRadius: BorderRadius.circular(25),
-                              child: Stack(fit: StackFit.expand, children: [
-                                CNImage(imageUrl: wall.thumbnail),
-                                Material(
-                                  color: Colors.transparent,
-                                  child: InkWell(
-                                    onTap: () => _onTapHandler(context, wall),
-                                    onLongPress: () =>
-                                        _onLongPressHandler(context, wall),
-                                    splashColor: blackColor.withOpacity(0.3),
+                            return Hero(
+                              tag: wall.url!,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(25),
+                                child: Stack(fit: StackFit.expand, children: [
+                                  CNImage(imageUrl: wall.thumbnail),
+                                  Material(
+                                    color: Colors.transparent,
+                                    child: InkWell(
+                                      onTap: () => _onTapHandler(context, wall),
+                                      onLongPress: () =>
+                                          _onLongPressHandler(context, wall),
+                                      splashColor: blackColor.withOpacity(0.3),
+                                    ),
                                   ),
-                                ),
-                              ]),
+                                ]),
+                              ),
                             );
                           })),
                     )

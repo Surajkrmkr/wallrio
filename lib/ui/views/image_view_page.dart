@@ -1,18 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../model/wall_rio_model.dart';
+import '../../provider/wall_action.dart';
 import '../../provider/wall_details.dart';
 import '../widgets/back_btn_widget.dart';
 import '../widgets/image_widget.dart';
 import '../widgets/primary_btn_widget.dart';
 import '../widgets/shimmer_widget.dart';
+import '../widgets/toast_widget.dart';
 
 class ImageViewPage extends StatelessWidget {
   final Walls wallModel;
   ImageViewPage({super.key, required this.wallModel});
 
   bool _isInitialized = false;
+
+  void copyColor(Color color) async {
+    String code = "#ff${color.toString().substring(10, 16)}";
+    await Clipboard.setData(ClipboardData(text: code));
+    ToastWidget.showToast("$code Color copied");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,13 +36,16 @@ class ImageViewPage extends StatelessWidget {
     }
     return Scaffold(
         body: Stack(children: [
-      SizedBox(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          child: CNImage(
-            imageUrl: wallModel.url,
-            isOriginalImg: true,
-          )),
+      Hero(
+        tag: wallModel.url!,
+        child: SizedBox(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            child: CNImage(
+              imageUrl: wallModel.url,
+              isOriginalImg: true,
+            )),
+      ),
       const Padding(
           padding: EdgeInsets.only(left: 8.0),
           child: BackBtnWidget(color: Colors.white)),
@@ -53,17 +65,19 @@ class ImageViewPage extends StatelessWidget {
                             topLeft: Radius.circular(25),
                             topRight: Radius.circular(25)),
                         color: Colors.white),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildHeaderUI(context),
-                          const SizedBox(height: 20),
-                          _buildActionBtnUI(),
-                          const SizedBox(height: 20),
-                          _buildDetailsUI(context),
-                          const SizedBox(height: 20),
-                          _buildColorsUI(context)
-                        ])));
+                    child: Center(
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildHeaderUI(context),
+                            const SizedBox(height: 20),
+                            _buildActionBtnUI(context),
+                            const SizedBox(height: 20),
+                            _buildDetailsUI(context),
+                            const SizedBox(height: 20),
+                            _buildColorsUI(context)
+                          ]),
+                    )));
           })
     ]));
   }
@@ -88,7 +102,7 @@ class ImageViewPage extends StatelessWidget {
                           .map((color) => Padding(
                                 padding: const EdgeInsets.only(right: 10.0),
                                 child: InkWell(
-                                    onTap: () {},
+                                    onTap: () => copyColor(color),
                                     borderRadius: BorderRadius.circular(15),
                                     child: Container(
                                       height: 60,
@@ -139,11 +153,19 @@ class ImageViewPage extends StatelessWidget {
     });
   }
 
-  Row _buildActionBtnUI() {
+  Row _buildActionBtnUI(context) {
+    final provider = Provider.of<WallActionProvider>(context, listen: false);
     return Row(children: [
-      Expanded(child: PrimaryBtnWidget(btnText: "Download", onTap: () {})),
+      Expanded(
+          child: PrimaryBtnWidget(
+              btnText: "Download",
+              onTap: () => provider.downloadImg(
+                  wallModel.url, wallModel.name! + wallModel.id.toString()))),
       const SizedBox(width: 10),
-      Expanded(child: PrimaryBtnWidget(btnText: "Apply", onTap: () {}))
+      Expanded(
+          child: PrimaryBtnWidget(
+              btnText: "Apply",
+              onTap: () => provider.setWall(wallModel.url, context)))
     ]);
   }
 
