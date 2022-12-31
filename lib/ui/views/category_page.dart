@@ -1,6 +1,8 @@
+import 'package:animated_icon_button/animated_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../provider/favourite.dart';
 import '../../provider/navigation.dart';
 import '../../provider/wall_rio.dart';
 import '../theme/theme_data.dart';
@@ -23,7 +25,8 @@ class CategoryPage extends StatelessWidget {
         isScrollControlled: true,
         backgroundColor: whiteColor,
         enableDrag: true,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(25))),
         barrierColor: Colors.black12,
         builder: (context) => ImageBottomSheet(wallModel: model));
   }
@@ -53,7 +56,7 @@ class CategoryPage extends StatelessWidget {
     return Consumer<WallRio>(builder: (context, provider, _) {
       return provider.isLoading
           ? SliverPadding(
-              padding: const EdgeInsets.only(left: 15, right: 15, bottom: 15),
+              padding: const EdgeInsets.only(left: 20, right: 20, bottom: 15),
               sliver: _buildShimmerUI(),
             )
           : provider.error.isEmpty
@@ -92,7 +95,8 @@ class CategoryPage extends StatelessWidget {
                   6,
                   (index) => const Padding(
                         padding: EdgeInsets.only(right: 10.0),
-                        child: ShimmerWidget(height: 200, width: 120),
+                        child:
+                            ShimmerWidget(height: 200, width: 120, radius: 25),
                       )),
             ),
           ),
@@ -132,6 +136,44 @@ class CategoryPage extends StatelessWidget {
                               splashColor: blackColor.withOpacity(0.3),
                             ),
                           ),
+                          Positioned(
+                              right: 10,
+                              bottom: 10,
+                              child: Consumer<FavouriteProvider>(
+                                  builder: (context, provider, _) {
+                                final bool isFav = provider
+                                    .isSelectedAsFav(categoryWalls[i]!.url!);
+                                if (provider.isLoading) {
+                                  return const FloatingActionButton.small(
+                                      heroTag: null,
+                                      backgroundColor: Colors.white,
+                                      onPressed: null,
+                                      child: Icon(Icons.favorite_border_rounded,
+                                          size: 18, color: Colors.black));
+                                }
+                                return FloatingActionButton.small(
+                                  heroTag: null,
+                                  backgroundColor: Colors.white,
+                                  onPressed: null,
+                                  child: AnimatedIconButton(
+                                    size: 18,
+                                    initialIcon: isFav ? 1 : 0,
+                                    onPressed: () => isFav
+                                        ? provider.removeFromFav(
+                                            categoryWalls[i]!.url!)
+                                        : provider.addToFav(categoryWalls[i]!),
+                                    icons: const [
+                                      AnimatedIconItem(
+                                        icon:
+                                            Icon(Icons.favorite_border_rounded),
+                                      ),
+                                      AnimatedIconItem(
+                                        icon: Icon(Icons.favorite_rounded),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }))
                         ]),
                       ),
                     ),

@@ -8,6 +8,8 @@ import 'package:wallrio/provider/wall_rio.dart';
 import 'package:wallrio/ui/theme/theme_data.dart';
 import 'package:wallrio/ui/views/navigation_page.dart';
 
+import 'provider/favourite.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -44,6 +46,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: ((context) => WallActionProvider()),
+        ),
+        ChangeNotifierProvider(
+          create: ((context) => FavouriteProvider()),
         )
       ],
       child: MaterialApp(

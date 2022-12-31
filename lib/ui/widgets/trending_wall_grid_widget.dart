@@ -1,4 +1,6 @@
+import 'package:animated_icon_button/animated_icon_button.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:wallrio/provider/wall_rio.dart';
 import 'package:wallrio/ui/theme/theme_data.dart';
@@ -6,6 +8,7 @@ import 'package:wallrio/ui/widgets/image_bottom_sheet.dart';
 import 'package:wallrio/ui/widgets/image_widget.dart';
 
 import '../../model/wall_rio_model.dart';
+import '../../provider/favourite.dart';
 import '../views/image_view_page.dart';
 import 'shimmer_widget.dart';
 
@@ -21,7 +24,9 @@ class TrendingWallGridWidget extends StatelessWidget {
         backgroundColor: whiteColor,
         enableDrag: true,
         isScrollControlled: true,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+        isDismissible: true,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(25))),
         barrierColor: Colors.black12,
         builder: (context) => ImageBottomSheet(wallModel: model));
   }
@@ -38,28 +43,26 @@ class TrendingWallGridWidget extends StatelessWidget {
     return Consumer<WallRio>(builder: (context, provider, _) {
       return provider.isLoading
           ? SliverPadding(
-              padding: const EdgeInsets.only(left: 15, right: 15, bottom: 15),
+              padding: const EdgeInsets.only(left: 20, right: 20, bottom: 15),
               sliver: SliverGrid.count(
-                crossAxisCount: 2,
-                crossAxisSpacing: 15,
-                mainAxisSpacing: 15,
-                childAspectRatio: 0.7,
-                children: List.generate(
-                    8,
-                    (index) => const ShimmerWidget(
-                          height: 100,
-                          width: double.infinity,
-                        )),
-              ),
-            )
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 15,
+                  mainAxisSpacing: 15,
+                  childAspectRatio: 0.7,
+                  children: List.generate(
+                      8,
+                      (index) => const ShimmerWidget(
+                            height: 100,
+                            width: double.infinity,
+                            radius: 25,
+                          ))))
           : provider.error.isEmpty
               ? isActionGrid && provider.actionWallList.isEmpty
                   ? SliverFillRemaining(
                       child: Center(
-                          child: Text(
-                      "No Wallpapers Found",
-                      style: TextStyle(color: blackColor.withOpacity(0.5)),
-                    )))
+                      child: Lottie.asset('assets/lottie/empty.json',
+                          width: MediaQuery.of(context).size.width * 0.7),
+                    ))
                   : SliverPadding(
                       padding: const EdgeInsets.only(
                           left: 20, right: 20, bottom: 20),
@@ -93,6 +96,47 @@ class TrendingWallGridWidget extends StatelessWidget {
                                       splashColor: blackColor.withOpacity(0.3),
                                     ),
                                   ),
+                                  Positioned(
+                                      right: 15,
+                                      bottom: 15,
+                                      child: Consumer<FavouriteProvider>(
+                                          builder: (context, provider, _) {
+                                        final bool isFav =
+                                            provider.isSelectedAsFav(wall.url!);
+                                        if (provider.isLoading) {
+                                          return const FloatingActionButton(
+                                            heroTag: null,
+                                            backgroundColor: Colors.white,
+                                            onPressed: null,
+                                            child: Icon(
+                                                Icons.favorite_border_rounded,
+                                                color: Colors.black),
+                                          );
+                                        }
+                                        return FloatingActionButton(
+                                          heroTag: null,
+                                          backgroundColor: Colors.white,
+                                          onPressed: null,
+                                          child: AnimatedIconButton(
+                                            size: 24,
+                                            initialIcon: isFav ? 1 : 0,
+                                            onPressed: () => isFav
+                                                ? provider
+                                                    .removeFromFav(wall.url!)
+                                                : provider.addToFav(wall),
+                                            icons: const [
+                                              AnimatedIconItem(
+                                                icon: Icon(Icons
+                                                    .favorite_border_rounded),
+                                              ),
+                                              AnimatedIconItem(
+                                                icon: Icon(
+                                                    Icons.favorite_rounded),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      }))
                                 ]),
                               ),
                             );

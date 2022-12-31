@@ -1,9 +1,12 @@
+import 'package:animated_icon_button/animated_icon_button.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:wallrio/ui/theme/theme_data.dart';
 import 'package:wallrio/ui/views/image_view_page.dart';
 import 'package:wallrio/ui/widgets/image_bottom_sheet.dart';
 
 import '../../model/wall_rio_model.dart';
+import '../../provider/favourite.dart';
 import '../widgets/image_widget.dart';
 import '../widgets/refresh_indicator_widget.dart';
 import '../widgets/sliver_app_bar_widget.dart';
@@ -19,7 +22,8 @@ class GridPage extends StatelessWidget {
         isScrollControlled: true,
         backgroundColor: whiteColor,
         enableDrag: true,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(25))),
         barrierColor: Colors.black12,
         builder: (context) => ImageBottomSheet(wallModel: model));
   }
@@ -75,7 +79,37 @@ class GridPage extends StatelessWidget {
                                       _onTapHandler(context, walls[index]),
                                   onLongPress: () => _onLongPressHandler(
                                       context, walls[index]),
-                                  splashColor: blackColor.withOpacity(0.3)))
+                                  splashColor: blackColor.withOpacity(0.3))),
+                          Positioned(
+                              right: 15,
+                              bottom: 15,
+                              child: Consumer<FavouriteProvider>(
+                                  builder: (context, provider, _) {
+                                final bool isFav = provider
+                                    .isSelectedAsFav(walls[index]!.url!);
+                                return FloatingActionButton(
+                                  heroTag: null,
+                                  backgroundColor: Colors.white,
+                                  onPressed: null,
+                                  child: AnimatedIconButton(
+                                    size: 24,
+                                    initialIcon: isFav ? 1 : 0,
+                                    onPressed: () => isFav
+                                        ? provider
+                                            .removeFromFav(walls[index]!.url!)
+                                        : provider.addToFav(walls[index]!),
+                                    icons: const [
+                                      AnimatedIconItem(
+                                        icon:
+                                            Icon(Icons.favorite_border_rounded),
+                                      ),
+                                      AnimatedIconItem(
+                                        icon: Icon(Icons.favorite_rounded),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }))
                         ]),
                       ),
                     ))));

@@ -32,7 +32,7 @@ class SliverAppBarWidget extends StatelessWidget {
       toolbarHeight:
           MediaQuery.of(context).size.height * (showLogo ? 0.14 : 0.10),
       title: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4),
+        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
         child: Column(
           children: [
             Row(

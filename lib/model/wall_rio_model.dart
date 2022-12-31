@@ -67,4 +67,17 @@ class Walls {
     category = json['category'];
     color = json['color'].cast<String>();
   }
+
+  static Map<String, dynamic> toJson(Walls wall) {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = wall.id;
+    data['name'] = wall.name;
+    data['author'] = wall.author;
+    data['url'] = wall.url;
+    data['thumbnail'] = wall.thumbnail;
+    data['tags'] = wall.tags;
+    data['category'] = wall.category;
+    data['color'] = wall.color;
+    return data;
+  }
 }

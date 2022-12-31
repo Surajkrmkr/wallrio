@@ -1,8 +1,10 @@
+import 'package:animated_icon_button/animated_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../model/wall_rio_model.dart';
+import '../../provider/favourite.dart';
 import '../../provider/wall_action.dart';
 import '../../provider/wall_details.dart';
 import '../widgets/back_btn_widget.dart';
@@ -57,27 +59,27 @@ class ImageViewPage extends StatelessWidget {
           maxChildSize: 0.5,
           builder: (BuildContext context, ScrollController scrollController) {
             return SingleChildScrollView(
-                controller: scrollController,
-                child: Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(25),
-                            topRight: Radius.circular(25)),
-                        color: Colors.white),
-                    child: Center(
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _buildHeaderUI(context),
-                            const SizedBox(height: 20),
-                            _buildActionBtnUI(context),
-                            const SizedBox(height: 20),
-                            _buildDetailsUI(context),
-                            const SizedBox(height: 20),
-                            _buildColorsUI(context)
-                          ]),
-                    )));
+              controller: scrollController,
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(25),
+                        topRight: Radius.circular(25)),
+                    color: Colors.white),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildHeaderUI(context),
+                      const SizedBox(height: 20),
+                      _buildActionBtnUI(context),
+                      const SizedBox(height: 20),
+                      _buildDetailsUI(context),
+                      const SizedBox(height: 20),
+                      _buildColorsUI(context)
+                    ]),
+              ),
+            );
           })
     ]));
   }
@@ -177,13 +179,29 @@ class ImageViewPage extends StatelessWidget {
         Text("Designed By ${wallModel.author!}",
             style: Theme.of(context).textTheme.bodySmall)
       ]),
-      FloatingActionButton(
+      Consumer<FavouriteProvider>(builder: (context, provider, _) {
+        final bool isFav = provider.isSelectedAsFav(wallModel.url!);
+        
+        return FloatingActionButton(
           backgroundColor: Colors.white,
-          onPressed: () {},
-          child: const Icon(
-            Icons.favorite_outlined,
-            color: Colors.black,
-          ))
+          onPressed: null,
+          child: AnimatedIconButton(
+            size: 24,
+            initialIcon: isFav ? 1 : 0,
+            onPressed: () => isFav
+                ? provider.removeFromFav(wallModel.url!)
+                : provider.addToFav(wallModel),
+            icons: const [
+              AnimatedIconItem(
+                icon: Icon(Icons.favorite_border_rounded),
+              ),
+              AnimatedIconItem(
+                icon: Icon(Icons.favorite_rounded),
+              ),
+            ],
+          ),
+        );
+      })
     ]);
   }
 }

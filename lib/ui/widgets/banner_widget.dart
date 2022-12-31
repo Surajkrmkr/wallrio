@@ -27,9 +27,13 @@ class BannerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<WallRio>(builder: (context, provider, _) {
       if (provider.isLoading) {
-        return const ShimmerWidget(
-          height: 150,
-          width: double.infinity,
+        return const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: ShimmerWidget(
+            height: 150,
+            width: double.infinity,
+            radius: 25,
+          ),
         );
       }
       final list = provider.bannerList;
