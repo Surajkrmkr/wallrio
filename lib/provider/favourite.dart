@@ -51,10 +51,10 @@ class FavouriteProvider extends ChangeNotifier {
     jsonPath = downloadDir.path;
     final file = File("$jsonPath//fav.json");
     final bool isExist = await file.exists();
-    // if (!isExist) {
-    // await file.create();
-    // await file.writeAsString('{"walls": []}');
-    // }
+    if (!isExist) {
+    await file.create();
+    await file.writeAsString('{"walls": []}');
+    }
     final jsonText = await file.readAsString();
     favJson = json.decode(jsonText);
     setWallList = WallRioModel.fromJson(favJson).walls!;
