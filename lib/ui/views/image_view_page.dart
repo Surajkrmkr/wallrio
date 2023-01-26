@@ -13,6 +13,7 @@ import '../widgets/primary_btn_widget.dart';
 import '../widgets/shimmer_widget.dart';
 import '../widgets/toast_widget.dart';
 
+// ignore: must_be_immutable
 class ImageViewPage extends StatelessWidget {
   final Walls wallModel;
   ImageViewPage({super.key, required this.wallModel});
@@ -88,10 +89,10 @@ class ImageViewPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Colors", style: Theme.of(context).textTheme.headline2),
+        Text("Colors", style: Theme.of(context).textTheme.displayMedium),
         const SizedBox(height: 10),
         Text("Tap swatches to copy",
-            style: Theme.of(context).textTheme.bodyText1),
+            style: Theme.of(context).textTheme.bodyLarge),
         const SizedBox(height: 10),
         Consumer<WallDetails>(
             builder: (context, provider, _) => provider.isColorPaletteLoading
@@ -127,27 +128,27 @@ class ImageViewPage extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Details", style: Theme.of(context).textTheme.headline2),
+          Text("Details", style: Theme.of(context).textTheme.displayMedium),
           const SizedBox(height: 10),
           Text("Category : ${wallModel.category}",
-              style: Theme.of(context).textTheme.bodyText1),
+              style: Theme.of(context).textTheme.bodyLarge),
           Row(
             children: [
-              Text("Size : ", style: Theme.of(context).textTheme.bodyText1),
+              Text("Size : ", style: Theme.of(context).textTheme.bodyLarge),
               provider.isImageDetailsLoading
                   ? const ShimmerWidget(height: 13, width: 70)
                   : Text(provider.size,
-                      style: Theme.of(context).textTheme.bodyText1),
+                      style: Theme.of(context).textTheme.bodyLarge),
             ],
           ),
           Row(
             children: [
               Text("Dimension : ",
-                  style: Theme.of(context).textTheme.bodyText1),
+                  style: Theme.of(context).textTheme.bodyLarge),
               provider.isImageDetailsLoading
                   ? const ShimmerWidget(height: 13, width: 70)
                   : Text("${provider.width} * ${provider.height}",
-                      style: Theme.of(context).textTheme.bodyText1),
+                      style: Theme.of(context).textTheme.bodyLarge),
             ],
           ),
         ],
@@ -174,14 +175,14 @@ class ImageViewPage extends StatelessWidget {
   Row _buildHeaderUI(BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(wallModel.name!, style: Theme.of(context).textTheme.headline2),
+        Text(wallModel.name!, style: Theme.of(context).textTheme.displayMedium),
         const SizedBox(height: 5),
         Text("Designed By ${wallModel.author!}",
             style: Theme.of(context).textTheme.bodySmall)
       ]),
       Consumer<FavouriteProvider>(builder: (context, provider, _) {
         final bool isFav = provider.isSelectedAsFav(wallModel.url!);
-        
+
         return FloatingActionButton(
           backgroundColor: Colors.white,
           onPressed: null,

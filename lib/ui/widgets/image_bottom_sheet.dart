@@ -34,7 +34,7 @@ class ImageBottomSheet extends StatelessWidget {
                   width: MediaQuery.of(context).size.width * 0.4,
                   child: Text(
                     wallModel.name!,
-                    style: Theme.of(context).textTheme.headline2,
+                    style: Theme.of(context).textTheme.displayMedium,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),

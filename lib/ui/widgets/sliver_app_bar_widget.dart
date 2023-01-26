@@ -42,7 +42,7 @@ class SliverAppBarWidget extends StatelessWidget {
                   children: [
                     GradientText(
                       text,
-                      style: Theme.of(context).textTheme.headline1,
+                      style: Theme.of(context).textTheme.displayLarge,
                       colors: const [Color(0xFFFF4949), Color(0xFF5344FF)],
                     ),
                     const SizedBox(height: 4),
@@ -51,7 +51,7 @@ class SliverAppBarWidget extends StatelessWidget {
                         children: [
                           const SizedBox(width: 4),
                           Text("by",
-                              style: Theme.of(context).textTheme.bodyText1),
+                              style: Theme.of(context).textTheme.bodyLarge),
                           const SizedBox(width: 4),
                           SvgPicture.asset("assets/team_logo.svg",
                               color: blackColor, height: 10)

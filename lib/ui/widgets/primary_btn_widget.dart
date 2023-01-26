@@ -24,7 +24,7 @@ class PrimaryBtnWidget extends StatelessWidget {
             child: Text(btnText,
                 style: Theme.of(context)
                     .textTheme
-                    .headline2!
+                    .displayMedium!
                     .copyWith(color: whiteColor))));
   }
 }

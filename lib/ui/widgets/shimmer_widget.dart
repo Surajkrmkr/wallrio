@@ -16,10 +16,10 @@ class ShimmerWidget extends StatelessWidget {
         baseColor: blackColor.withOpacity(0.2),
         highlightColor: blackColor.withOpacity(0.5),
         child: Container(
-            height: height,
-            width: width,
-            decoration: BoxDecoration(
-                color: blackColor.withOpacity(0.2),
+          height: height,
+          width: width,
+          decoration: BoxDecoration(
+              color: blackColor.withOpacity(0.2),
               borderRadius: BorderRadius.circular(15)),
         ));
   }

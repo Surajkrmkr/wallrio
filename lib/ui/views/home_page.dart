@@ -24,7 +24,7 @@ class HomePage extends StatelessWidget {
               padding: const EdgeInsets.only(top: 20, bottom: 20, left: 25),
               child: Text(
                 "Trending Wallpapers",
-                style: Theme.of(context).textTheme.bodyText2,
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
             ),
           ),

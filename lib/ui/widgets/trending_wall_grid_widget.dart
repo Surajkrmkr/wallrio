@@ -104,36 +104,44 @@ class TrendingWallGridWidget extends StatelessWidget {
                                         final bool isFav =
                                             provider.isSelectedAsFav(wall.url!);
                                         if (provider.isLoading) {
-                                          return const FloatingActionButton(
+                                          return const SizedBox(
+                                            height: 50,
+                                            width: 50,
+                                            child: FloatingActionButton(
+                                              heroTag: null,
+                                              backgroundColor: Colors.white,
+                                              onPressed: null,
+                                              child: Icon(
+                                                  Icons.favorite_border_rounded,
+                                                  color: Colors.black),
+                                            ),
+                                          );
+                                        }
+                                        return SizedBox(
+                                          height: 50,
+                                          width: 50,
+                                          child: FloatingActionButton(
                                             heroTag: null,
                                             backgroundColor: Colors.white,
                                             onPressed: null,
-                                            child: Icon(
-                                                Icons.favorite_border_rounded,
-                                                color: Colors.black),
-                                          );
-                                        }
-                                        return FloatingActionButton(
-                                          heroTag: null,
-                                          backgroundColor: Colors.white,
-                                          onPressed: null,
-                                          child: AnimatedIconButton(
-                                            size: 24,
-                                            initialIcon: isFav ? 1 : 0,
-                                            onPressed: () => isFav
-                                                ? provider
-                                                    .removeFromFav(wall.url!)
-                                                : provider.addToFav(wall),
-                                            icons: const [
-                                              AnimatedIconItem(
-                                                icon: Icon(Icons
-                                                    .favorite_border_rounded),
-                                              ),
-                                              AnimatedIconItem(
-                                                icon: Icon(
-                                                    Icons.favorite_rounded),
-                                              ),
-                                            ],
+                                            child: AnimatedIconButton(
+                                              size: 24,
+                                              initialIcon: isFav ? 1 : 0,
+                                              onPressed: () => isFav
+                                                  ? provider
+                                                      .removeFromFav(wall.url!)
+                                                  : provider.addToFav(wall),
+                                              icons: const [
+                                                AnimatedIconItem(
+                                                  icon: Icon(Icons
+                                                      .favorite_border_rounded),
+                                                ),
+                                                AnimatedIconItem(
+                                                  icon: Icon(
+                                                      Icons.favorite_rounded),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         );
                                       }))

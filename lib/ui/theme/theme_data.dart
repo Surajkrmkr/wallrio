@@ -4,7 +4,6 @@ class WallRioThemeData {
   static getLightThemeData() => ThemeData(
       brightness: Brightness.light,
       useMaterial3: true,
-      backgroundColor: whiteColor,
       scaffoldBackgroundColor: whiteColor,
       fontFamily: 'POCOTech',
       canvasColor: Colors.transparent,
@@ -21,16 +20,17 @@ class WallRioThemeData {
           surfaceTintColor: whiteColor,
           showCheckmark: false),
       textTheme: const TextTheme(
-          headline1: TextStyle(
+          displayLarge: TextStyle(
               fontSize: 25,
               fontWeight: FontWeight.w800,
               color: Color(0xFF2E2E2E)),
-          headline2: TextStyle(
+          displayMedium: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w800,
               color: Color(0xFF2E2E2E)),
-          bodyText1: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
-          bodyText2: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)));
+          bodyLarge: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+          bodyMedium: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+      colorScheme: const ColorScheme.light());
 
   static getDarkThemeData() =>
       ThemeData(brightness: Brightness.dark, useMaterial3: true);
