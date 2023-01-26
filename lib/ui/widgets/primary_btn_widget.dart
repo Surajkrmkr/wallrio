@@ -22,9 +22,7 @@ class PrimaryBtnWidget extends StatelessWidget {
         onPressed: onTap,
         child: Center(
             child: Text(btnText,
-                style: Theme.of(context)
-                    .textTheme
-                    .displayMedium!
-                    .copyWith(color: whiteColor))));
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    color: whiteColor, fontWeight: FontWeight.bold))));
   }
 }

@@ -112,7 +112,9 @@ class SearchPage extends StatelessWidget {
         onChanged: (query) => provider.onSearchTap(query),
         decoration: InputDecoration(
           filled: true,
+          fillColor: blackColor.withOpacity(0.05),
           hintText: 'Search...',
+          hintStyle: const TextStyle(fontSize: 14),
           suffixIcon: IconButton(
               onPressed: textEditingController.text.isNotEmpty
                   ? () {

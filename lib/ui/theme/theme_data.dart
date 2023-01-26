@@ -16,6 +16,9 @@ class WallRioThemeData {
       ),
       chipTheme: ChipThemeData(
           backgroundColor: blackColor.withOpacity(0.05),
+          side: BorderSide.none,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           selectedColor: blackColor,
           surfaceTintColor: whiteColor,
           showCheckmark: false),

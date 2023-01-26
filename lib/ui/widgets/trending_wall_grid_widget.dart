@@ -1,4 +1,3 @@
-import 'package:animated_icon_button/animated_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -81,76 +80,93 @@ class TrendingWallGridWidget extends StatelessWidget {
                             final Walls wall = isActionGrid
                                 ? provider.actionWallList[index]
                                 : provider.originalWallList[index];
-                            return Hero(
-                              tag: wall.url!,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(25),
-                                child: Stack(fit: StackFit.expand, children: [
-                                  CNImage(imageUrl: wall.thumbnail),
-                                  Material(
-                                    color: Colors.transparent,
-                                    child: InkWell(
-                                      onTap: () => _onTapHandler(context, wall),
-                                      onLongPress: () =>
-                                          _onLongPressHandler(context, wall),
-                                      splashColor: blackColor.withOpacity(0.3),
-                                    ),
-                                  ),
-                                  Positioned(
-                                      right: 15,
-                                      bottom: 15,
-                                      child: Consumer<FavouriteProvider>(
-                                          builder: (context, provider, _) {
-                                        final bool isFav =
-                                            provider.isSelectedAsFav(wall.url!);
-                                        if (provider.isLoading) {
-                                          return const SizedBox(
-                                            height: 50,
-                                            width: 50,
-                                            child: FloatingActionButton(
-                                              heroTag: null,
-                                              backgroundColor: Colors.white,
-                                              onPressed: null,
-                                              child: Icon(
-                                                  Icons.favorite_border_rounded,
-                                                  color: Colors.black),
-                                            ),
-                                          );
-                                        }
-                                        return SizedBox(
-                                          height: 50,
-                                          width: 50,
-                                          child: FloatingActionButton(
-                                            heroTag: null,
-                                            backgroundColor: Colors.white,
-                                            onPressed: null,
-                                            child: AnimatedIconButton(
-                                              size: 24,
-                                              initialIcon: isFav ? 1 : 0,
-                                              onPressed: () => isFav
-                                                  ? provider
-                                                      .removeFromFav(wall.url!)
-                                                  : provider.addToFav(wall),
-                                              icons: const [
-                                                AnimatedIconItem(
-                                                  icon: Icon(Icons
-                                                      .favorite_border_rounded),
-                                                ),
-                                                AnimatedIconItem(
-                                                  icon: Icon(
-                                                      Icons.favorite_rounded),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        );
-                                      }))
-                                ]),
-                              ),
-                            );
+                            return _buildImgUI(wall, context);
                           })),
                     )
               : SliverFillRemaining(child: Center(child: Text(provider.error)));
     });
+  }
+
+  Hero _buildImgUI(Walls wall, BuildContext context) {
+    return Hero(
+      tag: wall.url!,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(25),
+        child: Stack(fit: StackFit.expand, children: [
+          CNImage(imageUrl: wall.thumbnail),
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () => _onTapHandler(context, wall),
+              onLongPress: () => _onLongPressHandler(context, wall),
+              splashColor: blackColor.withOpacity(0.3),
+            ),
+          ),
+          _buildImgDetailsUI(context, wall),
+        ]),
+      ),
+    );
+  }
+
+  Align _buildImgDetailsUI(BuildContext context, Walls wall) {
+    return Align(
+        alignment: Alignment.bottomCenter,
+        child: Container(
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(
+            colors: [
+              Colors.black54,
+              Colors.transparent,
+            ],
+            begin: Alignment.bottomCenter,
+            end: Alignment.topCenter,
+          )),
+          padding: const EdgeInsets.only(left: 15, bottom: 4, right: 4),
+          height: 60,
+          alignment: Alignment.bottomCenter,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Material(
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.23,
+                  child: Text(
+                    wall.name!,
+                    maxLines: 1,
+                    overflow: TextOverflow.fade,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+              _buildFavIcon(wall)
+            ],
+          ),
+        ));
+  }
+
+  Consumer<FavouriteProvider> _buildFavIcon(Walls wall) {
+    return Consumer<FavouriteProvider>(builder: (context, provider, _) {
+      final bool isFav = provider.isSelectedAsFav(wall.url!);
+      if (provider.isLoading) {
+        return _buildFavBtn(
+            color: Colors.white,
+            iconData: Icons.favorite_border_rounded,
+            onTap: () {});
+      }
+      return _buildFavBtn(
+        color: isFav ? Colors.redAccent : Colors.white,
+        iconData:
+            isFav ? Icons.favorite_rounded : Icons.favorite_border_rounded,
+        onTap: () =>
+            isFav ? provider.removeFromFav(wall.url!) : provider.addToFav(wall),
+      );
+    });
+  }
+
+  IconButton _buildFavBtn(
+      {required Function() onTap,
+      required IconData iconData,
+      required Color color}) {
+    return IconButton(onPressed: onTap, icon: Icon(iconData, color: color));
   }
 }

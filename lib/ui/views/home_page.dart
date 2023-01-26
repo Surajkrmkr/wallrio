@@ -17,7 +17,10 @@ class HomePage extends StatelessWidget {
         controller: Provider.of<Navigation>(context).controller,
         slivers: [
           const SliverAppBarWidget(
-              showLogo: true, showSearchBar: true, text: "Wallpapers"),
+              showLogo: true,
+              showSearchBtn: true,
+              text: "WallRio",
+              showUserProfileIcon: true),
           const SliverToBoxAdapter(child: BannerWidget()),
           SliverToBoxAdapter(
             child: Padding(

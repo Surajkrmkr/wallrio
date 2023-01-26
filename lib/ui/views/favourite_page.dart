@@ -42,7 +42,10 @@ class FavouritePage extends StatelessWidget {
         controller: Provider.of<Navigation>(context).controller,
         slivers: [
           const SliverAppBarWidget(
-              showLogo: false, showSearchBar: false, text: "Your\nChoice"),
+              showLogo: false,
+              showSearchBtn: false,
+              centeredTitle: false,
+              text: "Your\nChoice"),
           _buildListUI(context)
         ],
       ),

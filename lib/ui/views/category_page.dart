@@ -1,4 +1,3 @@
-import 'package:animated_icon_button/animated_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -45,7 +44,10 @@ class CategoryPage extends StatelessWidget {
         controller: Provider.of<Navigation>(context).controller,
         slivers: [
           const SliverAppBarWidget(
-              showLogo: false, showSearchBar: false, text: "Our\nCollections"),
+              showLogo: false,
+              showSearchBtn: false,
+              centeredTitle: false,
+              text: "Our\nCollections"),
           _buildCategoryUI()
         ],
       ),
@@ -136,44 +138,14 @@ class CategoryPage extends StatelessWidget {
                               splashColor: blackColor.withOpacity(0.3),
                             ),
                           ),
-                          Positioned(
-                              right: 10,
-                              bottom: 10,
-                              child: Consumer<FavouriteProvider>(
-                                  builder: (context, provider, _) {
-                                final bool isFav = provider
-                                    .isSelectedAsFav(categoryWalls[i]!.url!);
-                                if (provider.isLoading) {
-                                  return const FloatingActionButton.small(
-                                      heroTag: null,
-                                      backgroundColor: Colors.white,
-                                      onPressed: null,
-                                      child: Icon(Icons.favorite_border_rounded,
-                                          size: 18, color: Colors.black));
-                                }
-                                return FloatingActionButton.small(
-                                  heroTag: null,
-                                  backgroundColor: Colors.white,
-                                  onPressed: null,
-                                  child: AnimatedIconButton(
-                                    size: 18,
-                                    initialIcon: isFav ? 1 : 0,
-                                    onPressed: () => isFav
-                                        ? provider.removeFromFav(
-                                            categoryWalls[i]!.url!)
-                                        : provider.addToFav(categoryWalls[i]!),
-                                    icons: const [
-                                      AnimatedIconItem(
-                                        icon:
-                                            Icon(Icons.favorite_border_rounded),
-                                      ),
-                                      AnimatedIconItem(
-                                        icon: Icon(Icons.favorite_rounded),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }))
+                          Align(
+                            alignment: Alignment.bottomRight,
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  right: 4.0, bottom: 4.0),
+                              child: _buildFavIcon(categoryWalls[i]!),
+                            ),
+                          )
                         ]),
                       ),
                     ),
@@ -183,6 +155,32 @@ class CategoryPage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Consumer<FavouriteProvider> _buildFavIcon(Walls wall) {
+    return Consumer<FavouriteProvider>(builder: (context, provider, _) {
+      final bool isFav = provider.isSelectedAsFav(wall.url!);
+      if (provider.isLoading) {
+        return _buildFavBtn(
+            color: Colors.white,
+            iconData: Icons.favorite_border_rounded,
+            onTap: () {});
+      }
+      return _buildFavBtn(
+        color: isFav ? Colors.redAccent : Colors.white,
+        iconData:
+            isFav ? Icons.favorite_rounded : Icons.favorite_border_rounded,
+        onTap: () =>
+            isFav ? provider.removeFromFav(wall.url!) : provider.addToFav(wall),
+      );
+    });
+  }
+
+  IconButton _buildFavBtn(
+      {required Function() onTap,
+      required IconData iconData,
+      required Color color}) {
+    return IconButton(onPressed: onTap, icon: Icon(iconData, color: color));
   }
 
   ListTile _buildCategoryHeaderUI(

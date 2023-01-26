@@ -1,4 +1,3 @@
-import 'package:animated_icon_button/animated_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -38,51 +37,95 @@ class ImageViewPage extends StatelessWidget {
       _isInitialized = false;
     }
     return Scaffold(
-        body: Stack(children: [
-      Hero(
-        tag: wallModel.url!,
-        child: SizedBox(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            child: CNImage(
-              imageUrl: wallModel.url,
-              isOriginalImg: true,
-            )),
-      ),
-      const Padding(
-          padding: EdgeInsets.only(left: 8.0),
-          child: BackBtnWidget(color: Colors.white)),
-      DraggableScrollableSheet(
-          snap: true,
-          snapSizes: const [0.1, 0.5],
-          initialChildSize: 0.2,
-          minChildSize: 0.1,
-          maxChildSize: 0.5,
-          builder: (BuildContext context, ScrollController scrollController) {
-            return SingleChildScrollView(
-              controller: scrollController,
-              child: Container(
-                padding: const EdgeInsets.all(20),
-                decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(25),
-                        topRight: Radius.circular(25)),
-                    color: Colors.white),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildHeaderUI(context),
-                      const SizedBox(height: 20),
-                      _buildActionBtnUI(context),
-                      const SizedBox(height: 20),
-                      _buildDetailsUI(context),
-                      const SizedBox(height: 20),
-                      _buildColorsUI(context)
-                    ]),
+        body: SafeArea(
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const BackBtnWidget(color: Colors.black),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Hero(
+                tag: wallModel.url!,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(25),
+                  child: SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.40,
+                      width: MediaQuery.of(context).size.width,
+                      child: CNImage(
+                        imageUrl: wallModel.url,
+                        isOriginalImg: true,
+                      )),
+                ),
               ),
-            );
-          })
-    ]));
+            ),
+            Container(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 20, horizontal: 20.0),
+              decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+                  color: Colors.white),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildHeaderUI(context),
+                    const SizedBox(height: 20),
+                    _buildActionBtnUI(context),
+                    const SizedBox(height: 20),
+                    _buildDetailsUI(context),
+                    const SizedBox(height: 20),
+                    _buildColorsUI(context)
+                  ]),
+            )
+          ],
+        ),
+      ),
+    ));
+    //     Stack(children: [
+    //   Hero(
+    //     tag: wallModel.url!,
+    //     child: SizedBox(
+    //         height: MediaQuery.of(context).size.height,
+    //         width: MediaQuery.of(context).size.width,
+    //         child: CNImage(
+    //           imageUrl: wallModel.url,
+    //           isOriginalImg: true,
+    //         )),
+    //   ),
+    //   const Padding(
+    //       padding: EdgeInsets.only(left: 8.0),
+    //       child: BackBtnWidget(color: Colors.white)),
+    //   DraggableScrollableSheet(
+    //       snap: true,
+    //       snapSizes: const [0.1, 0.5],
+    //       initialChildSize: 0.2,
+    //       minChildSize: 0.1,
+    //       maxChildSize: 0.5,
+    //       builder: (BuildContext context, ScrollController scrollController) {
+    //         return SingleChildScrollView(
+    //           controller: scrollController,
+    //           child: Container(
+    //             padding: const EdgeInsets.all(20),
+    //             decoration: const BoxDecoration(
+    //                 borderRadius: BorderRadius.only(
+    //                     topLeft: Radius.circular(25),
+    //                     topRight: Radius.circular(25)),
+    //                 color: Colors.white),
+    //             child: Column(
+    //                 crossAxisAlignment: CrossAxisAlignment.start,
+    //                 children: [
+    //                   _buildHeaderUI(context),
+    //                   const SizedBox(height: 20),
+    //                   _buildActionBtnUI(context),
+    //                   const SizedBox(height: 20),
+    //                   _buildDetailsUI(context),
+    //                   const SizedBox(height: 20),
+    //                   _buildColorsUI(context)
+    //                 ]),
+    //           ),
+    //         );
+    //       })
+    // ]));
   }
 
   Column _buildColorsUI(BuildContext context) {
@@ -92,7 +135,7 @@ class ImageViewPage extends StatelessWidget {
         Text("Colors", style: Theme.of(context).textTheme.displayMedium),
         const SizedBox(height: 10),
         Text("Tap swatches to copy",
-            style: Theme.of(context).textTheme.bodyLarge),
+            style: Theme.of(context).textTheme.titleSmall),
         const SizedBox(height: 10),
         Consumer<WallDetails>(
             builder: (context, provider, _) => provider.isColorPaletteLoading
@@ -130,11 +173,17 @@ class ImageViewPage extends StatelessWidget {
         children: [
           Text("Details", style: Theme.of(context).textTheme.displayMedium),
           const SizedBox(height: 10),
-          Text("Category : ${wallModel.category}",
-              style: Theme.of(context).textTheme.bodyLarge),
           Row(
             children: [
-              Text("Size : ", style: Theme.of(context).textTheme.bodyLarge),
+              Text("Category : ",
+                  style: Theme.of(context).textTheme.titleSmall),
+              Text(wallModel.category!,
+                  style: Theme.of(context).textTheme.bodyLarge),
+            ],
+          ),
+          Row(
+            children: [
+              Text("Size : ", style: Theme.of(context).textTheme.titleSmall),
               provider.isImageDetailsLoading
                   ? const ShimmerWidget(height: 13, width: 70)
                   : Text(provider.size,
@@ -144,7 +193,7 @@ class ImageViewPage extends StatelessWidget {
           Row(
             children: [
               Text("Dimension : ",
-                  style: Theme.of(context).textTheme.bodyLarge),
+                  style: Theme.of(context).textTheme.titleSmall),
               provider.isImageDetailsLoading
                   ? const ShimmerWidget(height: 13, width: 70)
                   : Text("${provider.width} * ${provider.height}",
@@ -178,31 +227,32 @@ class ImageViewPage extends StatelessWidget {
         Text(wallModel.name!, style: Theme.of(context).textTheme.displayMedium),
         const SizedBox(height: 5),
         Text("Designed By ${wallModel.author!}",
-            style: Theme.of(context).textTheme.bodySmall)
+            style: Theme.of(context).textTheme.titleSmall)
       ]),
       Consumer<FavouriteProvider>(builder: (context, provider, _) {
         final bool isFav = provider.isSelectedAsFav(wallModel.url!);
-
-        return FloatingActionButton(
-          backgroundColor: Colors.white,
-          onPressed: null,
-          child: AnimatedIconButton(
-            size: 24,
-            initialIcon: isFav ? 1 : 0,
-            onPressed: () => isFav
-                ? provider.removeFromFav(wallModel.url!)
-                : provider.addToFav(wallModel),
-            icons: const [
-              AnimatedIconItem(
-                icon: Icon(Icons.favorite_border_rounded),
-              ),
-              AnimatedIconItem(
-                icon: Icon(Icons.favorite_rounded),
-              ),
-            ],
-          ),
+        if (provider.isLoading) {
+          return _buildFavBtn(
+              color: Colors.black,
+              iconData: Icons.favorite_border_rounded,
+              onTap: () {});
+        }
+        return _buildFavBtn(
+          color: isFav ? Colors.redAccent : Colors.black,
+          iconData:
+              isFav ? Icons.favorite_rounded : Icons.favorite_border_rounded,
+          onTap: () => isFav
+              ? provider.removeFromFav(wallModel.url!)
+              : provider.addToFav(wallModel),
         );
       })
     ]);
+  }
+
+  IconButton _buildFavBtn(
+      {required Function() onTap,
+      required IconData iconData,
+      required Color color}) {
+    return IconButton(onPressed: onTap, icon: Icon(iconData, color: color));
   }
 }

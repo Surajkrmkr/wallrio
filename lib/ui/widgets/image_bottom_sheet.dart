@@ -1,8 +1,6 @@
-import 'package:animated_icon_button/animated_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallrio/model/wall_rio_model.dart';
-import 'package:wallrio/provider/favourite.dart';
 import 'package:wallrio/ui/widgets/image_widget.dart';
 import 'package:wallrio/ui/widgets/primary_btn_widget.dart';
 
@@ -69,40 +67,11 @@ class ImageBottomSheet extends StatelessWidget {
                       ))),
             ),
             const SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(
-                  child: PrimaryBtnWidget(
-                      btnText: "Apply",
-                      onTap: () => Provider.of<WallActionProvider>(context,
-                              listen: false)
-                          .setWall(wallModel.url, context)),
-                ),
-                const SizedBox(width: 20),
-                Consumer<FavouriteProvider>(builder: (context, provider, _) {
-                  final bool isFav = provider.isSelectedAsFav(wallModel.url!);
-                  return FloatingActionButton(
-                    backgroundColor: Colors.white,
-                    onPressed: null,
-                    child: AnimatedIconButton(
-                      size: 24,
-                      initialIcon: isFav ? 1 : 0,
-                      onPressed: () => isFav
-                          ? provider.removeFromFav(wallModel.url!)
-                          : provider.addToFav(wallModel),
-                      icons: const [
-                        AnimatedIconItem(
-                          icon: Icon(Icons.favorite_border_rounded),
-                        ),
-                        AnimatedIconItem(
-                          icon: Icon(Icons.favorite_rounded),
-                        ),
-                      ],
-                    ),
-                  );
-                })
-              ],
-            )
+            PrimaryBtnWidget(
+                btnText: "Apply",
+                onTap: () =>
+                    Provider.of<WallActionProvider>(context, listen: false)
+                        .setWall(wallModel.url, context)),
           ]))
     ]);
   }

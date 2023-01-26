@@ -26,7 +26,7 @@ class BackBtnWidget extends StatelessWidget {
             Icons.navigate_before_rounded,
             size: 40,
             color: color,
-            shadows: const [Shadow(blurRadius: 20, color: Colors.black26)],
+            // shadows: const [Shadow(blurRadius: 20, color: Colors.black26)],
           )),
     );
   }
