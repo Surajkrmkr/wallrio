@@ -135,7 +135,11 @@ class ImageViewPage extends StatelessWidget {
         const SizedBox(height: 10),
         Consumer<WallDetails>(
             builder: (context, provider, _) => provider.isColorPaletteLoading
-                ? const ShimmerWidget(height: 60, width: double.infinity)
+                ? const ShimmerWidget(
+                    height: 60,
+                    width: double.infinity,
+                    radius: 15,
+                  )
                 : SizedBox(
                     height: 60,
                     child: ListView(
@@ -146,7 +150,7 @@ class ImageViewPage extends StatelessWidget {
                                 child: InkWell(
                                     onTap: () => copyColor(color),
                                     borderRadius: BorderRadius.circular(15),
-                                    child: Container(
+                                    child: Ink(
                                       height: 60,
                                       width: 60,
                                       decoration: BoxDecoration(
@@ -229,12 +233,12 @@ class ImageViewPage extends StatelessWidget {
         final bool isFav = provider.isSelectedAsFav(wallModel.url!);
         if (provider.isLoading) {
           return _buildFavBtn(
-              color: Colors.black,
+              color: Theme.of(context).primaryColorLight,
               iconData: Icons.favorite_border_rounded,
               onTap: () {});
         }
         return _buildFavBtn(
-          color: isFav ? Colors.redAccent : Colors.black,
+          color: isFav ? Colors.redAccent : Theme.of(context).primaryColorLight,
           iconData:
               isFav ? Icons.favorite_rounded : Icons.favorite_border_rounded,
           onTap: () => isFav

@@ -6,7 +6,7 @@ class ShimmerWidget extends StatelessWidget {
   final double width;
   final double radius;
   const ShimmerWidget(
-      {super.key, required this.height, required this.width, this.radius = 15});
+      {super.key, required this.height, required this.width, this.radius = 25});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class ShimmerWidget extends StatelessWidget {
           width: width,
           decoration: BoxDecoration(
               color: Theme.of(context).primaryColorLight.withOpacity(0.2),
-              borderRadius: BorderRadius.circular(25)),
+              borderRadius: BorderRadius.circular(radius)),
         ));
   }
 }

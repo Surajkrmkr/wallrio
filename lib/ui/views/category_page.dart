@@ -111,49 +111,41 @@ class CategoryPage extends StatelessWidget {
   SizedBox _buildListViewUI(List<Walls?> categoryWalls) {
     return SizedBox(
       height: 200,
-      child: Row(
-        children: [
-          const SizedBox(width: 20),
-          Expanded(
-            child: ListView.separated(
-                separatorBuilder: (context, index) => const SizedBox(width: 10),
-                itemCount: categoryWalls.length < 8 ? categoryWalls.length : 8,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, i) {
-                  return Hero(
-                    tag: categoryWalls[i]!.url!,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(25),
-                      child: SizedBox(
-                        width: 120,
-                        child: Stack(fit: StackFit.expand, children: [
-                          CNImage(imageUrl: categoryWalls[i]!.thumbnail),
-                          Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              onTap: () =>
-                                  _onTapHandler(context, categoryWalls[i]),
-                              onLongPress: () => _onLongPressHandler(
-                                  context, categoryWalls[i]),
-                              splashColor: blackColor.withOpacity(0.3),
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.bottomRight,
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  right: 4.0, bottom: 4.0),
-                              child: _buildFavIcon(categoryWalls[i]!),
-                            ),
-                          )
-                        ]),
+      child: ListView.separated(
+          separatorBuilder: (context, index) => const SizedBox(width: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          itemCount: categoryWalls.length < 8 ? categoryWalls.length : 8,
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (context, i) {
+            return Hero(
+              tag: categoryWalls[i]!.url!,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(25),
+                child: SizedBox(
+                  width: 120,
+                  child: Stack(fit: StackFit.expand, children: [
+                    CNImage(imageUrl: categoryWalls[i]!.thumbnail),
+                    Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () => _onTapHandler(context, categoryWalls[i]),
+                        onLongPress: () =>
+                            _onLongPressHandler(context, categoryWalls[i]),
+                        splashColor: blackColor.withOpacity(0.3),
                       ),
                     ),
-                  );
-                }),
-          ),
-        ],
-      ),
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 4.0, bottom: 4.0),
+                        child: _buildFavIcon(categoryWalls[i]!),
+                      ),
+                    )
+                  ]),
+                ),
+              ),
+            );
+          }),
     );
   }
 

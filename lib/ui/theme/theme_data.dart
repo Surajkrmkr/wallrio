@@ -26,17 +26,18 @@ class WallRioThemeData {
             ),
             elevation: 0,
           ),
-          // switchTheme: SwitchThemeData(
-          //   trackColor: MaterialStateProperty.all(
-          //       isDarkTheme ? bgDarkAccentColor : blackColor),
-          // ),
-          dialogBackgroundColor: isDarkTheme ? bgDarkColor : whiteColor,
-          
+          switchTheme: SwitchThemeData(
+              thumbColor: MaterialStateProperty.all(
+                  isDarkTheme ? whiteColor : blackColor),
+              trackColor: MaterialStateProperty.all(
+                  isDarkTheme ? bgDarkAccentColor : whiteColor)),
+          dialogTheme: DialogTheme(
+              backgroundColor: isDarkTheme ? bgDarkColor : whiteColor,
+              surfaceTintColor: Colors.transparent),
           listTileTheme: ListTileThemeData(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 20),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          ),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20))),
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
                 minimumSize: const Size.fromHeight(60),
@@ -47,7 +48,20 @@ class WallRioThemeData {
           primaryColor: isDarkTheme ? bgDarkColor : whiteColor,
           primaryColorLight: isDarkTheme ? whiteColor : blackColor,
           bottomSheetTheme: BottomSheetThemeData(
-              backgroundColor: isDarkTheme ? bgDarkColor : whiteColor),
+              backgroundColor: isDarkTheme ? bgDarkColor : whiteColor,
+              surfaceTintColor: Colors.transparent),
+          filledButtonTheme: FilledButtonThemeData(
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                      isDarkTheme ? bgDarkAccentColor : blackColor),
+                  foregroundColor: MaterialStateProperty.all(whiteColor))),
+          outlinedButtonTheme: OutlinedButtonThemeData(
+              style: ButtonStyle(
+                  foregroundColor: MaterialStateProperty.all(
+                      isDarkTheme ? whiteColor : blackColor),
+                  overlayColor: MaterialStateProperty.all(isDarkTheme
+                      ? blackColor.withOpacity(0.1)
+                      : whiteColor.withOpacity(0.4)))),
           chipTheme: ChipThemeData(
               backgroundColor: isDarkTheme
                   ? whiteColor.withOpacity(0.05)
@@ -58,7 +72,6 @@ class WallRioThemeData {
               selectedColor: isDarkTheme ? whiteColor : blackColor,
               surfaceTintColor: isDarkTheme ? blackColor : whiteColor,
               showCheckmark: false),
-              
           textTheme: TextTheme(
               displayLarge: TextStyle(
                   fontSize: 25,
@@ -72,9 +85,7 @@ class WallRioThemeData {
                   const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
               bodyMedium:
                   const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
-          colorScheme: isDarkTheme
-              ? const ColorScheme.dark()
-              : const ColorScheme.light());
+          colorScheme: isDarkTheme ? const ColorScheme.dark() : const ColorScheme.light());
 
   static getDarkThemeData() =>
       ThemeData(brightness: Brightness.dark, useMaterial3: true);

@@ -7,6 +7,7 @@ import 'package:wallrio/ui/widgets/image_bottom_sheet.dart';
 import 'package:wallrio/ui/widgets/image_widget.dart';
 
 import '../../model/wall_rio_model.dart';
+import '../../provider/dark_theme.dart';
 import '../../provider/favourite.dart';
 import '../views/image_view_page.dart';
 import 'shimmer_widget.dart';
@@ -110,17 +111,13 @@ class TrendingWallGridWidget extends StatelessWidget {
     return Align(
         alignment: Alignment.bottomCenter,
         child: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
               gradient: LinearGradient(
-            colors: [
-              Colors.black54,
-              Colors.transparent,
-            ],
-            begin: Alignment.bottomCenter,
-            end: Alignment.topCenter,
-          )),
-          padding: const EdgeInsets.only(left: 15, bottom: 4, right: 4),
-          height: 60,
+                  colors: gradientColorMap[
+                      Provider.of<DarkThemeProvider>(context, listen: true)
+                          .gradType]!)),
+          padding: const EdgeInsets.only(left: 15, right: 5),
+          height: 45,
           alignment: Alignment.bottomCenter,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -131,8 +128,11 @@ class TrendingWallGridWidget extends StatelessWidget {
                   child: Text(
                     wall.name!,
                     maxLines: 1,
-                    overflow: TextOverflow.fade,
-                    style: const TextStyle(color: Colors.white),
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium!
+                        .copyWith(color: whiteColor),
                   ),
                 ),
               ),

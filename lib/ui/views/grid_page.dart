@@ -5,6 +5,7 @@ import 'package:wallrio/ui/views/image_view_page.dart';
 import 'package:wallrio/ui/widgets/image_bottom_sheet.dart';
 
 import '../../model/wall_rio_model.dart';
+import '../../provider/dark_theme.dart';
 import '../../provider/favourite.dart';
 import '../widgets/image_widget.dart';
 import '../widgets/sliver_app_bar_widget.dart';
@@ -84,17 +85,13 @@ class GridPage extends StatelessWidget {
     return Align(
         alignment: Alignment.bottomCenter,
         child: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
               gradient: LinearGradient(
-            colors: [
-              Colors.black54,
-              Colors.transparent,
-            ],
-            begin: Alignment.bottomCenter,
-            end: Alignment.topCenter,
-          )),
-          padding: const EdgeInsets.only(left: 15, bottom: 4, right: 4),
-          height: 60,
+                  colors: gradientColorMap[
+                      Provider.of<DarkThemeProvider>(context, listen: true)
+                          .gradType]!)),
+          padding: const EdgeInsets.only(left: 15, right: 5),
+          height: 45,
           alignment: Alignment.bottomCenter,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -106,7 +103,10 @@ class GridPage extends StatelessWidget {
                     wall.name!,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(color: Colors.white),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium!
+                        .copyWith(color: whiteColor),
                   ),
                 ),
               ),

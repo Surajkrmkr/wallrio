@@ -5,6 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 
 import '../model/wall_rio_model.dart';
+import '../ui/widgets/toast_widget.dart';
 
 class FavouriteProvider extends ChangeNotifier {
   Map<String, dynamic> favJson = {"walls": []};
@@ -32,12 +33,14 @@ class FavouriteProvider extends ChangeNotifier {
     favJson["walls"]!.add(obj);
     saveJson();
     setWallList = WallRioModel.fromJson(favJson).walls!;
+    ToastWidget.showToast("Added to Favourite");
   }
 
   void removeFromFav(String url) {
     favJson["walls"]!.removeWhere((wall) => wall["url"] == url);
     saveJson();
     setWallList = WallRioModel.fromJson(favJson).walls!;
+    ToastWidget.showToast("Removed from Favourite");
   }
 
   bool isSelectedAsFav(String url) {
@@ -52,8 +55,8 @@ class FavouriteProvider extends ChangeNotifier {
     final file = File("$jsonPath//fav.json");
     final bool isExist = await file.exists();
     if (!isExist) {
-    await file.create();
-    await file.writeAsString('{"walls": []}');
+      await file.create();
+      await file.writeAsString('{"walls": []}');
     }
     final jsonText = await file.readAsString();
     favJson = json.decode(jsonText);

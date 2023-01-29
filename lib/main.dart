@@ -23,20 +23,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        // statusBarIconBrightness: darkThemeProvider.amoledTheme
-        //     ? Brightness.light
-        //     : darkThemeProvider.darkTheme
-        //         ? Brightness.light
-        //         : Brightness.dark,
-        // statusBarBrightness: darkThemeProvider.amoledTheme
-        //     ? Brightness.light
-        //     : darkThemeProvider.darkTheme
-        //         ? Brightness.light
-        //         : Brightness.dark));
-        statusBarIconBrightness: Brightness.dark,
-        statusBarBrightness: Brightness.dark));
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -60,11 +46,19 @@ class MyApp extends StatelessWidget {
       ],
       child: Consumer<DarkThemeProvider>(
         builder: (context, provider, _) {
+          SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+              statusBarColor: Colors.transparent,
+              statusBarIconBrightness:
+                  provider.darkTheme ? Brightness.light : Brightness.dark,
+              statusBarBrightness:
+                  provider.darkTheme ? Brightness.light : Brightness.dark));
           return MaterialApp(
               title: 'Wall Rio',
               theme: WallRioThemeData.getLightThemeData(
-                  context: context, isDarkTheme: provider.darkTheme),
-              themeMode: ThemeMode.light,
+                  context: context, isDarkTheme: false),
+              darkTheme: WallRioThemeData.getLightThemeData(
+                  context: context, isDarkTheme: true),
+              themeMode: provider.darkTheme ? ThemeMode.dark : ThemeMode.light,
               debugShowCheckedModeBanner: false,
               home: const NavigationPage());
         },

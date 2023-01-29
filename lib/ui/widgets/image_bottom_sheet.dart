@@ -21,58 +21,58 @@ class ImageBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(children: [
-      Padding(
-          padding: const EdgeInsets.all(25.0),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.4,
-                  child: Text(
-                    wallModel.name!,
-                    style: Theme.of(context).textTheme.displayMedium,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+    return Padding(
+      padding: const EdgeInsets.all(25),
+      child: Wrap(children: [
+        Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.4,
+                child: Text(
+                  wallModel.name!,
+                  style: Theme.of(context).textTheme.displayMedium,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                Text(
-                  "Designed By ${wallModel.author!}",
-                  style: Theme.of(context).textTheme.labelSmall,
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            Hero(
-              tag: wallModel.url!,
-              child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.5,
-                  width: double.infinity,
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(25),
-                      child: Stack(
-                        fit: StackFit.expand,
-                        children: [
-                          CNImage(imageUrl: wallModel.thumbnail),
-                          Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              onTap: () => _onTapHandler(context, wallModel),
-                              splashColor: blackColor.withOpacity(0.3),
-                            ),
+              ),
+              Text(
+                "Designed By ${wallModel.author!}",
+                style: Theme.of(context).textTheme.labelSmall,
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Hero(
+            tag: wallModel.url!,
+            child: SizedBox(
+                height: MediaQuery.of(context).size.height * 0.5,
+                width: double.infinity,
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(25),
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        CNImage(imageUrl: wallModel.thumbnail),
+                        Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () => _onTapHandler(context, wallModel),
+                            splashColor: blackColor.withOpacity(0.3),
                           ),
-                        ],
-                      ))),
-            ),
-            const SizedBox(height: 20),
-            PrimaryBtnWidget(
-                btnText: "Apply",
-                onTap: () =>
-                    Provider.of<WallActionProvider>(context, listen: false)
-                        .setWall(wallModel.url, context)),
-          ]))
-    ]);
+                        ),
+                      ],
+                    ))),
+          ),
+          const SizedBox(height: 20),
+          PrimaryBtnWidget(
+              btnText: "Apply",
+              onTap: () =>
+                  Provider.of<WallActionProvider>(context, listen: false)
+                      .setWall(wallModel.url, context)),
+        ])
+      ]),
+    );
   }
 }
