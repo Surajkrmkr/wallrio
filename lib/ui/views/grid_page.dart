@@ -19,11 +19,9 @@ class GridPage extends StatelessWidget {
     showModalBottomSheet(
         context: context,
         isScrollControlled: true,
-        backgroundColor: whiteColor,
         enableDrag: true,
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(25))),
-        barrierColor: Colors.black12,
         builder: (context) => ImageBottomSheet(wallModel: model));
   }
 
@@ -106,11 +104,11 @@ class GridPage extends StatelessWidget {
             children: [
               Material(
                 child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.23,
+                  width: MediaQuery.of(context).size.width * 0.20,
                   child: Text(
                     wall.name!,
                     maxLines: 1,
-                    overflow: TextOverflow.fade,
+                    overflow: TextOverflow.ellipsis,
                     style: const TextStyle(color: Colors.white),
                   ),
                 ),

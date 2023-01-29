@@ -8,9 +8,13 @@ import 'package:wallrio/provider/wall_rio.dart';
 import 'package:wallrio/ui/theme/theme_data.dart';
 import 'package:wallrio/ui/views/navigation_page.dart';
 
+import 'provider/dark_theme.dart';
 import 'provider/favourite.dart';
+import 'services/dark_mode_services.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await ThemeService().getDarkMode();
   runApp(const MyApp());
 }
 
@@ -36,6 +40,9 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
+          create: ((context) => DarkThemeProvider()),
+        ),
+        ChangeNotifierProvider(
           create: ((context) => WallRio()),
         ),
         ChangeNotifierProvider(
@@ -51,13 +58,17 @@ class MyApp extends StatelessWidget {
           create: ((context) => FavouriteProvider()),
         )
       ],
-      child: MaterialApp(
-          title: 'Wall Rio',
-          theme: WallRioThemeData.getLightThemeData(),
-          darkTheme: WallRioThemeData.getDarkThemeData(),
-          themeMode: ThemeMode.light,
-          debugShowCheckedModeBanner: false,
-          home: const NavigationPage()),
+      child: Consumer<DarkThemeProvider>(
+        builder: (context, provider, _) {
+          return MaterialApp(
+              title: 'Wall Rio',
+              theme: WallRioThemeData.getLightThemeData(
+                  context: context, isDarkTheme: provider.darkTheme),
+              themeMode: ThemeMode.light,
+              debugShowCheckedModeBanner: false,
+              home: const NavigationPage());
+        },
+      ),
     );
   }
 }

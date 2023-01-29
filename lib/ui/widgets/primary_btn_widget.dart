@@ -14,11 +14,7 @@ class PrimaryBtnWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            minimumSize: const Size.fromHeight(60),
-            backgroundColor: blackColor,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15))),
+        
         onPressed: onTap,
         child: Center(
             child: Text(btnText,

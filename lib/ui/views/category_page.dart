@@ -22,11 +22,9 @@ class CategoryPage extends StatelessWidget {
     showModalBottomSheet(
         context: context,
         isScrollControlled: true,
-        backgroundColor: whiteColor,
         enableDrag: true,
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(25))),
-        barrierColor: Colors.black12,
         builder: (context) => ImageBottomSheet(wallModel: model));
   }
 
@@ -47,6 +45,8 @@ class CategoryPage extends StatelessWidget {
               showLogo: false,
               showSearchBtn: false,
               centeredTitle: false,
+              showUserProfileIcon: true,
+              userProfileIconRight: true,
               text: "Our\nCollections"),
           _buildCategoryUI()
         ],
@@ -117,7 +117,7 @@ class CategoryPage extends StatelessWidget {
           Expanded(
             child: ListView.separated(
                 separatorBuilder: (context, index) => const SizedBox(width: 10),
-                itemCount: categoryWalls.length,
+                itemCount: categoryWalls.length < 8 ? categoryWalls.length : 8,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, i) {
                   return Hero(
@@ -183,22 +183,25 @@ class CategoryPage extends StatelessWidget {
     return IconButton(onPressed: onTap, icon: Icon(iconData, color: color));
   }
 
-  ListTile _buildCategoryHeaderUI(
+  Widget _buildCategoryHeaderUI(
       String categoryName, List<Walls?> walls, BuildContext context) {
-    return ListTile(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 25),
-      title: Text(categoryName, style: Theme.of(context).textTheme.bodyMedium),
-      onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => GridPage(
-                    categoryName: categoryName,
-                    walls: walls,
-                  ))),
-      trailing: const Icon(
-        Icons.navigate_next_rounded,
-        color: blackColor,
-        size: 30,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
+      child: ListTile(
+        title:
+            Text(categoryName, style: Theme.of(context).textTheme.bodyMedium),
+        onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => GridPage(
+                      categoryName: categoryName,
+                      walls: walls,
+                    ))),
+        trailing: Icon(
+          Icons.navigate_next_rounded,
+          color: Theme.of(context).primaryColorLight,
+          size: 30,
+        ),
       ),
     );
   }

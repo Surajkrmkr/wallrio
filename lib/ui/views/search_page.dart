@@ -40,9 +40,11 @@ class SearchPage extends StatelessWidget {
         title: Padding(
             padding: const EdgeInsets.symmetric(vertical: 4),
             child: Column(children: [
-              Row(children: const [
-                BackBtnWidget(color: blackColor, isActionReset: true),
-                Spacer()
+              Row(children: [
+                BackBtnWidget(
+                    color: Theme.of(context).primaryColorLight,
+                    isActionReset: true),
+                const Spacer()
               ])
             ])),
         bottom: PreferredSize(
@@ -68,7 +70,9 @@ class SearchPage extends StatelessWidget {
                             padding: const EdgeInsets.only(right: 10.0),
                             child: FilterChip(
                                 label: Text(tag),
-                                labelStyle: const TextStyle(color: whiteColor),
+                                labelStyle: TextStyle(
+                                    color: Theme.of(context)
+                                        .scaffoldBackgroundColor),
                                 selected: provider.getTagIsSelected(tag),
                                 onSelected: (value) {
                                   cancelSearchBar(context);
@@ -81,7 +85,9 @@ class SearchPage extends StatelessWidget {
                             child: FilterChip(
                                 label: Text(tag),
                                 labelStyle: TextStyle(
-                                    color: blackColor.withOpacity(0.5)),
+                                    color: Theme.of(context)
+                                        .primaryColorLight
+                                        .withOpacity(0.5)),
                                 selected: provider.getTagIsSelected(tag),
                                 onSelected: (_) {
                                   cancelSearchBar(context);
@@ -100,7 +106,7 @@ class SearchPage extends StatelessWidget {
     return Consumer<WallRio>(builder: (context, provider, _) {
       return TextFormField(
         controller: textEditingController,
-        cursorColor: blackColor,
+        cursorColor: Theme.of(context).primaryColorLight,
         cursorWidth: 3,
         cursorRadius: const Radius.circular(10),
         onTap: () {
@@ -112,7 +118,7 @@ class SearchPage extends StatelessWidget {
         onChanged: (query) => provider.onSearchTap(query),
         decoration: InputDecoration(
           filled: true,
-          fillColor: blackColor.withOpacity(0.05),
+          fillColor: Theme.of(context).primaryColorLight.withOpacity(0.05),
           hintText: 'Search...',
           hintStyle: const TextStyle(fontSize: 14),
           suffixIcon: IconButton(

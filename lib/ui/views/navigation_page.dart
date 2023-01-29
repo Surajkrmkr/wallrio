@@ -17,28 +17,20 @@ class NavigationPage extends StatelessWidget {
           duration: const Duration(milliseconds: 500),
           curve: Curves.easeInOutCubic,
           height: provider.visible ? 80 : 0.0,
-          child: Center(
-            child: Wrap(
-              children: [
-                BottomNavigationBar(
-                    type: BottomNavigationBarType.fixed,
-                    enableFeedback: true,
-                    items: const [
-                      BottomNavigationBarItem(
-                          icon: Icon(Icons.home_rounded), label: 'Home'),
-                      BottomNavigationBarItem(
-                          icon: Icon(Icons.grid_view_rounded),
-                          label: 'Category'),
-                      BottomNavigationBarItem(
-                          icon: Icon(Icons.favorite), label: 'Favourite')
-                    ],
-                    iconSize: 28,
-                    showSelectedLabels: false,
-                    showUnselectedLabels: false,
-                    currentIndex: provider.index,
-                    onTap: (value) => provider.setIndex = value),
-              ],
-            ),
+          child: Wrap(
+            children: [
+              NavigationBar(
+                  destinations: const [
+                    NavigationDestination(
+                        icon: Icon(Icons.home_rounded), label: 'Home'),
+                    NavigationDestination(
+                        icon: Icon(Icons.grid_view_rounded), label: 'Category'),
+                    NavigationDestination(
+                        icon: Icon(Icons.favorite), label: 'Favourite')
+                  ],
+                  selectedIndex: provider.index,
+                  onDestinationSelected: (value) => provider.setIndex = value),
+            ],
           ),
         ),
       );

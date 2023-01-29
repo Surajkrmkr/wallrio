@@ -18,13 +18,11 @@ class FavouritePage extends StatelessWidget {
   void _onLongPressHandler(context, model) {
     showModalBottomSheet(
         context: context,
-        backgroundColor: whiteColor,
         enableDrag: true,
         isScrollControlled: true,
         isDismissible: true,
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(25))),
-        barrierColor: Colors.black12,
         builder: (context) => ImageBottomSheet(wallModel: model));
   }
 
@@ -45,6 +43,8 @@ class FavouritePage extends StatelessWidget {
               showLogo: false,
               showSearchBtn: false,
               centeredTitle: false,
+              showUserProfileIcon: true,
+              userProfileIconRight: true,
               text: "Your\nChoice"),
           _buildListUI(context)
         ],

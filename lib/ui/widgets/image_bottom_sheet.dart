@@ -27,6 +27,7 @@ class ImageBottomSheet extends StatelessWidget {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.4,
@@ -37,10 +38,9 @@ class ImageBottomSheet extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                const SizedBox(width: 10),
                 Text(
                   "Designed By ${wallModel.author!}",
-                  style: Theme.of(context).textTheme.bodyLarge,
+                  style: Theme.of(context).textTheme.labelSmall,
                 ),
               ],
             ),

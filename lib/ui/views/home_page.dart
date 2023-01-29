@@ -20,6 +20,7 @@ class HomePage extends StatelessWidget {
               showLogo: true,
               showSearchBtn: true,
               text: "WallRio",
+              userProfileIconRight: false,
               showUserProfileIcon: true),
           const SliverToBoxAdapter(child: BannerWidget()),
           SliverToBoxAdapter(

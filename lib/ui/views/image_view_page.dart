@@ -42,7 +42,7 @@ class ImageViewPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const BackBtnWidget(color: Colors.black),
+            BackBtnWidget(color: Theme.of(context).primaryColorLight),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Hero(
@@ -59,12 +59,8 @@ class ImageViewPage extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 20, horizontal: 20.0),
-              decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
-                  color: Colors.white),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

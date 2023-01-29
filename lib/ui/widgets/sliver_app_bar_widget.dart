@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
-import '../theme/theme_data.dart';
 import '../views/search_page.dart';
 import 'back_btn_widget.dart';
 import 'user_bottom_sheet.dart';
@@ -13,6 +12,7 @@ class SliverAppBarWidget extends StatelessWidget {
   final bool showBackBtn;
   final bool centeredTitle;
   final bool showUserProfileIcon;
+  final bool userProfileIconRight;
   const SliverAppBarWidget(
       {super.key,
       required this.showLogo,
@@ -20,18 +20,17 @@ class SliverAppBarWidget extends StatelessWidget {
       required this.showSearchBtn,
       this.showBackBtn = false,
       this.centeredTitle = true,
-      this.showUserProfileIcon = false});
+      this.showUserProfileIcon = false,
+      this.userProfileIconRight = true});
 
   void _onLongPressHandler(context) {
     showModalBottomSheet(
         context: context,
-        backgroundColor: whiteColor,
         enableDrag: true,
         isScrollControlled: true,
         isDismissible: true,
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(25))),
-        barrierColor: Colors.black12,
         builder: (context) => const UserBottomSheet());
   }
 
@@ -42,22 +41,13 @@ class SliverAppBarWidget extends StatelessWidget {
       pinned: false,
       floating: true,
       automaticallyImplyLeading: showBackBtn,
-      leadingWidth: showBackBtn || showUserProfileIcon ? 60 : 0,
+      leadingWidth: showBackBtn || !userProfileIconRight ? 60 : 0,
       leading: Row(
         children: [
-          Offstage(
-              offstage: !showUserProfileIcon,
-              child: Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: IconButton(
-                      iconSize: 30,
-                      icon: const Icon(
-                        Icons.account_circle_rounded,
-                      ),
-                      onPressed: () => _onLongPressHandler(context)))),
+          _buildUserProfileIcon(context, userProfileIconRight),
           Offstage(
               offstage: !showBackBtn,
-              child: const BackBtnWidget(color: Colors.black))
+              child: BackBtnWidget(color: Theme.of(context).primaryColorLight))
         ],
       ),
       toolbarHeight: MediaQuery.of(context).size.height * 0.10,
@@ -86,16 +76,37 @@ class SliverAppBarWidget extends StatelessWidget {
         ],
       ),
       actions: [
-        Offstage(
-          offstage: !showSearchBtn,
-          child: IconButton(
-              iconSize: 30,
-              onPressed: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => SearchPage())),
-              icon: const Icon(Icons.search_rounded)),
-        ),
+        _buildUserProfileIcon(context, !userProfileIconRight),
+        _buildSearchIcon(context),
         const SizedBox(width: 20),
       ],
+    );
+  }
+
+  Offstage _buildSearchIcon(BuildContext context) {
+    return Offstage(
+      offstage: !showSearchBtn,
+      child: IconButton(
+          iconSize: 30,
+          onPressed: () => Navigator.push(
+              context, MaterialPageRoute(builder: (context) => SearchPage())),
+          icon: const Icon(Icons.search_rounded)),
+    );
+  }
+
+  Offstage _buildUserProfileIcon(BuildContext context, bool showRight) {
+    return Offstage(
+      offstage: showRight,
+      child: Offstage(
+          offstage: !showUserProfileIcon,
+          child: Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: IconButton(
+                  iconSize: 30,
+                  icon: const Icon(
+                    Icons.account_circle_rounded,
+                  ),
+                  onPressed: () => _onLongPressHandler(context)))),
     );
   }
 }

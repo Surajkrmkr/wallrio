@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../views/settings_page.dart';
 import 'primary_btn_widget.dart';
 
 class UserBottomSheet extends StatelessWidget {
@@ -25,7 +26,11 @@ class UserBottomSheet extends StatelessWidget {
               ])
             ]),
           ),
-          PrimaryBtnWidget(btnText: 'Settings', onTap: () {}),
+          PrimaryBtnWidget(
+            btnText: 'Settings',
+            onTap: () => Navigator.push(context,
+                MaterialPageRoute(builder: (context) => SettingsPage())),
+          ),
           PrimaryBtnWidget(btnText: 'Changelog', onTap: () {}),
           PrimaryBtnWidget(btnText: 'Log Out', onTap: () {}),
         ],
