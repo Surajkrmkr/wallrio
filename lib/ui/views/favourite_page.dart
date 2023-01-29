@@ -8,7 +8,6 @@ import '../../provider/favourite.dart';
 import '../theme/theme_data.dart';
 import '../widgets/image_bottom_sheet.dart';
 import '../widgets/image_widget.dart';
-import '../widgets/refresh_indicator_widget.dart';
 import '../widgets/shimmer_widget.dart';
 import 'image_view_page.dart';
 
@@ -35,20 +34,18 @@ class FavouritePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicatorWidget(
-      child: CustomScrollView(
-        controller: Provider.of<Navigation>(context).controller,
-        slivers: [
-          const SliverAppBarWidget(
-              showLogo: false,
-              showSearchBtn: false,
-              centeredTitle: false,
-              showUserProfileIcon: true,
-              userProfileIconRight: true,
-              text: "Your\nChoice"),
-          _buildListUI(context)
-        ],
-      ),
+    return CustomScrollView(
+      controller: Provider.of<Navigation>(context).controller,
+      slivers: [
+        const SliverAppBarWidget(
+            showLogo: false,
+            showSearchBtn: false,
+            centeredTitle: false,
+            showUserProfileIcon: true,
+            userProfileIconRight: true,
+            text: "Your\nChoice"),
+        _buildListUI(context)
+      ],
     );
   }
 

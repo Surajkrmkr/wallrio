@@ -7,7 +7,6 @@ import 'package:wallrio/ui/widgets/image_bottom_sheet.dart';
 import '../../model/wall_rio_model.dart';
 import '../../provider/favourite.dart';
 import '../widgets/image_widget.dart';
-import '../widgets/refresh_indicator_widget.dart';
 import '../widgets/sliver_app_bar_widget.dart';
 
 class GridPage extends StatelessWidget {
@@ -35,18 +34,16 @@ class GridPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: RefreshIndicatorWidget(
-        child: SafeArea(
-          child: CustomScrollView(
-            slivers: [
-              SliverAppBarWidget(
-                  showLogo: false,
-                  showSearchBtn: false,
-                  text: categoryName,
-                  showBackBtn: true),
-              _buildListUI(context)
-            ],
-          ),
+      body: SafeArea(
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBarWidget(
+                showLogo: false,
+                showSearchBtn: false,
+                text: categoryName,
+                showBackBtn: true),
+            _buildListUI(context)
+          ],
         ),
       ),
     );

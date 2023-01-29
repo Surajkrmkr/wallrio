@@ -14,7 +14,7 @@ import 'services/dark_mode_services.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await ThemeService().getDarkMode();
+  await ThemeService().getData();
   runApp(const MyApp());
 }
 

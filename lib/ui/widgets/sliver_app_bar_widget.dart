@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
+import '../../provider/dark_theme.dart';
+import '../theme/theme_data.dart';
 import '../views/search_page.dart';
 import 'back_btn_widget.dart';
 import 'user_bottom_sheet.dart';
@@ -54,10 +57,17 @@ class SliverAppBarWidget extends StatelessWidget {
       centerTitle: centeredTitle,
       title: Column(
         children: [
-          GradientText(
-            text,
-            style: Theme.of(context).textTheme.displayLarge,
-            colors: const [Color(0xFFFF4949), Color(0xFF5344FF)],
+          Consumer<DarkThemeProvider>(
+            builder: (context, provider, _) {
+              return Padding(
+                padding: EdgeInsets.only(left: centeredTitle ? 0.0 : 10),
+                child: GradientText(
+                  text,
+                  style: Theme.of(context).textTheme.displayLarge,
+                  colors: gradientColorMap[provider.gradType]!,
+                ),
+              );
+            },
           ),
           Offstage(
             offstage: !showLogo,
@@ -103,8 +113,10 @@ class SliverAppBarWidget extends StatelessWidget {
               padding: const EdgeInsets.only(left: 8.0),
               child: IconButton(
                   iconSize: 30,
-                  icon: const Icon(
-                    Icons.account_circle_rounded,
+                  icon: const CircleAvatar(
+                    radius: 18,
+                    backgroundImage: NetworkImage(
+                        "https://gitlab.com/piyushkpv/wallrio_wall_data/-/raw/main/Assests/Ellipse%2013.png"),
                   ),
                   onPressed: () => _onLongPressHandler(context)))),
     );

@@ -17,8 +17,12 @@ class UserBottomSheet extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(bottom: 25.0),
             child: Row(children: [
-              const Icon(Icons.account_circle_rounded, size: 60),
-              const SizedBox(width: 10),
+              const CircleAvatar(
+                radius: 30,
+                backgroundImage: NetworkImage(
+                    "https://gitlab.com/piyushkpv/wallrio_wall_data/-/raw/main/Assests/Ellipse%2013.png"),
+              ),
+              const SizedBox(width: 20),
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text("Suraj Karmakar",
                     style: Theme.of(context).textTheme.displayMedium),
@@ -29,7 +33,7 @@ class UserBottomSheet extends StatelessWidget {
           PrimaryBtnWidget(
             btnText: 'Settings',
             onTap: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => SettingsPage())),
+                MaterialPageRoute(builder: (context) => const SettingsPage())),
           ),
           PrimaryBtnWidget(btnText: 'Changelog', onTap: () {}),
           PrimaryBtnWidget(btnText: 'Log Out', onTap: () {}),

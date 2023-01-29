@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../provider/dark_theme.dart';
+import '../theme/theme_data.dart';
+import '../widgets/clear_cache_widget.dart';
 import '../widgets/sliver_app_bar_widget.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -28,6 +30,7 @@ class SettingsPage extends StatelessWidget {
                     _advancedSection(context),
                     _socialSection(context),
                     _ourTeamSection(context),
+                    _appInfoSection(context),
                   ],
                 ),
               ),
@@ -46,24 +49,7 @@ class SettingsPage extends StatelessWidget {
           "Appearance",
           style: Theme.of(context).textTheme.bodyMedium,
         ),
-        Consumer<DarkThemeProvider>(
-          builder: (context, provider, _) {
-            return SwitchListTile(
-              value: provider.darkTheme,
-              onChanged: (bool val) {
-                provider.darkTheme = val;
-              },
-              title: const Text('Dark Mode'),
-              subtitle: Text(
-                "Welcome to the Dark Mode",
-                style: Theme.of(context).textTheme.labelSmall,
-              ),
-              contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-            );
-          },
-        ),
+        _darkModeTile(),
         ListTile(
           title: const Text('Customise your App'),
           contentPadding: const EdgeInsets.symmetric(horizontal: 10),
@@ -72,10 +58,65 @@ class SettingsPage extends StatelessWidget {
             style: Theme.of(context).textTheme.labelSmall,
           ),
         ),
-        Ink(
-          height: 100,
-        ),
+        _buildGradientUI(context),
       ],
+    );
+  }
+
+  Consumer<DarkThemeProvider> _darkModeTile() {
+    return Consumer<DarkThemeProvider>(
+      builder: (context, provider, _) {
+        return SwitchListTile(
+          value: provider.darkTheme,
+          onChanged: (bool val) {
+            provider.darkTheme = val;
+          },
+          title: const Text('Dark Mode'),
+          subtitle: Text(
+            "Welcome to the Dark Mode",
+            style: Theme.of(context).textTheme.labelSmall,
+          ),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        );
+      },
+    );
+  }
+
+  Consumer _buildGradientUI(BuildContext context) {
+    return Consumer<DarkThemeProvider>(
+      builder: (context, provider, _) {
+        return Container(
+          height: 150,
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: GridView(
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 5, mainAxisSpacing: 10, crossAxisSpacing: 10),
+              children: gradientColorMap.entries
+                  .map((e) => InkWell(
+                        borderRadius: BorderRadius.circular(20),
+                        onTap: provider.gradType == e.key
+                            ? () {}
+                            : () => provider.gradType = e.key,
+                        child: Ink(
+                          height: 60,
+                          width: 60,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              gradient: LinearGradient(colors: e.value),
+                              border: Border.all(
+                                  strokeAlign: BorderSide.strokeAlignOutside,
+                                  width: 3,
+                                  color: provider.gradType == e.key
+                                      ? Theme.of(context).primaryColorLight
+                                      : Colors.transparent)),
+                        ),
+                      ))
+                  .toList()),
+        );
+      },
     );
   }
 
@@ -87,7 +128,10 @@ class SettingsPage extends StatelessWidget {
         style: Theme.of(context).textTheme.bodyMedium,
       ),
       _getListTile(context,
-          title: 'Clear Cache', subtitle: "Clear Out Cache", onTap: () {})
+          title: 'Clear Cache',
+          subtitle: "Clear Out Cache",
+          onTap: () => showDialog(
+              context: context, builder: (context) => const ClearCacheWidget()))
     ]);
   }
 
@@ -121,6 +165,22 @@ class SettingsPage extends StatelessWidget {
       _getListTile(context,
           title: 'Sumit', subtitle: "Graphic Designer", onTap: () {}),
     ]);
+  }
+
+  Padding _appInfoSection(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20.0),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+        Text(
+          "Version 1.0.0.0",
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+        Text(
+          "Made With Love ❤️ In India",
+          style: Theme.of(context).textTheme.bodyLarge,
+        ),
+      ]),
+    );
   }
 
   Widget _getListTile(context,

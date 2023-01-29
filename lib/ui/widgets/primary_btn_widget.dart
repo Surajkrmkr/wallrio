@@ -14,7 +14,6 @@ class PrimaryBtnWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-        
         onPressed: onTap,
         child: Center(
             child: Text(btnText,

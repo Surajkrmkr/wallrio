@@ -162,12 +162,12 @@ class CategoryPage extends StatelessWidget {
       final bool isFav = provider.isSelectedAsFav(wall.url!);
       if (provider.isLoading) {
         return _buildFavBtn(
-            color: Colors.white,
+            color: Colors.black,
             iconData: Icons.favorite_border_rounded,
             onTap: () {});
       }
       return _buildFavBtn(
-        color: isFav ? Colors.redAccent : Colors.white,
+        color: isFav ? Colors.redAccent : Colors.black,
         iconData:
             isFav ? Icons.favorite_rounded : Icons.favorite_border_rounded,
         onTap: () =>
@@ -180,7 +180,10 @@ class CategoryPage extends StatelessWidget {
       {required Function() onTap,
       required IconData iconData,
       required Color color}) {
-    return IconButton(onPressed: onTap, icon: Icon(iconData, color: color));
+    return IconButton(
+        style: IconButton.styleFrom(backgroundColor: whiteColor),
+        onPressed: onTap,
+        icon: Icon(iconData, color: color));
   }
 
   Widget _buildCategoryHeaderUI(
