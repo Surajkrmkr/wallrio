@@ -14,8 +14,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ThemeService().getData();
   await Supabase.initialize(
-    url: supabaseUrl,
-    anonKey: anonKey,
+    url: Constants.supabaseUrl,
+    anonKey: Constants.supabaseAnnonKey,
   );
   runApp(const MyApp());
 }

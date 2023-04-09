@@ -27,7 +27,7 @@ class AuthProvider with ChangeNotifier {
     setIsLoading = true;
     try {
       await supabase.auth
-          .signInWithOAuth(Provider.google, redirectTo: redirectUri);
+          .signInWithOAuth(Provider.google, redirectTo: Constants.redirectUri);
     } on AuthException catch (error) {
       ToastWidget.showToast(error.message);
     } catch (error) {
