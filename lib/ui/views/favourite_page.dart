@@ -87,7 +87,7 @@ class FavouritePage extends StatelessWidget {
               delegate: SliverChildBuilderDelegate(
                   childCount: walls.length,
                   (context, index) => Hero(
-                        tag: walls[index].url!,
+                        tag: walls[index].url,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(25),
                           child: Stack(fit: StackFit.expand, children: [

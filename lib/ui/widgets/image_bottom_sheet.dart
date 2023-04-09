@@ -31,21 +31,21 @@ class ImageBottomSheet extends StatelessWidget {
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.4,
                 child: Text(
-                  wallModel.name!,
+                  wallModel.name,
                   style: Theme.of(context).textTheme.displayMedium,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
               Text(
-                "Designed By ${wallModel.author!}",
+                "Designed By ${wallModel.author}",
                 style: Theme.of(context).textTheme.labelSmall,
               ),
             ],
           ),
           const SizedBox(height: 20),
           Hero(
-            tag: wallModel.url!,
+            tag: wallModel.url,
             child: SizedBox(
                 height: MediaQuery.of(context).size.height * 0.5,
                 width: double.infinity,

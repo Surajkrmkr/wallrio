@@ -30,9 +30,9 @@ class ImageViewPage extends StatelessWidget {
     if (!_isInitialized) {
       Future.delayed(Duration.zero, () {
         Provider.of<WallDetails>(context, listen: false)
-            .getColorPalette(wallModel.thumbnail!);
+            .getColorPalette(wallModel.thumbnail);
         Provider.of<WallDetails>(context, listen: false)
-            .getWallDetails(wallModel.url!);
+            .getWallDetails(wallModel.url);
       });
       _isInitialized = false;
     }
@@ -46,7 +46,7 @@ class ImageViewPage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Hero(
-                tag: wallModel.url!,
+                tag: wallModel.url,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(25),
                   child: SizedBox(
@@ -177,7 +177,7 @@ class ImageViewPage extends StatelessWidget {
             children: [
               Text("Category : ",
                   style: Theme.of(context).textTheme.titleSmall),
-              Text(wallModel.category!,
+              Text(wallModel.category,
                   style: Theme.of(context).textTheme.bodyLarge),
             ],
           ),
@@ -212,7 +212,7 @@ class ImageViewPage extends StatelessWidget {
           child: PrimaryBtnWidget(
               btnText: "Download",
               onTap: () => provider.downloadImg(
-                  wallModel.url, wallModel.name! + wallModel.id.toString()))),
+                  wallModel.url, wallModel.name+ wallModel.id.toString()))),
       const SizedBox(width: 10),
       Expanded(
           child: PrimaryBtnWidget(
@@ -224,13 +224,13 @@ class ImageViewPage extends StatelessWidget {
   Row _buildHeaderUI(BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(wallModel.name!, style: Theme.of(context).textTheme.displayMedium),
+        Text(wallModel.name, style: Theme.of(context).textTheme.displayMedium),
         const SizedBox(height: 5),
-        Text("Designed By ${wallModel.author!}",
+        Text("Designed By ${wallModel.author}",
             style: Theme.of(context).textTheme.titleSmall)
       ]),
       Consumer<FavouriteProvider>(builder: (context, provider, _) {
-        final bool isFav = provider.isSelectedAsFav(wallModel.url!);
+        final bool isFav = provider.isSelectedAsFav(wallModel.url);
         if (provider.isLoading) {
           return _buildFavBtn(
               color: Theme.of(context).primaryColorLight,
@@ -242,7 +242,7 @@ class ImageViewPage extends StatelessWidget {
           iconData:
               isFav ? Icons.favorite_rounded : Icons.favorite_border_rounded,
           onTap: () => isFav
-              ? provider.removeFromFav(wallModel.url!)
+              ? provider.removeFromFav(wallModel.url)
               : provider.addToFav(wallModel),
         );
       })

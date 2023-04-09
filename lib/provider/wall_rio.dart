@@ -59,9 +59,9 @@ class WallRio extends ChangeNotifier {
     setBannerList = [];
     WallRioModel model = await ApiServices.getData();
     if (model.error.isEmpty) {
-      setWallList = model.walls!;
-      setActionWallList = model.walls!;
-      setBannerList = model.banners!;
+      setWallList = model.walls;
+      setActionWallList = model.walls;
+      setBannerList = model.banners;
       _buildCategoryAndTags();
     } else {
       setError = model.error;
@@ -75,17 +75,16 @@ class WallRio extends ChangeNotifier {
     tag.selectedTags.clear();
     tag.unSelectedTags.clear();
     for (Walls? wall in originalWallList) {
-      if (!categories!.containsKey(wall!.category!)) {
-        categories![wall.category!] =
+      if (!categories!.containsKey(wall!.category)) {
+        categories![wall.category] =
             []; // Initiating a Empty list of a category
       }
-      for (String? eachTag in wall.tags!) {
+      for (String? eachTag in wall.tags) {
         if (!tag.unSelectedTags.contains(eachTag)) {
           tag.unSelectedTags.add(eachTag!); // Adding a tag to TagList
-
         }
       }
-      categories![wall.category!]!.add(wall); // Adding a Wall to CategoryList
+      categories![wall.category]!.add(wall); // Adding a Wall to CategoryList
     }
     notifyListeners();
   }
@@ -114,7 +113,7 @@ class WallRio extends ChangeNotifier {
     }
     for (String tag in tag.selectedTags) {
       final eachTagwall =
-          originalWallList.where((wall) => wall.tags!.contains(tag)).toList();
+          originalWallList.where((wall) => wall.tags.contains(tag)).toList();
       wall.insertAll(0, eachTagwall);
     }
     return wall;
@@ -124,7 +123,7 @@ class WallRio extends ChangeNotifier {
     if (query.isNotEmpty) {
       setActionWallList = originalWallList
           .where(
-              (wall) => wall.name!.toLowerCase().contains(query.toLowerCase()))
+              (wall) => wall.name.toLowerCase().contains(query.toLowerCase()))
           .toList();
     } else {
       setActionWallList = originalWallList;

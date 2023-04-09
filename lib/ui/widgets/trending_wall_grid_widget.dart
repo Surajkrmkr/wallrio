@@ -7,7 +7,6 @@ import 'package:wallrio/ui/widgets/image_bottom_sheet.dart';
 import 'package:wallrio/ui/widgets/image_widget.dart';
 
 import '../../model/wall_rio_model.dart';
-import '../../provider/dark_theme.dart';
 import '../../provider/favourite.dart';
 import '../views/image_view_page.dart';
 import 'shimmer_widget.dart';
@@ -88,7 +87,7 @@ class TrendingWallGridWidget extends StatelessWidget {
 
   Hero _buildImgUI(Walls wall, BuildContext context) {
     return Hero(
-      tag: wall.url!,
+      tag: wall.url,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(25),
         child: Stack(fit: StackFit.expand, children: [
@@ -111,11 +110,7 @@ class TrendingWallGridWidget extends StatelessWidget {
     return Align(
         alignment: Alignment.bottomCenter,
         child: Container(
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  colors: gradientColorMap[
-                      Provider.of<DarkThemeProvider>(context, listen: true)
-                          .gradType]!)),
+          color: wall.colorList.last,
           padding: const EdgeInsets.only(left: 15, right: 5),
           height: 45,
           alignment: Alignment.bottomCenter,
@@ -126,13 +121,13 @@ class TrendingWallGridWidget extends StatelessWidget {
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.23,
                   child: Text(
-                    wall.name!,
+                    wall.name,
                     maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                    overflow: TextOverflow.clip,
                     style: Theme.of(context)
                         .textTheme
                         .titleMedium!
-                        .copyWith(color: whiteColor),
+                        .copyWith(color: whiteColor, fontSize: 14),
                   ),
                 ),
               ),
@@ -144,7 +139,7 @@ class TrendingWallGridWidget extends StatelessWidget {
 
   Consumer<FavouriteProvider> _buildFavIcon(Walls wall) {
     return Consumer<FavouriteProvider>(builder: (context, provider, _) {
-      final bool isFav = provider.isSelectedAsFav(wall.url!);
+      final bool isFav = provider.isSelectedAsFav(wall.url);
       if (provider.isLoading) {
         return _buildFavBtn(
             color: Colors.white,
@@ -156,7 +151,7 @@ class TrendingWallGridWidget extends StatelessWidget {
         iconData:
             isFav ? Icons.favorite_rounded : Icons.favorite_border_rounded,
         onTap: () =>
-            isFav ? provider.removeFromFav(wall.url!) : provider.addToFav(wall),
+            isFav ? provider.removeFromFav(wall.url) : provider.addToFav(wall),
       );
     });
   }

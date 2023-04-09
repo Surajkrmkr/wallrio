@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-
 class Navigation extends ChangeNotifier {
   int index = 0;
   final ScrollController controller = ScrollController();
@@ -25,14 +24,14 @@ class Navigation extends ChangeNotifier {
     setVisible = true;
     controller.addListener(
       () {
-        if (controller.position.userScrollDirection ==
+        if (controller.positions.last.userScrollDirection ==
             ScrollDirection.reverse) {
           if (visible) {
             setVisible = false;
           }
         }
 
-        if (controller.position.userScrollDirection ==
+        if (controller.positions.last.userScrollDirection ==
             ScrollDirection.forward) {
           if (!visible) {
             setVisible = true;

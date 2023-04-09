@@ -12,13 +12,13 @@ import 'shimmer_widget.dart';
 class BannerWidget extends StatelessWidget {
   const BannerWidget({super.key});
 
-  void _onTapHandler(context, Banners banner) => banner.category!.isEmpty
-      ? LaunchUrlWidget.launch(banner.link!)
+  void _onTapHandler(context, Banners banner) => banner.category.isEmpty
+      ? LaunchUrlWidget.launch(banner.link)
       : Navigator.push(context, MaterialPageRoute(builder: (context) {
           final categoryWalls =
-              Provider.of<WallRio>(context).categories![banner.category!];
+              Provider.of<WallRio>(context).categories![banner.category];
           return GridPage(
-            categoryName: banner.category!,
+            categoryName: banner.category,
             walls: categoryWalls!,
           );
         }));

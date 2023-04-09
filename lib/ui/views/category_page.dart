@@ -118,7 +118,7 @@ class CategoryPage extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, i) {
             return Hero(
-              tag: categoryWalls[i]!.url!,
+              tag: categoryWalls[i]!.url,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(25),
                 child: SizedBox(
@@ -151,7 +151,7 @@ class CategoryPage extends StatelessWidget {
 
   Consumer<FavouriteProvider> _buildFavIcon(Walls wall) {
     return Consumer<FavouriteProvider>(builder: (context, provider, _) {
-      final bool isFav = provider.isSelectedAsFav(wall.url!);
+      final bool isFav = provider.isSelectedAsFav(wall.url);
       if (provider.isLoading) {
         return _buildFavBtn(
             color: Colors.black,
@@ -163,7 +163,7 @@ class CategoryPage extends StatelessWidget {
         iconData:
             isFav ? Icons.favorite_rounded : Icons.favorite_border_rounded,
         onTap: () =>
-            isFav ? provider.removeFromFav(wall.url!) : provider.addToFav(wall),
+            isFav ? provider.removeFromFav(wall.url) : provider.addToFav(wall),
       );
     });
   }

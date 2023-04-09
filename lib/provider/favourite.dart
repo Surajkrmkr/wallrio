@@ -32,14 +32,14 @@ class FavouriteProvider extends ChangeNotifier {
     final obj = Walls.toJson(wall);
     favJson["walls"]!.add(obj);
     saveJson();
-    setWallList = WallRioModel.fromJson(favJson).walls!;
+    setWallList = WallRioModel.fromJson(favJson).walls;
     ToastWidget.showToast("Added to Favourite");
   }
 
   void removeFromFav(String url) {
     favJson["walls"]!.removeWhere((wall) => wall["url"] == url);
     saveJson();
-    setWallList = WallRioModel.fromJson(favJson).walls!;
+    setWallList = WallRioModel.fromJson(favJson).walls;
     ToastWidget.showToast("Removed from Favourite");
   }
 
@@ -60,7 +60,7 @@ class FavouriteProvider extends ChangeNotifier {
     }
     final jsonText = await file.readAsString();
     favJson = json.decode(jsonText);
-    setWallList = WallRioModel.fromJson(favJson).walls!;
+    setWallList = WallRioModel.fromJson(favJson).walls;
     setIsLoading = false;
   }
 

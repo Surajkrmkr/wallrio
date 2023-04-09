@@ -15,6 +15,7 @@ class HomePage extends StatelessWidget {
     return RefreshIndicatorWidget(
       child: CustomScrollView(
         controller: Provider.of<Navigation>(context).controller,
+        primary: false,
         slivers: [
           const SliverAppBarWidget(
               showLogo: true,

@@ -5,7 +5,6 @@ import 'package:wallrio/ui/views/image_view_page.dart';
 import 'package:wallrio/ui/widgets/image_bottom_sheet.dart';
 
 import '../../model/wall_rio_model.dart';
-import '../../provider/dark_theme.dart';
 import '../../provider/favourite.dart';
 import '../widgets/image_widget.dart';
 import '../widgets/sliver_app_bar_widget.dart';
@@ -62,7 +61,7 @@ class GridPage extends StatelessWidget {
             delegate: SliverChildBuilderDelegate(
                 childCount: walls.length,
                 (context, index) => Hero(
-                      tag: walls[index]!.url!,
+                      tag: walls[index]!.url,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(25),
                         child: Stack(fit: StackFit.expand, children: [
@@ -85,11 +84,7 @@ class GridPage extends StatelessWidget {
     return Align(
         alignment: Alignment.bottomCenter,
         child: Container(
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  colors: gradientColorMap[
-                      Provider.of<DarkThemeProvider>(context, listen: true)
-                          .gradType]!)),
+          color: wall.colorList.last,
           padding: const EdgeInsets.only(left: 15, right: 5),
           height: 45,
           alignment: Alignment.bottomCenter,
@@ -100,7 +95,7 @@ class GridPage extends StatelessWidget {
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.20,
                   child: Text(
-                    wall.name!,
+                    wall.name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context)
@@ -118,7 +113,7 @@ class GridPage extends StatelessWidget {
 
   Consumer<FavouriteProvider> _buildFavIcon(Walls wall) {
     return Consumer<FavouriteProvider>(builder: (context, provider, _) {
-      final bool isFav = provider.isSelectedAsFav(wall.url!);
+      final bool isFav = provider.isSelectedAsFav(wall.url);
       if (provider.isLoading) {
         return _buildFavBtn(
             color: Colors.white,
@@ -130,7 +125,7 @@ class GridPage extends StatelessWidget {
         iconData:
             isFav ? Icons.favorite_rounded : Icons.favorite_border_rounded,
         onTap: () =>
-            isFav ? provider.removeFromFav(wall.url!) : provider.addToFav(wall),
+            isFav ? provider.removeFromFav(wall.url) : provider.addToFav(wall),
       );
     });
   }
