@@ -41,6 +41,12 @@ class _NavigationPageState extends State<NavigationPage> {
   }
 
   @override
+  void dispose() {
+    _authStateSubscription.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return provider.Consumer<Navigation>(builder: (context, provider, _) {
       return Scaffold(

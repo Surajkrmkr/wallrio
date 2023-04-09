@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-import '../model/user_profile_model.dart';
-import 'auth.dart';
 
 class Navigation extends ChangeNotifier {
   int index = 0;

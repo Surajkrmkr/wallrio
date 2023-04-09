@@ -3,7 +3,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../constants.dart';
 import '../model/user_profile_model.dart';
-import '../ui/oauth/login_page.dart';
 import '../ui/widgets/toast_widget.dart';
 
 class AuthProvider with ChangeNotifier {
@@ -33,8 +32,9 @@ class AuthProvider with ChangeNotifier {
     } catch (error) {
       debugPrint(error.toString());
       ToastWidget.showToast('Unexpected error occurred');
+    } finally {
+      setIsLoading = false;
     }
-    setIsLoading = false;
   }
 
   Future<void> signOut(context) async {
@@ -47,8 +47,9 @@ class AuthProvider with ChangeNotifier {
     } catch (error) {
       debugPrint(error.toString());
       ToastWidget.showToast('Unexpected error occurred');
+    } finally {
+      setIsLoading = false;
     }
-    setIsLoading = false;
   }
 
   void setUserProfileData() {

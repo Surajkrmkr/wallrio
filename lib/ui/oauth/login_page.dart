@@ -10,6 +10,7 @@ import '../theme/theme_data.dart' as theme;
 import '../views/navigation_page.dart';
 import '../widgets/primary_btn_widget.dart';
 import '../widgets/shimmer_widget.dart';
+import '../widgets/toast_widget.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -33,6 +34,8 @@ class _LoginPageState extends State<LoginPage> {
       final session = data.session;
       if (session != null) {
         _redirecting = true;
+        ToastWidget.showToast(
+            "Logged in as ${provider.Provider.of<AuthProvider>(context, listen: false).supabase.auth.currentUser!.email!}");
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => const NavigationPage()));
       }
@@ -112,7 +115,7 @@ class _LoginPageState extends State<LoginPage> {
 
   PrimaryBtnWidget _buildSignInBtn(AuthProvider provider) {
     return PrimaryBtnWidget(
-      btnText: "SIGN-IN",
+      btnText: "SIGN IN",
       onTap: provider.signIn,
     );
   }

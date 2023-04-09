@@ -33,7 +33,7 @@ class _SplashPageState extends State<SplashPage> {
         .currentSession;
     if (session != null) {
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => NavigationPage()));
+          context, MaterialPageRoute(builder: (context) => const NavigationPage()));
     } else {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => const LoginPage()));
