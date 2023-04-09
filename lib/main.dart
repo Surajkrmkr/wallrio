@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:wallrio/provider/wall_action.dart';
-import 'package:wallrio/provider/wall_details.dart';
-import 'package:wallrio/provider/navigation.dart';
-import 'package:wallrio/provider/wall_rio.dart';
-import 'package:wallrio/ui/theme/theme_data.dart';
-import 'package:wallrio/ui/views/navigation_page.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:wallrio/providers.dart';
 
+import 'constants.dart';
 import 'provider/dark_theme.dart';
-import 'provider/favourite.dart';
 import 'services/dark_mode_services.dart';
+import 'ui/oauth/splash_page.dart';
+import 'ui/theme/theme_data.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ThemeService().getData();
+  await Supabase.initialize(
+    url: supabaseUrl,
+    anonKey: anonKey,
+  );
   runApp(const MyApp());
 }
 
@@ -24,26 +26,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: ((context) => DarkThemeProvider()),
-        ),
-        ChangeNotifierProvider(
-          create: ((context) => WallRio()),
-        ),
-        ChangeNotifierProvider(
-          create: ((context) => Navigation()),
-        ),
-        ChangeNotifierProvider(
-          create: ((context) => WallDetails()),
-        ),
-        ChangeNotifierProvider(
-          create: ((context) => WallActionProvider()),
-        ),
-        ChangeNotifierProvider(
-          create: ((context) => FavouriteProvider()),
-        )
-      ],
+      providers: providers(context),
       child: Consumer<DarkThemeProvider>(
         builder: (context, provider, _) {
           SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -60,7 +43,7 @@ class MyApp extends StatelessWidget {
                   context: context, isDarkTheme: true),
               themeMode: provider.darkTheme ? ThemeMode.dark : ThemeMode.light,
               debugShowCheckedModeBanner: false,
-              home: const NavigationPage());
+              home: const SplashPage());
         },
       ),
     );

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
+import '../../provider/auth.dart';
 import '../../provider/dark_theme.dart';
 import '../theme/theme_data.dart';
 import '../views/search_page.dart';
@@ -113,10 +114,16 @@ class SliverAppBarWidget extends StatelessWidget {
               padding: const EdgeInsets.only(left: 8.0),
               child: IconButton(
                   iconSize: 30,
-                  icon: const CircleAvatar(
-                    radius: 18,
-                    backgroundImage: NetworkImage(
-                        "https://gitlab.com/piyushkpv/wallrio_wall_data/-/raw/main/Assests/Ellipse%2013.png"),
+                  icon: Consumer<AuthProvider>(
+                    builder: (context, provider, _) {
+                      return provider.user.picture.isEmpty
+                          ? const Icon(Icons.account_circle_rounded)
+                          : CircleAvatar(
+                              radius: 18,
+                              backgroundImage:
+                                  NetworkImage(provider.user.picture),
+                            );
+                    },
                   ),
                   onPressed: () => _onLongPressHandler(context)))),
     );

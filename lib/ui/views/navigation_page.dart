@@ -1,15 +1,48 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:provider/provider.dart' as provider;
 import 'package:animations/animations.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wallrio/pages.dart';
 import 'package:wallrio/provider/navigation.dart';
 
-class NavigationPage extends StatelessWidget {
+import '../../provider/auth.dart';
+import '../oauth/login_page.dart';
+
+class NavigationPage extends StatefulWidget {
   const NavigationPage({super.key});
 
   @override
+  State<NavigationPage> createState() => _NavigationPageState();
+}
+
+class _NavigationPageState extends State<NavigationPage> {
+  late final StreamSubscription<AuthState> _authStateSubscription;
+  @override
+  void initState() {
+    Future.delayed(
+        Duration.zero,
+        provider.Provider.of<AuthProvider>(context, listen: false)
+            .setUserProfileData);
+    _authStateSubscription =
+        provider.Provider.of<AuthProvider>(context, listen: false)
+            .supabase
+            .auth
+            .onAuthStateChange
+            .listen((data) {
+      final session = data.session;
+      if (session == null && mounted) {
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const LoginPage()));
+      }
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Consumer<Navigation>(builder: (context, provider, _) {
+    return provider.Consumer<Navigation>(builder: (context, provider, _) {
       return Scaffold(
         extendBodyBehindAppBar: true,
         extendBody: true,

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../provider/auth.dart';
 import '../views/settings_page.dart';
 import 'primary_btn_widget.dart';
+import 'shimmer_widget.dart';
 
 class UserBottomSheet extends StatelessWidget {
   const UserBottomSheet({super.key});
@@ -16,29 +19,53 @@ class UserBottomSheet extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(bottom: 25.0),
-            child: Row(children: [
-              const CircleAvatar(
-                radius: 30,
-                backgroundImage: NetworkImage(
-                    "https://gitlab.com/piyushkpv/wallrio_wall_data/-/raw/main/Assests/Ellipse%2013.png"),
-              ),
-              const SizedBox(width: 20),
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text("Suraj Karmakar",
-                    style: Theme.of(context).textTheme.displayMedium),
-                Text("pro user", style: Theme.of(context).textTheme.titleSmall)
-              ])
-            ]),
+            child: Consumer<AuthProvider>(
+              builder: (context, provider, _) {
+                return Row(children: [
+                  provider.user.picture.isEmpty
+                      ? const Icon(Icons.account_circle_rounded)
+                      : CircleAvatar(
+                          radius: 30,
+                          backgroundImage: NetworkImage(provider.user.picture),
+                        ),
+                  const SizedBox(width: 20),
+                  Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(provider.user.fullName,
+                            style: Theme.of(context).textTheme.displayMedium),
+                        Text("pro user",
+                            style: Theme.of(context).textTheme.titleSmall)
+                      ])
+                ]);
+              },
+            ),
           ),
           PrimaryBtnWidget(
             btnText: 'Settings',
-            onTap: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const SettingsPage())),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const SettingsPage()));
+            },
           ),
           PrimaryBtnWidget(btnText: 'Changelog', onTap: () {}),
-          PrimaryBtnWidget(btnText: 'Log Out', onTap: () {}),
+          Consumer<AuthProvider>(builder: (context, provider, _) {
+            return provider.isLoading
+                ? ShimmerWidget.withWidget(_buildSignOutBtn(context), context)
+                : _buildSignOutBtn(context);
+          }),
         ],
       ),
     );
+  }
+
+  PrimaryBtnWidget _buildSignOutBtn(BuildContext context) {
+    return PrimaryBtnWidget(
+        btnText: 'Log Out',
+        onTap: () =>
+            Provider.of<AuthProvider>(context, listen: false).signOut(context));
   }
 }

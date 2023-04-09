@@ -21,4 +21,11 @@ class ShimmerWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(radius)),
         ));
   }
+
+  static Widget withWidget(Widget child, context) {
+    return Shimmer.fromColors(
+        baseColor: Theme.of(context).primaryColorLight.withOpacity(0.2),
+        highlightColor: Theme.of(context).primaryColorLight.withOpacity(0.5),
+        child: IgnorePointer(child: child));
+  }
 }

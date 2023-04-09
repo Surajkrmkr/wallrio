@@ -25,6 +25,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.7"
+  app_links:
+    dependency: transitive
+    description:
+      name: app_links
+      sha256: d572dcdff49c4cfcfa6f315e2683e518ec6eb54e084d01e51d9631a4dcc1b5e8
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.4.2"
   archive:
     dependency: transitive
     description:
@@ -288,14 +296,38 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.0"
-  get_it:
+  functions_client:
     dependency: transitive
     description:
-      name: get_it
-      sha256: "290fde3a86072e4b37dbb03c07bec6126f0ecc28dad403c12ffe2e5a2d751ab7"
+      name: functions_client
+      sha256: e82e7325c0fc04d751aca9aaaf7b9e9d599e1e5cf869e0cb7c762a5f53784c71
       url: "https://pub.dev"
     source: hosted
-    version: "7.2.0"
+    version: "1.1.1"
+  gotrue:
+    dependency: transitive
+    description:
+      name: gotrue
+      sha256: da1528e2de8ec626e04ee93aee6d055b53ab06388cf1a36ffd1d9af776da31f3
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.5.7"
+  hive:
+    dependency: transitive
+    description:
+      name: hive
+      sha256: "8dcf6db979d7933da8217edcec84e9df1bdb4e4edc7fc77dbd5aa74356d6d941"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.3"
+  hive_flutter:
+    dependency: transitive
+    description:
+      name: hive_flutter
+      sha256: dca1da446b1d808a51689fb5d0c6c9510c0a2ba01e22805d492c73b68e33eecc
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   html:
     dependency: transitive
     description:
@@ -344,6 +376,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.8.0"
+  jwt_decode:
+    dependency: transitive
+    description:
+      name: jwt_decode
+      sha256: d2e9f68c052b2225130977429d30f187aa1981d789c76ad104a32243cfdebfbb
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.1"
   lints:
     dependency: transitive
     description:
@@ -384,6 +424,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.8.0"
+  mime:
+    dependency: transitive
+    description:
+      name: mime
+      sha256: e4ff8e8564c03f255408decd16e7899da1733852a9110a58fe6d1b817684a63e
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.4"
   nested:
     dependency: transitive
     description:
@@ -520,6 +568,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.6.2"
+  postgrest:
+    dependency: transitive
+    description:
+      name: postgrest
+      sha256: b6c2d1b58e648bdf1e6c775a90064ae1c505879b439c30028cfc5072969e8601
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.3"
   process:
     dependency: transitive
     description:
@@ -536,6 +592,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.5"
+  realtime_client:
+    dependency: transitive
+    description:
+      name: realtime_client
+      sha256: "467ef702a35858004a1b9c475dc0ebc0b858ade758e99295beda7f101d523198"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.3"
+  retry:
+    dependency: transitive
+    description:
+      name: retry
+      sha256: a8a1e475a100a0bdc73f529ca8ea1e9c9c76bec8ad86a1f47780139a34ce7aea
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.1"
   rxdart:
     dependency: transitive
     description:
@@ -653,22 +725,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.11.0"
-  stacked:
-    dependency: "direct main"
-    description:
-      name: stacked
-      sha256: fce10597eb14f4405315d0df1e20f24b2c7b9e12e1afe29756c87a134f9af660
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.1.0+2"
-  stacked_core:
+  storage_client:
     dependency: transitive
     description:
-      name: stacked_core
-      sha256: "28889e0b3cb612bf8f13d85050df43fb386f9483bd0fba6756637d9bc7af23dd"
+      name: storage_client
+      sha256: d0fefd2e68e14ced989197b6f4f1933290d32fcd633003aafd7a325e4143ddd3
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.4"
+    version: "1.2.5"
   stream_channel:
     dependency: transitive
     description:
@@ -685,6 +749,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  supabase:
+    dependency: transitive
+    description:
+      name: supabase
+      sha256: d3c7978c547260950d5b9cbfe7351bc883a16c916c12f3c9c6963b084f42a516
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.6.3"
+  supabase_flutter:
+    dependency: "direct main"
+    description:
+      name: supabase_flutter
+      sha256: "2cc98ff2a6aa4ad2ab9f263428eda998886cb70ed24695f106aa25c02ecba854"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.6.2"
   synchronized:
     dependency: transitive
     description:
@@ -805,6 +885,46 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
+  web_socket_channel:
+    dependency: transitive
+    description:
+      name: web_socket_channel
+      sha256: ca49c0bc209c687b887f30527fb6a9d80040b072cc2990f34b9bec3e7663101b
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.0"
+  webview_flutter:
+    dependency: transitive
+    description:
+      name: webview_flutter
+      sha256: "392c1d83b70fe2495de3ea2c84531268d5b8de2de3f01086a53334d8b6030a88"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.4"
+  webview_flutter_android:
+    dependency: transitive
+    description:
+      name: webview_flutter_android
+      sha256: "8b3b2450e98876c70bfcead876d9390573b34b9418c19e28168b74f6cb252dbd"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.10.4"
+  webview_flutter_platform_interface:
+    dependency: transitive
+    description:
+      name: webview_flutter_platform_interface
+      sha256: "812165e4e34ca677bdfbfa58c01e33b27fd03ab5fa75b70832d4b7d4ca1fa8cf"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.9.5"
+  webview_flutter_wkwebview:
+    dependency: transitive
+    description:
+      name: webview_flutter_wkwebview
+      sha256: a5364369c758892aa487cbf59ea41d9edd10f9d9baf06a94e80f1bd1b4c7bbc0
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.9.5"
   win32:
     dependency: transitive
     description:
@@ -837,6 +957,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.1"
+  yet_another_json_isolate:
+    dependency: transitive
+    description:
+      name: yet_another_json_isolate
+      sha256: cfaaaf91a1a7f4b226a4fbc72b6db2adadccea1bfa337aef9827d2d0cce6d79a
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
 sdks:
-  dart: ">=2.18.4 <4.0.0"
+  dart: ">=2.18.4 <3.0.0"
   flutter: ">=3.3.0"
