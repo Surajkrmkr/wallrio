@@ -7,7 +7,7 @@ import '../ui/widgets/toast_widget.dart';
 class DarkThemeProvider with ChangeNotifier {
   bool _darkTheme = true;
 
-  GradientType _gradType = GradientType.defaultType;
+  GradientType _gradType = GradientType.sunset;
 
   bool get darkTheme => _darkTheme;
 

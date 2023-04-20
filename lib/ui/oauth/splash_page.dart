@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
 
 import '../../provider/auth.dart';
@@ -31,9 +32,10 @@ class _SplashPageState extends State<SplashPage> {
         .supabase
         .auth
         .currentSession;
+    FlutterNativeSplash.remove();
     if (session != null) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const NavigationPage()));
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => const NavigationPage()));
     } else {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => const LoginPage()));

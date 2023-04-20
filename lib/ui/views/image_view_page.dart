@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:wallrio/ui/theme/theme_data.dart';
 
 import '../../model/wall_rio_model.dart';
 import '../../provider/favourite.dart';
@@ -11,6 +12,7 @@ import '../widgets/image_widget.dart';
 import '../widgets/primary_btn_widget.dart';
 import '../widgets/shimmer_widget.dart';
 import '../widgets/toast_widget.dart';
+import 'full_image.dart';
 
 // ignore: must_be_immutable
 class ImageViewPage extends StatelessWidget {
@@ -25,14 +27,18 @@ class ImageViewPage extends StatelessWidget {
     ToastWidget.showToast("$code Color copied");
   }
 
+  void _onTapHandler(context, model) {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => FullImage(wallModel: model)));
+  }
+
   @override
   Widget build(BuildContext context) {
     if (!_isInitialized) {
       Future.delayed(Duration.zero, () {
         Provider.of<WallDetails>(context, listen: false)
-            .getColorPalette(wallModel.thumbnail);
-        Provider.of<WallDetails>(context, listen: false)
-            .getWallDetails(wallModel.url);
+          ..getColorPalette(wallModel.thumbnail)
+          ..getWallDetails(wallModel.url);
       });
       _isInitialized = false;
     }
@@ -52,9 +58,21 @@ class ImageViewPage extends StatelessWidget {
                   child: SizedBox(
                       height: MediaQuery.of(context).size.height * 0.40,
                       width: MediaQuery.of(context).size.width,
-                      child: CNImage(
-                        imageUrl: wallModel.url,
-                        isOriginalImg: true,
+                      child: Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          CNImage(
+                            imageUrl: wallModel.url,
+                            isOriginalImg: true,
+                          ),
+                          Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: () => _onTapHandler(context, wallModel),
+                              splashColor: blackColor.withOpacity(0.3),
+                            ),
+                          ),
+                        ],
                       )),
                 ),
               ),
@@ -77,51 +95,6 @@ class ImageViewPage extends StatelessWidget {
         ),
       ),
     ));
-    //     Stack(children: [
-    //   Hero(
-    //     tag: wallModel.url!,
-    //     child: SizedBox(
-    //         height: MediaQuery.of(context).size.height,
-    //         width: MediaQuery.of(context).size.width,
-    //         child: CNImage(
-    //           imageUrl: wallModel.url,
-    //           isOriginalImg: true,
-    //         )),
-    //   ),
-    //   const Padding(
-    //       padding: EdgeInsets.only(left: 8.0),
-    //       child: BackBtnWidget(color: Colors.white)),
-    //   DraggableScrollableSheet(
-    //       snap: true,
-    //       snapSizes: const [0.1, 0.5],
-    //       initialChildSize: 0.2,
-    //       minChildSize: 0.1,
-    //       maxChildSize: 0.5,
-    //       builder: (BuildContext context, ScrollController scrollController) {
-    //         return SingleChildScrollView(
-    //           controller: scrollController,
-    //           child: Container(
-    //             padding: const EdgeInsets.all(20),
-    //             decoration: const BoxDecoration(
-    //                 borderRadius: BorderRadius.only(
-    //                     topLeft: Radius.circular(25),
-    //                     topRight: Radius.circular(25)),
-    //                 color: Colors.white),
-    //             child: Column(
-    //                 crossAxisAlignment: CrossAxisAlignment.start,
-    //                 children: [
-    //                   _buildHeaderUI(context),
-    //                   const SizedBox(height: 20),
-    //                   _buildActionBtnUI(context),
-    //                   const SizedBox(height: 20),
-    //                   _buildDetailsUI(context),
-    //                   const SizedBox(height: 20),
-    //                   _buildColorsUI(context)
-    //                 ]),
-    //           ),
-    //         );
-    //       })
-    // ]));
   }
 
   Column _buildColorsUI(BuildContext context) {
@@ -212,7 +185,7 @@ class ImageViewPage extends StatelessWidget {
           child: PrimaryBtnWidget(
               btnText: "Download",
               onTap: () => provider.downloadImg(
-                  wallModel.url, wallModel.name+ wallModel.id.toString()))),
+                  wallModel.url, wallModel.name + wallModel.id.toString()))),
       const SizedBox(width: 10),
       Expanded(
           child: PrimaryBtnWidget(

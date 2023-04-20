@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "340316492418",
+    "project_id": "wallrio-e551b",
+    "storage_bucket": "wallrio-e551b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:340316492418:android:4e3c43cdba731752e89a9b",
+        "android_client_info": {
+          "package_name": "com.shadowteam.wallrio"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "340316492418-2ut13arjfmj015gli2ptc03a9ujdvu04.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_BlkOSFRCVL7aLbPOCfokD65SGdxfr6Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "340316492418-2ut13arjfmj015gli2ptc03a9ujdvu04.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
