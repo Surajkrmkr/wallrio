@@ -8,7 +8,9 @@ import 'package:wallrio/pages.dart';
 import 'package:wallrio/provider/navigation.dart';
 
 import '../../provider/auth.dart';
+import '../../provider/wall_rio.dart';
 import '../oauth/login_page.dart';
+import '../widgets/change_log.dart';
 
 class NavigationPage extends StatefulWidget {
   const NavigationPage({super.key});
@@ -21,10 +23,12 @@ class _NavigationPageState extends State<NavigationPage> {
   late final StreamSubscription<AuthState> _authStateSubscription;
   @override
   void initState() {
-    Future.delayed(
-        Duration.zero,
-        provider.Provider.of<AuthProvider>(context, listen: false)
-            .setUserProfileData);
+    Future.delayed(Duration.zero, () {
+      provider.Provider.of<AuthProvider>(context, listen: false)
+          .setUserProfileData();
+      provider.Provider.of<WallRio>(context, listen: false)
+          .getListFromAPI(context);
+    });
     _authStateSubscription =
         provider.Provider.of<AuthProvider>(context, listen: false)
             .supabase
@@ -37,6 +41,7 @@ class _NavigationPageState extends State<NavigationPage> {
             MaterialPageRoute(builder: (context) => const LoginPage()));
       }
     });
+
     super.initState();
   }
 

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:wallrio/provider/navigation.dart';
 import 'package:wallrio/ui/widgets/sliver_app_bar_widget.dart';
 
+import '../../model/wall_rio_model.dart';
 import '../../provider/favourite.dart';
 import '../theme/theme_data.dart';
 import '../widgets/image_bottom_sheet.dart';
@@ -67,7 +68,7 @@ class FavouritePage extends StatelessWidget {
                           radius: 25,
                         ))));
       }
-      final walls = provider.wallList;
+      List<Walls> walls = provider.wallList;
       if (walls.isEmpty) {
         return SliverFillRemaining(
           child: Center(
@@ -76,6 +77,7 @@ class FavouritePage extends StatelessWidget {
           ),
         );
       }
+      walls = walls.reversed.toList();
       return SliverPadding(
           padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
           sliver: SliverGrid(

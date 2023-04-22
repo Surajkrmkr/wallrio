@@ -16,7 +16,7 @@ class PrimaryBtnWidget extends StatelessWidget {
     return ElevatedButton(
         onPressed: onTap,
         child: Center(
-            child: Text(btnText,
+            child: Text(btnText.toUpperCase(),
                 style: Theme.of(context).textTheme.titleMedium!.copyWith(
                     color: whiteColor, fontWeight: FontWeight.bold))));
   }

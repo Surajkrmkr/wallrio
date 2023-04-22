@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../provider/dark_theme.dart';
+import '../../provider/wall_rio.dart';
 import '../theme/theme_data.dart';
 import '../widgets/clear_cache_widget.dart';
+import '../widgets/shimmer_widget.dart';
 import '../widgets/sliver_app_bar_widget.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -143,11 +146,17 @@ class SettingsPage extends StatelessWidget {
         style: Theme.of(context).textTheme.bodyMedium,
       ),
       _getListTile(context,
-          title: 'Instagram', subtitle: "Follow us on Instagram", onTap: () {}),
+          title: 'Instagram',
+          subtitle: "Follow us on Instagram",
+          onTap: () => launch("https://instagram.com/studio.teamshadow")),
       _getListTile(context,
-          title: 'Twitter', subtitle: "Follow us on Twitter", onTap: () {}),
+          title: 'Twitter',
+          subtitle: "Follow us on Twitter",
+          onTap: () => launch(("https://twitter.com/TeamShadowST"))),
       _getListTile(context,
-          title: 'Telegram', subtitle: "Join our community", onTap: () {}),
+          title: 'Telegram',
+          subtitle: "Join our community",
+          onTap: () => launch(("https://t.me/TeamShadow_Studio"))),
     ]);
   }
 
@@ -159,11 +168,17 @@ class SettingsPage extends StatelessWidget {
         style: Theme.of(context).textTheme.bodyMedium,
       ),
       _getListTile(context,
-          title: 'Suraj Karmakar', subtitle: "Android Developer", onTap: () {}),
+          title: 'Suraj Karmakar',
+          subtitle: "Android Developer",
+          onTap: () => launch(("http://t.me/surajkrmkr"))),
       _getListTile(context,
-          title: 'Piyush KPV', subtitle: "UX/UI Designer", onTap: () {}),
+          title: 'Piyush KPV',
+          subtitle: "UX/UI Designer",
+          onTap: () => launch(("http://t.me/piyuskpv"))),
       _getListTile(context,
-          title: 'Sumit', subtitle: "Graphic Designer", onTap: () {}),
+          title: 'Sumit',
+          subtitle: "Graphic Designer",
+          onTap: () => launch(("http://t.me/sumi7t"))),
     ]);
   }
 
@@ -171,10 +186,14 @@ class SettingsPage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 20.0),
       child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        Text(
-          "Version 1.0.0.0",
-          style: Theme.of(context).textTheme.bodySmall,
-        ),
+        Consumer<WallRio>(builder: (context, provider, _) {
+          return provider.isLoading
+              ? const ShimmerWidget(height: 12, width: 60)
+              : Text(
+                  "Version ${provider.currentVersion}",
+                  style: Theme.of(context).textTheme.bodySmall,
+                );
+        }),
         Text(
           "Made With Love ❤️ In India",
           style: Theme.of(context).textTheme.bodyLarge,
@@ -200,4 +219,7 @@ class SettingsPage extends StatelessWidget {
       onTap: onTap,
     );
   }
+
+  static void launch(String url) =>
+      launchUrl(Uri.parse(url), mode: LaunchMode.externalNonBrowserApplication);
 }

@@ -4,9 +4,13 @@ import 'package:wallrio/ui/theme/theme_data.dart';
 class WallRioModel {
   final List<Banners> banners;
   final List<Walls> walls;
+  final AppDetails appDetails;
   String error = "";
 
-  WallRioModel({this.banners = const [], this.walls = const []});
+  WallRioModel(
+      {this.banners = const [],
+      this.walls = const [],
+      this.appDetails = const AppDetails()});
 
   factory WallRioModel.fromJson(Map<String, dynamic> json) => WallRioModel(
       banners: json['banners'] == null
@@ -18,7 +22,10 @@ class WallRioModel {
           ? []
           : (json['walls'] as List<dynamic>)
               .map((v) => Walls.fromJson(v))
-              .toList());
+              .toList(),
+      appDetails: json['appDetails'] == null
+          ? const AppDetails()
+          : AppDetails.fromJson(json['appDetails']));
 }
 
 class Banners {
@@ -91,4 +98,16 @@ class Walls {
     data['color'] = wall.colorsString;
     return data;
   }
+}
+
+class AppDetails {
+  final String version;
+  final List<String> releaseNotes;
+
+  const AppDetails({this.version = "1.0.0", this.releaseNotes = const []});
+
+  factory AppDetails.fromJson(Map<String, dynamic> json) => AppDetails(
+        version: json['version'] ?? "1.0.0",
+        releaseNotes: json['releaseNotes'].cast<String>() ?? [],
+      );
 }

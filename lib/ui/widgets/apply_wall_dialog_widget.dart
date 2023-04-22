@@ -21,12 +21,7 @@ class ApplyWallDialogWidget extends StatelessWidget {
     return SimpleDialog(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const Text("Set Wallpaper"),
-          IconButton(
-              onPressed: () => Navigator.pop(context),
-              icon: const Icon(Icons.close))
-        ],
+        children: const [Text("Set Wallpaper"), CloseButton()],
       ),
       contentPadding: const EdgeInsets.all(20),
       children: [

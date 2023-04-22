@@ -120,6 +120,8 @@ class SliverAppBarWidget extends StatelessWidget {
                           ? const Icon(Icons.account_circle_rounded)
                           : CircleAvatar(
                               radius: 18,
+                              backgroundColor:
+                                  Theme.of(context).primaryColorDark,
                               backgroundImage:
                                   NetworkImage(provider.user.picture),
                             );

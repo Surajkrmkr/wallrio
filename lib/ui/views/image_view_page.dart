@@ -65,6 +65,12 @@ class ImageViewPage extends StatelessWidget {
                             imageUrl: wallModel.url,
                             isOriginalImg: true,
                           ),
+                          const Align(
+                              alignment: Alignment.topRight,
+                              child: Padding(
+                                padding: EdgeInsets.all(20.0),
+                                child: Icon(Icons.fullscreen),
+                              )),
                           Material(
                             color: Colors.transparent,
                             child: InkWell(

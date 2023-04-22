@@ -1,22 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:wallrio/model/wall_rio_model.dart';
 import 'package:wallrio/services/api_services.dart';
 
 import '../model/tag_model.dart';
+import '../ui/widgets/user_bottom_sheet.dart';
 
 class WallRio extends ChangeNotifier {
   List<Walls> originalWallList = [];
   List<Walls> actionWallList = [];
   List<Banners> bannerList = [];
+  AppDetails details = const AppDetails();
 
   Map<String, List<Walls?>>? categories = <String, List<Walls?>>{};
   Tag tag = Tag(selectedTags: [], unSelectedTags: []);
 
   String error = "";
+  String currentVersion = "1.0.0";
   bool isLoading = false;
+  bool isUpdateAvailable = false;
 
   set setIsLoading(bool val) {
     isLoading = val;
+    notifyListeners();
+  }
+
+  set setIsUpdateAvailable(bool val) {
+    isUpdateAvailable = val;
+    notifyListeners();
+  }
+
+  set setCurrentVersion(String version) {
+    currentVersion = version;
     notifyListeners();
   }
 
@@ -35,6 +50,11 @@ class WallRio extends ChangeNotifier {
     notifyListeners();
   }
 
+  set setAppDetails(AppDetails appDetails) {
+    details = appDetails;
+    notifyListeners();
+  }
+
   set setError(String msg) {
     error = msg;
     notifyListeners();
@@ -49,11 +69,31 @@ class WallRio extends ChangeNotifier {
   }
 
   WallRio() {
-    getListFromAPI();
+    // getListFromAPI();
   }
 
-  void getListFromAPI() async {
+  Future<void> getCurrentVersion() async {
+    final PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    final String version = packageInfo.version;
+    setCurrentVersion = version;
+  }
+
+  void checkUpdate(context) {
+    final int currentVersionInInt =
+        int.parse(currentVersion.replaceAll(".", ""));
+    final int latestVersionInInt =
+        int.parse(details.version.replaceAll(".", ""));
+    if (currentVersionInInt < latestVersionInInt) {
+      setIsUpdateAvailable = true;
+    }
+    if (isUpdateAvailable) {
+      UserBottomSheet.changeLog(context);
+    }
+  }
+
+  void getListFromAPI(context) async {
     setIsLoading = true;
+    await getCurrentVersion();
     setWallList = [];
     setActionWallList = [];
     setBannerList = [];
@@ -62,6 +102,8 @@ class WallRio extends ChangeNotifier {
       setWallList = model.walls;
       setActionWallList = model.walls;
       setBannerList = model.banners;
+      setAppDetails = model.appDetails;
+      checkUpdate(context);
       _buildCategoryAndTags();
     } else {
       setError = model.error;

@@ -10,7 +10,7 @@ class RefreshIndicatorWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async {
-        Provider.of<WallRio>(context, listen: false).getListFromAPI();
+        Provider.of<WallRio>(context, listen: false).getListFromAPI(context);
         await Future.delayed(const Duration(seconds: 1));
       },
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
