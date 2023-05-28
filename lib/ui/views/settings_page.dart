@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../provider/dark_theme.dart';
 import '../../provider/wall_rio.dart';
 import '../theme/theme_data.dart';
 import '../widgets/clear_cache_widget.dart';
+import '../widgets/plus_subscription.dart';
 import '../widgets/shimmer_widget.dart';
 import '../widgets/sliver_app_bar_widget.dart';
 
@@ -29,6 +31,7 @@ class SettingsPage extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   children: [
+                    _plusBanner(context),
                     _appearanceSection(context),
                     _advancedSection(context),
                     _socialSection(context),
@@ -39,6 +42,59 @@ class SettingsPage extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Padding _plusBanner(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: InkWell(
+        onTap: () => showDialog(
+            context: context, builder: (context) => const PlusSubscription()),
+        borderRadius: BorderRadius.circular(30),
+        child: Ink(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(30),
+              color: Theme.of(context).navigationBarTheme.indicatorColor),
+          child: Column(children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Upgrade to",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                Consumer<DarkThemeProvider>(builder: (context, provider, _) {
+                  return GradientText(
+                    " WallRio ",
+                    style: Theme.of(context).textTheme.bodyMedium,
+                    colors: gradientColorMap[provider.gradType]!,
+                  );
+                }),
+                Text(
+                  "Plus",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                const SizedBox(width: 8),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 5),
+                  child: Image.asset(
+                    "assets/plus_icon.png",
+                    height: 18,
+                  ),
+                )
+              ],
+            ),
+            const SizedBox(height: 15),
+            Text(
+              "Unleash creativity with our exclusive subscription for stunning wallpapers. Ad-free, high-quality downloads. Elevate your screen's style.",
+              style: Theme.of(context).textTheme.labelSmall,
+              textAlign: TextAlign.center,
+            )
+          ]),
         ),
       ),
     );

@@ -62,6 +62,11 @@ class WallRioThemeData {
                   overlayColor: MaterialStateProperty.all(isDarkTheme
                       ? blackColor.withOpacity(0.1)
                       : whiteColor.withOpacity(0.4)))),
+          textButtonTheme: TextButtonThemeData(
+              style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all(
+                isDarkTheme ? whiteColor : blackColor),
+          )),
           chipTheme: ChipThemeData(
               backgroundColor: isDarkTheme
                   ? whiteColor.withOpacity(0.05)

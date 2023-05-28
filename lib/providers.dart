@@ -5,11 +5,18 @@ import 'provider/auth.dart';
 import 'provider/dark_theme.dart';
 import 'provider/favourite.dart';
 import 'provider/navigation.dart';
+import 'provider/subscription.dart';
 import 'provider/wall_action.dart';
 import 'provider/wall_details.dart';
 import 'provider/wall_rio.dart';
 
 List<SingleChildWidget> providers(context) => [
+      ChangeNotifierProvider(
+        create: ((context) => AuthProvider()),
+      ),
+      ChangeNotifierProvider(
+        create: ((context) => SubscriptionProvider()),
+      ),
       ChangeNotifierProvider(
         create: ((context) => AuthProvider()),
       ),

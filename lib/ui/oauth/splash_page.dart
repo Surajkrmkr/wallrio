@@ -17,13 +17,13 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
-    InAppUpdate.checkForUpdate().then((updateInfo) async {
-      if (updateInfo.updateAvailability == UpdateAvailability.updateAvailable) {
-        await InAppUpdate.performImmediateUpdate();
-      }
-    }, onError: (error) {
-      logger.e(error);
-    });
+    // InAppUpdate.checkForUpdate().then((updateInfo) async {
+    //   if (updateInfo.updateAvailability == UpdateAvailability.updateAvailable) {
+    //     await InAppUpdate.performImmediateUpdate();
+    //   }
+    // }, onError: (error) {
+    //   logger.e(error);
+    // });
     FlutterNativeSplash.remove();
 
     super.initState();
