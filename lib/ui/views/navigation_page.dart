@@ -1,13 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:animations/animations.dart';
 import 'package:wallrio/pages.dart';
 import 'package:wallrio/provider/navigation.dart';
 import 'package:wallrio/provider/wall_rio.dart';
-
-import '../../log.dart';
-import '../../provider/auth.dart';
 
 class NavigationPage extends StatefulWidget {
   const NavigationPage({super.key});

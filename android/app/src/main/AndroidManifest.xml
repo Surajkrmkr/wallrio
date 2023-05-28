@@ -47,4 +47,5 @@
             android:resource="@mipmap/ic_launcher" />
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
 </manifest>

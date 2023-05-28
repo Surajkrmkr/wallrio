@@ -8,7 +8,6 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
 import 'package:wallrio/firebase_options.dart';
 import 'package:wallrio/providers.dart';
-import 'log.dart';
 import 'provider/dark_theme.dart';
 import 'services/dark_mode_services.dart';
 import 'services/notification.dart';
