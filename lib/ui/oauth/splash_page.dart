@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:in_app_update/in_app_update.dart';
 
+import '../../log.dart';
 import '../views/navigation_page.dart';
 import 'login_page.dart';
 
@@ -20,6 +21,8 @@ class _SplashPageState extends State<SplashPage> {
       if (updateInfo.updateAvailability == UpdateAvailability.updateAvailable) {
         await InAppUpdate.performImmediateUpdate();
       }
+    }, onError: (error) {
+      logger.e(error);
     });
     FlutterNativeSplash.remove();
 
@@ -38,9 +41,8 @@ class _SplashPageState extends State<SplashPage> {
           } else if (snapshot.hasData) {
             return const NavigationPage();
           } else if (snapshot.hasError) {
-            return Center(
-              child: Text('Error: ${snapshot.error}'),
-            );
+            logger.e(snapshot.error);
+            return const LoginPage();
           } else {
             return const LoginPage();
           }

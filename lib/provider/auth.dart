@@ -43,7 +43,9 @@ class AuthProvider with ChangeNotifier {
       );
       final firebaseAuth = FirebaseAuth.instance;
       await firebaseAuth.signInWithCredential(credential);
-      setSignedInUser = firebaseAuth.currentUser!;
+      if (firebaseAuth.currentUser != null) {
+        setSignedInUser = firebaseAuth.currentUser!;
+      }
       ToastWidget.showToast("Logged in as ${firebaseAuth.currentUser!.email}");
     } on Exception catch (exception) {
       logger.e(exception.toString());
