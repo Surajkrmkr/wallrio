@@ -1,14 +1,17 @@
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
+import 'package:wallrio/firebase_options.dart';
 import 'package:wallrio/providers.dart';
-
 import 'log.dart';
 import 'provider/dark_theme.dart';
 import 'services/dark_mode_services.dart';
+import 'services/notification.dart';
 import 'ui/oauth/splash_page.dart';
 import 'ui/theme/theme_data.dart';
 
@@ -17,16 +20,17 @@ void main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   await ThemeService().getData();
-  await Firebase.initializeApp();
-  await FirebaseMessaging.instance.requestPermission();
-  logger.i(await FirebaseMessaging.instance.getToken());
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-    //print(event.notification!.body);
-    RemoteNotification? notification = message.notification;
-    if (notification != null) {
-      logger.i("Notification received when app in foreground");
-    }
-  });
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  await FirebaseAppCheck.instance.activate();
+  await NotificationService().init();
+
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
 
   runApp(const MyApp());
 }
@@ -47,7 +51,7 @@ class MyApp extends StatelessWidget {
               statusBarBrightness:
                   provider.darkTheme ? Brightness.light : Brightness.dark));
           return MaterialApp(
-              title: 'Wall Rio',
+              title: 'WallRio',
               theme: WallRioThemeData.getLightThemeData(
                   context: context, isDarkTheme: false),
               darkTheme: WallRioThemeData.getLightThemeData(

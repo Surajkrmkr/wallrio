@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "340316492418-1c4pqtb12kkarumbqcdrhl541bribro3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shadowteam.wallrio",
+            "certificate_hash": "bda10a2d173f3b5018d5ffb1695e3460f6b36160"
+          }
+        },
+        {
           "client_id": "340316492418-ha4d9psbogodbb11e20aeune03ghf4sl.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -37,6 +45,13 @@
             {
               "client_id": "340316492418-2ut13arjfmj015gli2ptc03a9ujdvu04.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "340316492418-nnc7j4iul3o7nj74m35d7866amvmlm32.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.wallrio"
+              }
             }
           ]
         }

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>340316492418-nnc7j4iul3o7nj74m35d7866amvmlm32.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.340316492418-nnc7j4iul3o7nj74m35d7866amvmlm32</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>340316492418-ha4d9psbogodbb11e20aeune03ghf4sl.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBDESnKuihDPTL4kkZxZK7YyBqUU7se-TI</string>
+	<key>GCM_SENDER_ID</key>
+	<string>340316492418</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.wallrio</string>
+	<key>PROJECT_ID</key>
+	<string>wallrio-e551b</string>
+	<key>STORAGE_BUCKET</key>
+	<string>wallrio-e551b.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:340316492418:ios:cb24e45d496e7be8e89a9b</string>
+</dict>
+</plist>
