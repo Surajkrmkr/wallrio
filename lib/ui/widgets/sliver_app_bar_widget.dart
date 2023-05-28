@@ -116,14 +116,14 @@ class SliverAppBarWidget extends StatelessWidget {
                   iconSize: 30,
                   icon: Consumer<AuthProvider>(
                     builder: (context, provider, _) {
-                      return provider.user.picture.isEmpty
+                      return provider.user.photoURL!.isEmpty
                           ? const Icon(Icons.account_circle_rounded)
                           : CircleAvatar(
                               radius: 18,
                               backgroundColor:
                                   Theme.of(context).primaryColorDark,
                               backgroundImage:
-                                  NetworkImage(provider.user.picture),
+                                  NetworkImage(provider.user.photoURL!),
                             );
                     },
                   ),

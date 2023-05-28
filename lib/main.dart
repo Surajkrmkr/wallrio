@@ -1,12 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wallrio/providers.dart';
 
-import 'constants.dart';
+import 'log.dart';
 import 'provider/dark_theme.dart';
 import 'services/dark_mode_services.dart';
 import 'ui/oauth/splash_page.dart';
@@ -17,11 +17,17 @@ void main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   await ThemeService().getData();
-  await Supabase.initialize(
-      url: Constants.supabaseUrl,
-      anonKey: Constants.supabaseAnnonKey,
-      debug: false);
   await Firebase.initializeApp();
+  await FirebaseMessaging.instance.requestPermission();
+  logger.i(await FirebaseMessaging.instance.getToken());
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+    //print(event.notification!.body);
+    RemoteNotification? notification = message.notification;
+    if (notification != null) {
+      logger.i("Notification received when app in foreground");
+    }
+  });
+
   runApp(const MyApp());
 }
 

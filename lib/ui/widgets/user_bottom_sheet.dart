@@ -33,18 +33,19 @@ class UserBottomSheet extends StatelessWidget {
             child: Consumer<AuthProvider>(
               builder: (context, provider, _) {
                 return Row(children: [
-                  provider.user.picture.isEmpty
+                  provider.user.photoURL!.isEmpty
                       ? const Icon(Icons.account_circle_rounded)
                       : CircleAvatar(
                           radius: 30,
-                          backgroundImage: NetworkImage(provider.user.picture),
+                          backgroundImage:
+                              NetworkImage(provider.user.photoURL!),
                           backgroundColor: Theme.of(context).primaryColorDark,
                         ),
                   const SizedBox(width: 20),
                   Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(provider.user.fullName,
+                        Text(provider.user.displayName!,
                             style: Theme.of(context).textTheme.displayMedium),
                         Text("WallRio member",
                             style: Theme.of(context).textTheme.titleSmall)

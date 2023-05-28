@@ -1,54 +1,16 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart' as provider;
 import 'package:simple_gradient_text/simple_gradient_text.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../provider/auth.dart';
 import '../theme/theme_data.dart' as theme;
-import '../views/navigation_page.dart';
 import '../widgets/primary_btn_widget.dart';
 import '../widgets/shimmer_widget.dart';
-import '../widgets/toast_widget.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
-
-  @override
-  State<LoginPage> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
-  bool _redirecting = false;
-  late final StreamSubscription<AuthState> _authStateSubscription;
-  @override
-  void initState() {
-    _authStateSubscription =
-        provider.Provider.of<AuthProvider>(context, listen: false)
-            .supabase
-            .auth
-            .onAuthStateChange
-            .listen((data) {
-      if (_redirecting) return;
-      final session = data.session;
-      if (session != null) {
-        _redirecting = true;
-        ToastWidget.showToast(
-            "Logged in as ${provider.Provider.of<AuthProvider>(context, listen: false).supabase.auth.currentUser!.email!}");
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const NavigationPage()));
-      }
-    });
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _authStateSubscription.cancel();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -122,6 +84,7 @@ class _LoginPageState extends State<LoginPage> {
     return PrimaryBtnWidget(
       btnText: "SIGN IN",
       onTap: provider.signIn,
+      icon: Image.asset("assets/google_logo.png"),
     );
   }
 }

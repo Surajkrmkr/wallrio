@@ -1,16 +1,13 @@
-import 'dart:async';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart' as provider;
+import 'package:provider/provider.dart';
 import 'package:animations/animations.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wallrio/pages.dart';
 import 'package:wallrio/provider/navigation.dart';
+import 'package:wallrio/provider/wall_rio.dart';
 
+import '../../log.dart';
 import '../../provider/auth.dart';
-import '../../provider/wall_rio.dart';
-import '../oauth/login_page.dart';
-import '../widgets/change_log.dart';
 
 class NavigationPage extends StatefulWidget {
   const NavigationPage({super.key});
@@ -20,40 +17,25 @@ class NavigationPage extends StatefulWidget {
 }
 
 class _NavigationPageState extends State<NavigationPage> {
-  late final StreamSubscription<AuthState> _authStateSubscription;
   @override
   void initState() {
     Future.delayed(Duration.zero, () {
-      provider.Provider.of<AuthProvider>(context, listen: false)
-          .setUserProfileData();
-      provider.Provider.of<WallRio>(context, listen: false)
-          .getListFromAPI(context);
-    });
-    _authStateSubscription =
-        provider.Provider.of<AuthProvider>(context, listen: false)
-            .supabase
-            .auth
-            .onAuthStateChange
-            .listen((data) {
-      final session = data.session;
-      if (session == null && mounted) {
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const LoginPage()));
-      }
+      Provider.of<WallRio>(context, listen: false).getListFromAPI(context);
     });
 
+    // FirebaseAuth.instance.userChanges().listen((event) {
+    //   if (FirebaseAuth.instance.currentUser == null) {
+    //     Provider.of<AuthProvider>(context, listen: false).signOut(context);
+    //   }
+    // }, onError: (error) {
+    //   logger.e(error.toString());
+    // });
     super.initState();
   }
 
   @override
-  void dispose() {
-    _authStateSubscription.cancel();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return provider.Consumer<Navigation>(builder: (context, provider, _) {
+    return Consumer<Navigation>(builder: (context, provider, _) {
       return Scaffold(
         extendBodyBehindAppBar: true,
         extendBody: true,

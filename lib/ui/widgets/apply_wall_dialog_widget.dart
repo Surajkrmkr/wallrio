@@ -19,9 +19,9 @@ class ApplyWallDialogWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
-      title: Row(
+      title: const Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: const [Text("Set Wallpaper"), CloseButton()],
+        children: [Text("Set Wallpaper"), CloseButton()],
       ),
       contentPadding: const EdgeInsets.all(20),
       children: [

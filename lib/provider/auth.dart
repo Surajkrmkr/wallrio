@@ -1,36 +1,55 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
-import '../constants.dart';
-import '../model/user_profile_model.dart';
+import '../log.dart';
 import '../ui/widgets/toast_widget.dart';
 
 class AuthProvider with ChangeNotifier {
   bool isLoading = false;
 
-  SupabaseClient supabase = Supabase.instance.client;
+  final GoogleSignIn googleSignIn = GoogleSignIn();
 
-  UserProfile user = UserProfile();
+  User? _user;
 
-  set setUser(val) {
-    user = val;
-    notifyListeners();
-  }
+  User get user => _user!;
 
   set setIsLoading(val) {
     isLoading = val;
     notifyListeners();
   }
 
+  set setSignedInUser(User user) {
+    _user = user;
+  }
+
+  AuthProvider() {
+    if (FirebaseAuth.instance.currentUser != null) {
+      setSignedInUser = FirebaseAuth.instance.currentUser!;
+    }
+  }
+
   Future<void> signIn() async {
     setIsLoading = true;
     try {
-      await supabase.auth
-          .signInWithOAuth(Provider.google, redirectTo: Constants.redirectUri);
-    } on AuthException catch (error) {
-      ToastWidget.showToast(error.message);
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+      if (googleUser == null) return;
+
+      final googleAuth = await googleUser.authentication;
+
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      final firebaseAuth = FirebaseAuth.instance;
+      await firebaseAuth.signInWithCredential(credential);
+      setSignedInUser = firebaseAuth.currentUser!;
+      ToastWidget.showToast("Logged in as ${firebaseAuth.currentUser!.email}");
+    } on Exception catch (exception) {
+      logger.e(exception.toString());
+      ToastWidget.showToast('Something went wrong');
     } catch (error) {
-      debugPrint(error.toString());
+      logger.e(error.toString());
       ToastWidget.showToast('Unexpected error occurred');
     } finally {
       setIsLoading = false;
@@ -40,26 +59,16 @@ class AuthProvider with ChangeNotifier {
   Future<void> signOut(context) async {
     setIsLoading = true;
     try {
-      await supabase.auth.signOut();
+      Navigator.pop(context);
+      await FirebaseAuth.instance.signOut();
+      await googleSignIn.disconnect();
       ToastWidget.showToast("Logged Out");
-    } on AuthException catch (error) {
-      ToastWidget.showToast(error.message);
+    } on Exception catch (exception) {
+      debugPrint(exception.toString());
     } catch (error) {
       debugPrint(error.toString());
-      ToastWidget.showToast('Unexpected error occurred');
     } finally {
       setIsLoading = false;
-    }
-  }
-
-  void setUserProfileData() {
-    bool userLoggedIn = false;
-    if (supabase.auth.currentUser != null) {
-      userLoggedIn = true;
-    }
-    if (userLoggedIn) {
-      setUser =
-          UserProfile.fromJson(supabase.auth.currentUser!.userMetadata ?? {});
     }
   }
 }
