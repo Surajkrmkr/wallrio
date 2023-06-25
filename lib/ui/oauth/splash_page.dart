@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:in_app_update/in_app_update.dart';
 
 import '../../log.dart';
 import '../views/navigation_page.dart';

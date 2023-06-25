@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../provider/auth.dart';
+import '../../provider/subscription.dart';
 import '../../provider/wall_rio.dart';
 import '../views/settings_page.dart';
 import 'change_log.dart';
@@ -78,7 +79,10 @@ class UserBottomSheet extends StatelessWidget {
   PrimaryBtnWidget _buildSignOutBtn(BuildContext context) {
     return PrimaryBtnWidget(
         btnText: 'LOG OUT',
-        onTap: () =>
-            Provider.of<AuthProvider>(context, listen: false).signOut(context));
+        onTap: () {
+          Navigator.pop(context);
+          Provider.of<SubscriptionProvider>(context, listen: false).clearData();
+          Provider.of<AuthProvider>(context, listen: false).signOut();
+        });
   }
 }

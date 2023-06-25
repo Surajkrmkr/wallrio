@@ -20,10 +20,25 @@ class _PlusSubscriptionState extends State<PlusSubscription> {
   void initState() {
     Future.delayed(Duration.zero, () {
       Provider.of<SubscriptionProvider>(context, listen: false)
-          .getUserProducts();
+        ..checkSupportForIAP()
+        ..getUserProducts()
+        ..successPurchasedStream.stream.listen((event) {
+          if (mounted && event) {
+            Navigator.pop(context);
+          }
+        });
     });
 
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    Provider.of<SubscriptionProvider>(context, listen: false)
+        .successPurchasedStream
+        .stream
+        .drain();
+    super.dispose();
   }
 
   @override
@@ -36,8 +51,8 @@ class _PlusSubscriptionState extends State<PlusSubscription> {
           _featureUI(),
           _productList(),
           _buildQueryUI(),
-          _buildBuyBtnUI(),
-          _buildRestoreBtn()
+          // _buildBuyBtnUI(),
+          // _buildRestoreBtn()
         ],
       ),
     );
@@ -101,19 +116,17 @@ class _PlusSubscriptionState extends State<PlusSubscription> {
                 end: Alignment.bottomCenter),
             borderRadius: BorderRadius.circular(20)),
         child: Consumer<SubscriptionProvider>(builder: (context, provider, _) {
-          return provider.isLoading
-              ? const ShimmerWidget(height: 24, width: double.infinity)
-              : Theme(
-                  data: WallRioThemeData.getLightThemeData(
-                      isDarkTheme: false, context: context),
-                  child: Column(
-                    children: provider.products
-                        .map((product) => _buildSubscriptonTile(
-                            product: product,
-                            activeSubscription: provider.activeSubscription))
-                        .toList(),
-                  ),
-                );
+          return Theme(
+            data: WallRioThemeData.getLightThemeData(
+                isDarkTheme: false, context: context),
+            child: Column(
+              children: provider.products
+                  .map((product) => _buildSubscriptonTile(
+                      product: product,
+                      activeSubscription: provider.activeSubscriptionId))
+                  .toList(),
+            ),
+          );
         }),
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:wallrio/provider/subscription.dart';
 
 import '../log.dart';
 import '../ui/widgets/toast_widget.dart';
@@ -46,9 +47,11 @@ class AuthProvider with ChangeNotifier {
       if (firebaseAuth.currentUser != null) {
         setSignedInUser = firebaseAuth.currentUser!;
       }
+      await SubscriptionProvider().checkPastPurchases(email: _user!.email!);
       ToastWidget.showToast("Logged in as ${firebaseAuth.currentUser!.email}");
     } on Exception catch (exception) {
       logger.e(exception.toString());
+      signOut();
       ToastWidget.showToast('Something went wrong');
     } catch (error) {
       logger.e(error.toString());
@@ -58,10 +61,9 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
-  Future<void> signOut(context) async {
+  Future<void> signOut() async {
     setIsLoading = true;
     try {
-      Navigator.pop(context);
       await FirebaseAuth.instance.signOut();
       await googleSignIn.disconnect();
       ToastWidget.showToast("Logged Out");
