@@ -47,7 +47,6 @@ class AuthProvider with ChangeNotifier {
       if (firebaseAuth.currentUser != null) {
         setSignedInUser = firebaseAuth.currentUser!;
       }
-      await SubscriptionProvider().checkPastPurchases(email: _user!.email!);
       ToastWidget.showToast("Logged in as ${firebaseAuth.currentUser!.email}");
     } on Exception catch (exception) {
       logger.e(exception.toString());

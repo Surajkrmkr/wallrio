@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:provider/provider.dart';
@@ -6,65 +8,36 @@ import 'package:simple_gradient_text/simple_gradient_text.dart';
 import '../../provider/dark_theme.dart';
 import '../../provider/subscription.dart';
 import '../theme/theme_data.dart';
-import 'shimmer_widget.dart';
+import 'launch_url_widget.dart';
 
-class PlusSubscription extends StatefulWidget {
+class PlusSubscription extends StatelessWidget {
   const PlusSubscription({super.key});
 
   @override
-  State<PlusSubscription> createState() => _PlusSubscriptionState();
-}
-
-class _PlusSubscriptionState extends State<PlusSubscription> {
-  @override
-  void initState() {
-    Future.delayed(Duration.zero, () {
-      Provider.of<SubscriptionProvider>(context, listen: false)
-        ..checkSupportForIAP()
-        ..getUserProducts()
-        ..successPurchasedStream.stream.listen((event) {
-          if (mounted && event) {
-            Navigator.pop(context);
-          }
-        });
-    });
-
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    Provider.of<SubscriptionProvider>(context, listen: false)
-        .successPurchasedStream
-        .stream
-        .drain();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Dialog(
       child: Wrap(
         alignment: WrapAlignment.center,
         children: [
-          _headerUI(),
-          _featureUI(),
+          _headerUI(context),
+          _featureUI(context),
           _productList(),
-          _buildQueryUI(),
-          // _buildBuyBtnUI(),
-          // _buildRestoreBtn()
+          _buildQueryUI(context),
+          // _buildBuyBtnUI(context),
+          // _buildRestoreBtn(context)
         ],
       ),
     );
   }
 
-  Widget _buildRestoreBtn() => Padding(
+  Widget _buildRestoreBtn(BuildContext context) => Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
         child:
             TextButton(onPressed: () {}, child: const Text("Restore Purchase")),
       );
 
-  Padding _buildBuyBtnUI() {
+  Padding _buildBuyBtnUI(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 35, right: 25),
       child: InkWell(
@@ -87,7 +60,7 @@ class _PlusSubscriptionState extends State<PlusSubscription> {
     );
   }
 
-  Padding _buildQueryUI() {
+  Padding _buildQueryUI(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 18),
       child: Column(
@@ -98,8 +71,12 @@ class _PlusSubscriptionState extends State<PlusSubscription> {
             style: Theme.of(context).textTheme.labelSmall,
             textAlign: TextAlign.center,
           ),
-          Text("teamshadowsupp@gmail.com",
-              style: Theme.of(context).textTheme.labelSmall),
+          TextButton(
+            onPressed: () =>
+                LaunchUrlWidget.launchEmail("teamshadowsupp@gmail.com"),
+            child: Text("teamshadowsupp@gmail.com",
+                style: Theme.of(context).textTheme.labelSmall),
+          ),
         ],
       ),
     );
@@ -107,7 +84,7 @@ class _PlusSubscriptionState extends State<PlusSubscription> {
 
   Widget _productList() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 18),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 18),
       child: Ink(
         decoration: BoxDecoration(
             gradient: const LinearGradient(
@@ -121,9 +98,9 @@ class _PlusSubscriptionState extends State<PlusSubscription> {
                 isDarkTheme: false, context: context),
             child: Column(
               children: provider.products
-                  .map((product) => _buildSubscriptonTile(
+                  .map((product) => _buildSubscriptonTile(context,
                       product: product,
-                      activeSubscription: provider.activeSubscriptionId))
+                      activeSubscription: provider.subscriptionDaysLeft))
                   .toList(),
             ),
           );
@@ -132,7 +109,7 @@ class _PlusSubscriptionState extends State<PlusSubscription> {
     );
   }
 
-  Widget _featureUI() {
+  Widget _featureUI(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 18),
       child: Column(
@@ -147,7 +124,7 @@ class _PlusSubscriptionState extends State<PlusSubscription> {
     );
   }
 
-  Container _headerUI() {
+  Container _headerUI(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
@@ -180,7 +157,7 @@ class _PlusSubscriptionState extends State<PlusSubscription> {
     );
   }
 
-  RadioListTile<String> _buildSubscriptonTile(
+  RadioListTile<String> _buildSubscriptonTile(BuildContext context,
       {required ProductDetails product, required String activeSubscription}) {
     return RadioListTile(
       value: product.id,

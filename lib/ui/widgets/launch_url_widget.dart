@@ -9,4 +9,15 @@ class LaunchUrlWidget {
       ToastWidget.showToast("Couldn't able to launch");
     }
   }
+
+  static Future<void> launchEmail(String email) async {
+    if (!await launchUrl(
+        Uri(
+          scheme: 'mailto',
+          path: email,
+        ),
+        mode: LaunchMode.externalApplication)) {
+      ToastWidget.showToast("Couldn't able to launch");
+    }
+  }
 }

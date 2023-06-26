@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -15,6 +16,13 @@ import '../widgets/sliver_app_bar_widget.dart';
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
+  void _showAnimation(SubscriptionProvider provider) {
+    provider.setIsSubcriptionAnimating = true;
+    Future.delayed(const Duration(seconds: 5), () {
+      provider.setIsSubcriptionAnimating = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,14 +38,32 @@ class SettingsPage extends StatelessWidget {
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
+                child: Stack(
                   children: [
-                    _plusBanner(context),
-                    _appearanceSection(context),
-                    _advancedSection(context),
-                    _socialSection(context),
-                    _ourTeamSection(context),
-                    _appInfoSection(context),
+                    Column(
+                      children: [
+                        _plusBanner(context),
+                        _appearanceSection(context),
+                        _advancedSection(context),
+                        _socialSection(context),
+                        _ourTeamSection(context),
+                        _appInfoSection(context),
+                      ],
+                    ),
+                    Consumer<SubscriptionProvider>(
+                        builder: (context, provider, _) {
+                      return Center(
+                        child: AnimatedOpacity(
+                          duration: const Duration(milliseconds: 500),
+                          opacity: provider.isSubcriptionAnimating ? 1 : 0,
+                          child: IgnorePointer(
+                            child: Lottie.network(
+                                'https://assets6.lottiefiles.com/packages/lf20_5ki7ru7q.json',
+                                width: MediaQuery.of(context).size.width),
+                          ),
+                        ),
+                      );
+                    }),
                   ],
                 ),
               ),
@@ -53,13 +79,21 @@ class SettingsPage extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 20),
       child: Consumer<SubscriptionProvider>(
         builder: (context, provider, _) {
-          final bool hasSubscription = provider.activeSubscriptionId.isNotEmpty;
+          final bool hasSubscription = provider.subscriptionDaysLeft.isNotEmpty;
           return InkWell(
-            onTap: () => hasSubscription
-                ? {}
-                : showDialog(
+            onTap: () async {
+              if (hasSubscription) {
+                if (provider.isSubcriptionAnimating) return;
+                _showAnimation(provider);
+              } else {
+                final val = await showDialog(
                     context: context,
-                    builder: (context) => const PlusSubscription()),
+                    builder: (context) => const PlusSubscription());
+                if (val != null) {
+                  if (val) _showAnimation(provider);
+                }
+              }
+            },
             borderRadius: BorderRadius.circular(30),
             child: Ink(
               padding: const EdgeInsets.all(20),
@@ -104,7 +138,14 @@ class SettingsPage extends StatelessWidget {
                       : "Now You’re a Plus Member\nEnjoy Plus Collection & Ad-free Experience",
                   style: Theme.of(context).textTheme.labelSmall,
                   textAlign: TextAlign.center,
-                )
+                ),
+                const SizedBox(height: 15),
+                if (hasSubscription)
+                  Text(
+                    "${provider.subscriptionDaysLeft} Days Left",
+                    style: Theme.of(context).textTheme.labelMedium,
+                    textAlign: TextAlign.center,
+                  )
               ]),
             ),
           );

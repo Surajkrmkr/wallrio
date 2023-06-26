@@ -18,9 +18,6 @@ List<SingleChildWidget> providers(context) => [
         create: ((context) => SubscriptionProvider()),
       ),
       ChangeNotifierProvider(
-        create: ((context) => AuthProvider()),
-      ),
-      ChangeNotifierProvider(
         create: ((context) => DarkThemeProvider()),
       ),
       ChangeNotifierProvider(

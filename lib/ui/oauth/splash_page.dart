@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:provider/provider.dart';
 
 import '../../log.dart';
+import '../../provider/subscription.dart';
 import '../views/navigation_page.dart';
 import 'login_page.dart';
 
@@ -23,10 +25,34 @@ class _SplashPageState extends State<SplashPage> {
     // }, onError: (error) {
     //   logger.e(error);
     // });
-    FlutterNativeSplash.remove();
-
+    final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+    firebaseAuth.authStateChanges().listen((event) {
+      if (mounted && event != null) {
+        Provider.of<SubscriptionProvider>(context, listen: false)
+            .checkPastPurchases(email: event.email!);
+      }
+    });
+    Future.delayed(Duration.zero,
+        () => _checkSubscription(firebaseAuth.currentUser!.email!));
     super.initState();
   }
+
+  void _checkSubscription(String email) async {
+    final subscriptionProvider =
+        Provider.of<SubscriptionProvider>(context, listen: false);
+    _checkPastPurchases(subscriptionProvider, email);
+    subscriptionProvider.checkSupportForIAP();
+    subscriptionProvider.successPurchasedStream.listen((event) {
+      if (mounted && event) {
+        Navigator.pop(context, true);
+      }
+    });
+    FlutterNativeSplash.remove();
+  }
+
+  Future<void> _checkPastPurchases(
+          SubscriptionProvider subscriptionProvider, String email) async =>
+      await subscriptionProvider.checkPastPurchases(email: email);
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +64,14 @@ class _SplashPageState extends State<SplashPage> {
               child: CircularProgressIndicator(),
             );
           } else if (snapshot.hasData) {
-            return const NavigationPage();
+            return Consumer<SubscriptionProvider>(
+                builder: (context, provider, _) {
+              return provider.isSubscriptionLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : const NavigationPage();
+            });
           } else if (snapshot.hasError) {
             logger.e(snapshot.error);
             return const LoginPage();
