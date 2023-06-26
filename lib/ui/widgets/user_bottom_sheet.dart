@@ -33,6 +33,7 @@ class UserBottomSheet extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 25.0),
             child: Consumer<AuthProvider>(
               builder: (context, provider, _) {
+                final String name = provider.user.displayName!;
                 return Row(children: [
                   provider.user.photoURL!.isEmpty
                       ? const Icon(Icons.account_circle_rounded)
@@ -43,14 +44,44 @@ class UserBottomSheet extends StatelessWidget {
                           backgroundColor: Theme.of(context).primaryColorDark,
                         ),
                   const SizedBox(width: 20),
-                  Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(provider.user.displayName!,
-                            style: Theme.of(context).textTheme.displayMedium),
-                        Text("WallRio member",
-                            style: Theme.of(context).textTheme.titleSmall)
-                      ])
+                  Expanded(
+                    child: Consumer<SubscriptionProvider>(
+                        builder: (context, provider, _) {
+                      return Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Flexible(
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(name,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .displayMedium),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                      "WallRio ${provider.subscriptionDaysLeft.isNotEmpty ? "Plus" : ""} Member",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall)
+                                ]),
+                          ),
+                          Visibility(
+                            visible: provider.subscriptionDaysLeft.isNotEmpty,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Image.asset(
+                                "assets/plus_icon.png",
+                                height: 18,
+                              ),
+                            ),
+                          )
+                        ],
+                      );
+                    }),
+                  )
                 ]);
               },
             ),

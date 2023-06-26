@@ -110,25 +110,44 @@ class TrendingWallGridWidget extends StatelessWidget {
     return Align(
         alignment: Alignment.bottomCenter,
         child: Container(
-          color: wall.colorList.last,
+          // color: wall.colorList.last,
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                  colors: [Colors.transparent, Colors.black54],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter)),
           padding: const EdgeInsets.only(left: 15, right: 5),
-          height: 45,
+          height: 65,
           alignment: Alignment.bottomCenter,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Material(
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.23,
-                  child: Text(
-                    wall.name,
-                    maxLines: 1,
-                    overflow: TextOverflow.clip,
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium!
-                        .copyWith(color: whiteColor, fontSize: 14),
-                  ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      wall.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.fade,
+                      softWrap: false,
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium!
+                          .copyWith(color: whiteColor, fontSize: 12),
+                    ),
+                    Text(
+                      "Designed by ${wall.author}",
+                      maxLines: 1,
+                      overflow: TextOverflow.clip,
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium!
+                          .copyWith(color: whiteColor, fontSize: 10),
+                    ),
+                  ],
                 ),
               ),
               _buildFavIcon(wall)

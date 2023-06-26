@@ -49,7 +49,7 @@ class SubscriptionProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  get subscriptionDaysLeft => _subscriptionDaysLeft;
+  String get subscriptionDaysLeft => _subscriptionDaysLeft;
 
   set setIsLoading(val) {
     isLoading = val;

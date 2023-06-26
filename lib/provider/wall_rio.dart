@@ -46,7 +46,8 @@ class WallRio extends ChangeNotifier {
   }
 
   set setActionWallList(List<Walls> list) {
-    actionWallList = list;
+    actionWallList..clear()..addAll(list);
+    actionWallList.shuffle();
     notifyListeners();
   }
 
