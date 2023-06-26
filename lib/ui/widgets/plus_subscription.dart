@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:provider/provider.dart';
@@ -31,34 +29,34 @@ class PlusSubscription extends StatelessWidget {
     );
   }
 
-  Widget _buildRestoreBtn(BuildContext context) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        child:
-            TextButton(onPressed: () {}, child: const Text("Restore Purchase")),
-      );
+  // Widget _buildRestoreBtn(BuildContext context) => Padding(
+  //       padding: const EdgeInsets.symmetric(vertical: 10),
+  //       child:
+  //           TextButton(onPressed: () {}, child: const Text("Restore Purchase")),
+  //     );
 
-  Padding _buildBuyBtnUI(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 35, right: 25),
-      child: InkWell(
-        child: Ink(
-          decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                  colors: [Color(0xFFFFE376), Color(0xFFF7B540)],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter),
-              borderRadius: BorderRadius.circular(20)),
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          child: Center(
-            child: Text("Buy now for",
-                style: Theme.of(context).textTheme.displayMedium!.copyWith(
-                      color: Theme.of(context).primaryColorDark,
-                    )),
-          ),
-        ),
-      ),
-    );
-  }
+  // Padding _buildBuyBtnUI(BuildContext context) {
+  //   return Padding(
+  //     padding: const EdgeInsets.only(left: 35, right: 25),
+  //     child: InkWell(
+  //       child: Ink(
+  //         decoration: BoxDecoration(
+  //             gradient: const LinearGradient(
+  //                 colors: [Color(0xFFFFE376), Color(0xFFF7B540)],
+  //                 begin: Alignment.topCenter,
+  //                 end: Alignment.bottomCenter),
+  //             borderRadius: BorderRadius.circular(20)),
+  //         padding: const EdgeInsets.symmetric(vertical: 16),
+  //         child: Center(
+  //           child: Text("Buy now for",
+  //               style: Theme.of(context).textTheme.displayMedium!.copyWith(
+  //                     color: Theme.of(context).primaryColorDark,
+  //                   )),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Padding _buildQueryUI(BuildContext context) {
     return Padding(
