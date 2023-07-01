@@ -32,8 +32,13 @@ class _SplashPageState extends State<SplashPage> {
             .checkPastPurchases(email: event.email!);
       }
     });
-    Future.delayed(Duration.zero,
-        () => _checkSubscription(firebaseAuth.currentUser!.email!));
+
+    Future.delayed(
+        Duration.zero,
+        () => firebaseAuth.currentUser != null
+            ? _checkSubscription(firebaseAuth.currentUser!.email!)
+            : {});
+    FlutterNativeSplash.remove();
     super.initState();
   }
 
@@ -47,7 +52,6 @@ class _SplashPageState extends State<SplashPage> {
         Navigator.pop(context, true);
       }
     });
-    FlutterNativeSplash.remove();
   }
 
   Future<void> _checkPastPurchases(

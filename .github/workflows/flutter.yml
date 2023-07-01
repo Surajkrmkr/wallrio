@@ -1,0 +1,24 @@
+name: Flutter Build Generate
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Github Action Check
+        uses: echo Yeah! Github Action Workflow is so cool
+
+    #   - name: Checkout code
+    #     uses: actions/checkout@v2
+
+    #   - name: Set up Flutter
+    #     uses: subosito/flutter-action@v2
+    #     with:
+    #       flutter-version: stable
+
+    #   - name: Build APK
+    #     run: flutter build apk --split-per-abi
