@@ -9,16 +9,16 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Github Action Check
-        run: echo Yeah! Github Action Workflow is so cool
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    #   - name: Checkout code
-    #     uses: actions/checkout@v2
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: stable
 
-    #   - name: Set up Flutter
-    #     uses: subosito/flutter-action@v2
-    #     with:
-    #       flutter-version: stable
+      - name: Export key.properties file
+        run: echo keys exported | base64 --decode > android/key.properties
 
-    #   - name: Build APK
-    #     run: flutter build apk --split-per-abi
+      - name: Build APK
+        run: flutter build apk --split-per-abi
