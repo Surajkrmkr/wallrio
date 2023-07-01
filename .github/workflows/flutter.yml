@@ -10,7 +10,7 @@ jobs:
 
     steps:
       - name: Github Action Check
-        uses: echo Yeah! Github Action Workflow is so cool
+        run: echo Yeah! Github Action Workflow is so cool
 
     #   - name: Checkout code
     #     uses: actions/checkout@v2
