@@ -19,9 +19,11 @@ jobs:
             flutter-architecture: x64        
 
       - name: Export key.properties file
-        run: echo "$KEY_PROPERTIES" | base64 --decode > android/key.properties
+        run: |
+            echo "$KEY_PROPERTIES_BASE64" | base64 --decode > android/key.properties
         env:
-            KEY_PROPERTIES: ${{ secrets.KEY_PROPERTIES }}
+            KEY_PROPERTIES_BASE64: |
+                <base64-encoded-contents-of-key.properties>
 
       - name: Build APK
         run: flutter build apk --split-per-abi
