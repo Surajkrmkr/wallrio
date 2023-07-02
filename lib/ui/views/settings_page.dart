@@ -48,6 +48,7 @@ class SettingsPage extends StatelessWidget {
                           _advancedSection(context),
                           _socialSection(context),
                           _ourTeamSection(context),
+                          _legalSection(context),
                           _appInfoSection(context),
                         ],
                       ),
@@ -338,6 +339,24 @@ class SettingsPage extends StatelessWidget {
         style: Theme.of(context).textTheme.labelSmall,
       ),
       onTap: onTap,
+    );
+  }
+
+  Widget _legalSection(context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 10),
+        Text(
+          "Legal",
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
+        _getListTile(context,
+            onTap: () => launch(
+                "https://doc-hosting.flycricket.io/wallrio-privacy-policy/74e93607-af2a-42e8-b23c-ae459cee92b3/privacy"),
+            title: "Privacy Policy",
+            subtitle: "more info"),
+      ],
     );
   }
 

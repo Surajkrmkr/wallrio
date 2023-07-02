@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:in_app_update/in_app_update.dart';
 import 'package:provider/provider.dart';
 
 import '../../log.dart';
@@ -20,13 +21,13 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
-    // InAppUpdate.checkForUpdate().then((updateInfo) async {
-    //   if (updateInfo.updateAvailability == UpdateAvailability.updateAvailable) {
-    //     await InAppUpdate.performImmediateUpdate();
-    //   }
-    // }, onError: (error) {
-    //   logger.e(error);
-    // });
+    InAppUpdate.checkForUpdate().then((updateInfo) async {
+      if (updateInfo.updateAvailability == UpdateAvailability.updateAvailable) {
+        await InAppUpdate.performImmediateUpdate();
+      }
+    }, onError: (error) {
+      logger.e(error);
+    });
     final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
     firebaseAuth.authStateChanges().listen((event) {
       if (mounted && event != null) {

@@ -7,12 +7,14 @@ import 'package:wallrio/ui/widgets/primary_btn_widget.dart';
 import '../../provider/wall_action.dart';
 import '../theme/theme_data.dart';
 import '../views/image_view_page.dart';
+import 'ads_widget.dart';
 
 class ImageBottomSheet extends StatelessWidget {
   final Walls wallModel;
   const ImageBottomSheet({super.key, required this.wallModel});
 
   void _onTapHandler(context, model) {
+    Navigator.pop(context);
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -66,6 +68,7 @@ class ImageBottomSheet extends StatelessWidget {
                     ))),
           ),
           const SizedBox(height: 20),
+          const AdsWidget(bottomPadding: 20),
           PrimaryBtnWidget(
               btnText: "Apply",
               onTap: () =>

@@ -1,6 +1,7 @@
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
+import 'provider/ads.dart';
 import 'provider/auth.dart';
 import 'provider/dark_theme.dart';
 import 'provider/favourite.dart';
@@ -16,6 +17,9 @@ List<SingleChildWidget> providers(context) => [
       ),
       ChangeNotifierProvider(
         create: ((context) => SubscriptionProvider()),
+      ),
+      ChangeNotifierProvider(
+        create: ((context) => AdsProvider()),
       ),
       ChangeNotifierProvider(
         create: ((context) => DarkThemeProvider()),

@@ -6,6 +6,7 @@ import 'package:wallrio/ui/widgets/image_bottom_sheet.dart';
 
 import '../../model/wall_rio_model.dart';
 import '../../provider/favourite.dart';
+import '../widgets/ads_widget.dart';
 import '../widgets/image_widget.dart';
 import '../widgets/sliver_app_bar_widget.dart';
 
@@ -35,14 +36,19 @@ class GridPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            SliverAppBarWidget(
-                showLogo: false,
-                showSearchBtn: false,
-                text: categoryName,
-                showBackBtn: true),
-            _buildListUI(context)
+        child: Stack(
+          children: [
+            CustomScrollView(
+              slivers: [
+                SliverAppBarWidget(
+                    showLogo: false,
+                    showSearchBtn: false,
+                    text: categoryName,
+                    showBackBtn: true),
+                _buildListUI(context)
+              ],
+            ),
+            const AdsWidget()
           ],
         ),
       ),
@@ -51,13 +57,13 @@ class GridPage extends StatelessWidget {
 
   Widget _buildListUI(context) {
     return SliverPadding(
-        padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+        padding: const EdgeInsets.only(left: 20, right: 20, bottom: 80),
         sliver: SliverGrid(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 mainAxisSpacing: 15,
                 crossAxisSpacing: 15,
-                childAspectRatio: 0.7),
+                childAspectRatio: 0.6),
             delegate: SliverChildBuilderDelegate(
                 childCount: walls.length,
                 (context, index) => Hero(
@@ -84,25 +90,42 @@ class GridPage extends StatelessWidget {
     return Align(
         alignment: Alignment.bottomCenter,
         child: Container(
-          color: wall.colorList.last,
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                  colors: [Colors.transparent, Colors.black54],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter)),
           padding: const EdgeInsets.only(left: 15, right: 5),
-          height: 45,
+          height: 65,
           alignment: Alignment.bottomCenter,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Material(
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.20,
-                  child: Text(
-                    wall.name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium!
-                        .copyWith(color: whiteColor),
-                  ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      wall.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.fade,
+                      softWrap: false,
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium!
+                          .copyWith(color: whiteColor, fontSize: 12),
+                    ),
+                    Text(
+                      "Designed by ${wall.author}",
+                      maxLines: 1,
+                      overflow: TextOverflow.clip,
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium!
+                          .copyWith(color: whiteColor, fontSize: 10),
+                    ),
+                  ],
                 ),
               ),
               _buildFavIcon(wall)

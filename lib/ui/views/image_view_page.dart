@@ -4,9 +4,11 @@ import 'package:provider/provider.dart';
 import 'package:wallrio/ui/theme/theme_data.dart';
 
 import '../../model/wall_rio_model.dart';
+import '../../provider/ads.dart';
 import '../../provider/favourite.dart';
 import '../../provider/wall_action.dart';
 import '../../provider/wall_details.dart';
+import '../widgets/ads_widget.dart';
 import '../widgets/back_btn_widget.dart';
 import '../widgets/image_widget.dart';
 import '../widgets/primary_btn_widget.dart';
@@ -30,6 +32,30 @@ class ImageViewPage extends StatelessWidget {
   void _onTapHandler(context, model) {
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => FullImage(wallModel: model)));
+  }
+
+  void _downloadHandler(context) {
+    Provider.of<WallActionProvider>(context, listen: false)
+        .downloadImg(wallModel.url, wallModel.name + wallModel.id.toString());
+  }
+
+  void _applyImgHandler(context) {
+    Provider.of<WallActionProvider>(context, listen: false)
+        .setWall(wallModel.url, context);
+  }
+
+  void _showPlusDialog(context, isForDownload) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => AdsWidget.getPlusDialog(context,
+                 onWatchAdClick: () {
+              Provider.of<AdsProvider>(context, listen: false).loadRewardedAd(
+                  context,
+                  onRewarded: () => isForDownload
+                      ? _downloadHandler(context)
+                      : _applyImgHandler(context));
+            }));
   }
 
   @override
@@ -69,7 +95,10 @@ class ImageViewPage extends StatelessWidget {
                               alignment: Alignment.topRight,
                               child: Padding(
                                 padding: EdgeInsets.all(20.0),
-                                child: Icon(Icons.fullscreen),
+                                child: Icon(
+                                  Icons.fullscreen,
+                                  color: whiteColor,
+                                ),
                               )),
                           Material(
                             color: Colors.transparent,
@@ -88,6 +117,7 @@ class ImageViewPage extends StatelessWidget {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    const AdsWidget(bottomPadding: 20),
                     _buildHeaderUI(context),
                     const SizedBox(height: 20),
                     _buildActionBtnUI(context),
@@ -185,18 +215,15 @@ class ImageViewPage extends StatelessWidget {
   }
 
   Row _buildActionBtnUI(context) {
-    final provider = Provider.of<WallActionProvider>(context, listen: false);
     return Row(children: [
       Expanded(
           child: PrimaryBtnWidget(
               btnText: "Download",
-              onTap: () => provider.downloadImg(
-                  wallModel.url, wallModel.name + wallModel.id.toString()))),
+              onTap: () => _showPlusDialog(context, true))),
       const SizedBox(width: 10),
       Expanded(
           child: PrimaryBtnWidget(
-              btnText: "Apply",
-              onTap: () => provider.setWall(wallModel.url, context)))
+              btnText: "Apply", onTap: () => _showPlusDialog(context, false)))
     ]);
   }
 

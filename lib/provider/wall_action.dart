@@ -42,6 +42,7 @@ class WallActionProvider extends ChangeNotifier {
 
   void setWall(url, context) => showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (context) => ApplyWallDialogWidget(imgUrl: url));
 
   void applyWall(context,

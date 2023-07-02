@@ -5,6 +5,7 @@ import '../../provider/favourite.dart';
 import '../../provider/navigation.dart';
 import '../../provider/wall_rio.dart';
 import '../theme/theme_data.dart';
+import '../widgets/ads_widget.dart';
 import '../widgets/image_bottom_sheet.dart';
 import '../widgets/image_widget.dart';
 import '../widgets/refresh_indicator_widget.dart';
@@ -38,17 +39,22 @@ class CategoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicatorWidget(
-      child: CustomScrollView(
-        controller: Provider.of<Navigation>(context).controller,
-        slivers: [
-          const SliverAppBarWidget(
-              showLogo: false,
-              showSearchBtn: false,
-              centeredTitle: false,
-              showUserProfileIcon: true,
-              userProfileIconRight: true,
-              text: "Our\nCollections"),
-          _buildCategoryUI()
+      child: Stack(
+        children: [
+          CustomScrollView(
+            controller: Provider.of<Navigation>(context).controller,
+            slivers: [
+              const SliverAppBarWidget(
+                  showLogo: false,
+                  showSearchBtn: false,
+                  centeredTitle: false,
+                  showUserProfileIcon: true,
+                  userProfileIconRight: true,
+                  text: "Our\nCollections"),
+              _buildCategoryUI()
+            ],
+          ),
+          const AdsWidget()
         ],
       ),
     );

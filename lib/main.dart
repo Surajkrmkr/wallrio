@@ -1,6 +1,7 @@
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,6 +25,7 @@ void main() async {
   );
   await FirebaseAppCheck.instance.activate();
   await NotificationService().init();
+  await MobileAds.instance.initialize();
 
   if (kReleaseMode) {
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;

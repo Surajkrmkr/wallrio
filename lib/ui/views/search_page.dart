@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../provider/wall_rio.dart';
 import '../theme/theme_data.dart';
+import '../widgets/ads_widget.dart';
 import '../widgets/sliver_app_bar_widget.dart';
 import '../widgets/trending_wall_grid_widget.dart';
 
@@ -20,18 +21,24 @@ class SearchPage extends StatelessWidget {
           return true;
         },
         child: SafeArea(
-          child: CustomScrollView(controller: scrollController, slivers: [
-            const SliverAppBarWidget(
-                showLogo: false,
-                showSearchBtn: false,
-                centeredTitle: true,
-                showBackBtn: true,
-                clearSearchedData: true,
-                text: "Search it..."),
-            _buildSearchBarUI(),
-            _buildChipsUI(),
-            const TrendingWallGridWidget(isShuffled: true, isActionGrid: true)
-          ]),
+          child: Stack(
+            children: [
+              CustomScrollView(controller: scrollController, slivers: [
+                const SliverAppBarWidget(
+                    showLogo: false,
+                    showSearchBtn: false,
+                    centeredTitle: true,
+                    showBackBtn: true,
+                    clearSearchedData: true,
+                    text: "Search it..."),
+                _buildSearchBarUI(),
+                _buildChipsUI(),
+                const TrendingWallGridWidget(
+                    isShuffled: true, isActionGrid: true)
+              ]),
+              const AdsWidget()
+            ],
+          ),
         ),
       ),
     );
