@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:wallrio/provider/navigation.dart';
 import 'package:wallrio/ui/widgets/banner_widget.dart';
 import 'package:wallrio/ui/widgets/sliver_app_bar_widget.dart';
 import 'package:wallrio/ui/widgets/trending_wall_grid_widget.dart';
 
-import '../../provider/ads.dart';
 import '../widgets/ads_widget.dart';
 import '../widgets/refresh_indicator_widget.dart';
 

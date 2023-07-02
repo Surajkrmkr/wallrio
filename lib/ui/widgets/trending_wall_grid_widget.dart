@@ -6,12 +6,9 @@ import 'package:wallrio/ui/theme/theme_data.dart';
 import 'package:wallrio/ui/widgets/image_bottom_sheet.dart';
 import 'package:wallrio/ui/widgets/image_widget.dart';
 
-import '../../log.dart';
 import '../../model/wall_rio_model.dart';
-import '../../provider/ads.dart';
 import '../../provider/favourite.dart';
 import '../views/image_view_page.dart';
-import 'ads_widget.dart';
 import 'shimmer_widget.dart';
 
 class TrendingWallGridWidget extends StatelessWidget {
