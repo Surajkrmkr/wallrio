@@ -36,35 +36,37 @@ class SettingsPage extends StatelessWidget {
                 showBackBtn: true,
                 text: "Settings"),
             SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Stack(
-                  children: [
-                    Column(
-                      children: [
-                        _plusBanner(context),
-                        _appearanceSection(context),
-                        _advancedSection(context),
-                        _socialSection(context),
-                        _ourTeamSection(context),
-                        _appInfoSection(context),
-                      ],
-                    ),
-                    Consumer<SubscriptionProvider>(
-                        builder: (context, provider, _) {
-                      return Center(
-                        child: AnimatedOpacity(
-                          duration: const Duration(milliseconds: 500),
-                          opacity: provider.isSubcriptionAnimating ? 1 : 0,
-                          child: IgnorePointer(
-                            child: Lottie.network(
-                                'https://assets6.lottiefiles.com/packages/lf20_5ki7ru7q.json',
-                                width: MediaQuery.of(context).size.width),
+              child: Material(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Stack(
+                    children: [
+                      Column(
+                        children: [
+                          _plusBanner(context),
+                          _appearanceSection(context),
+                          _advancedSection(context),
+                          _socialSection(context),
+                          _ourTeamSection(context),
+                          _appInfoSection(context),
+                        ],
+                      ),
+                      Consumer<SubscriptionProvider>(
+                          builder: (context, provider, _) {
+                        return Center(
+                          child: AnimatedOpacity(
+                            duration: const Duration(milliseconds: 500),
+                            opacity: provider.isSubcriptionAnimating ? 1 : 0,
+                            child: IgnorePointer(
+                              child: Lottie.network(
+                                  'https://assets6.lottiefiles.com/packages/lf20_5ki7ru7q.json',
+                                  width: MediaQuery.of(context).size.width),
+                            ),
                           ),
-                        ),
-                      );
-                    }),
-                  ],
+                        );
+                      }),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -107,7 +109,10 @@ class SettingsPage extends StatelessWidget {
                     if (!hasSubscription)
                       Text(
                         "Upgrade to",
-                        style: Theme.of(context).textTheme.bodyMedium,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium!
+                            .copyWith(color: whiteColor),
                       ),
                     Consumer<DarkThemeProvider>(
                         builder: (context, provider, _) {
@@ -119,7 +124,10 @@ class SettingsPage extends StatelessWidget {
                     }),
                     Text(
                       "Plus",
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(color: whiteColor),
                     ),
                     const SizedBox(width: 8),
                     Padding(
@@ -136,7 +144,10 @@ class SettingsPage extends StatelessWidget {
                   !hasSubscription
                       ? "Unleash creativity with our exclusive subscription for stunning wallpapers. Ad-free, high-quality downloads. Elevate your screen's style."
                       : "Now You’re a Plus Member\nEnjoy Plus Collection & Ad-free Experience",
-                  style: Theme.of(context).textTheme.labelSmall,
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelSmall!
+                      .copyWith(color: whiteColor),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 15),

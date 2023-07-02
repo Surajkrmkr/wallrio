@@ -45,7 +45,7 @@ class TrendingWallGridWidget extends StatelessWidget {
                   crossAxisCount: 2,
                   crossAxisSpacing: 15,
                   mainAxisSpacing: 15,
-                  childAspectRatio: 0.7,
+                  childAspectRatio: 0.6,
                   children: List.generate(
                       8,
                       (index) => const ShimmerWidget(
@@ -69,7 +69,7 @@ class TrendingWallGridWidget extends StatelessWidget {
                                   crossAxisCount: 2,
                                   mainAxisSpacing: 15,
                                   crossAxisSpacing: 15,
-                                  childAspectRatio: 0.7),
+                                  childAspectRatio: 0.6),
                           delegate: SliverChildBuilderDelegate(
                               childCount: isActionGrid
                                   ? provider.actionWallList.length
@@ -169,8 +169,9 @@ class TrendingWallGridWidget extends StatelessWidget {
         color: isFav ? Colors.redAccent : Colors.white,
         iconData:
             isFav ? Icons.favorite_rounded : Icons.favorite_border_rounded,
-        onTap: () =>
-            isFav ? provider.removeFromFav(wall.url) : provider.addToFav(wall),
+        onTap: () => isFav
+            ? provider.removeFromFav(id: wall.id)
+            : provider.addToFav(wall: wall),
       );
     });
   }

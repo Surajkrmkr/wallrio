@@ -134,13 +134,7 @@ class CategoryPage extends StatelessWidget {
                         splashColor: blackColor.withOpacity(0.3),
                       ),
                     ),
-                    Align(
-                      alignment: Alignment.bottomRight,
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 4.0, bottom: 4.0),
-                        child: _buildFavIcon(categoryWalls[i]!),
-                      ),
-                    )
+                    buildImgBottomUI(categoryWalls[i]!)
                   ]),
                 ),
               ),
@@ -149,21 +143,39 @@ class CategoryPage extends StatelessWidget {
     );
   }
 
+  Widget buildImgBottomUI(Walls wall) {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Container(
+        decoration: const BoxDecoration(
+            gradient: LinearGradient(
+                colors: [Colors.transparent, Colors.black54],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter)),
+        height: 65,
+        padding: const EdgeInsets.only(right: 5, bottom: 5),
+        alignment: Alignment.bottomRight,
+        child: _buildFavIcon(wall),
+      ),
+    );
+  }
+
   Consumer<FavouriteProvider> _buildFavIcon(Walls wall) {
     return Consumer<FavouriteProvider>(builder: (context, provider, _) {
       final bool isFav = provider.isSelectedAsFav(wall.url);
       if (provider.isLoading) {
         return _buildFavBtn(
-            color: Colors.black,
+            color: whiteColor,
             iconData: Icons.favorite_border_rounded,
             onTap: () {});
       }
       return _buildFavBtn(
-        color: isFav ? Colors.redAccent : Colors.black,
+        color: isFav ? Colors.redAccent : whiteColor,
         iconData:
             isFav ? Icons.favorite_rounded : Icons.favorite_border_rounded,
-        onTap: () =>
-            isFav ? provider.removeFromFav(wall.url) : provider.addToFav(wall),
+        onTap: () => isFav
+            ? provider.removeFromFav(id: wall.id)
+            : provider.addToFav(wall: wall),
       );
     });
   }
@@ -173,7 +185,7 @@ class CategoryPage extends StatelessWidget {
       required IconData iconData,
       required Color color}) {
     return IconButton(
-        style: IconButton.styleFrom(backgroundColor: whiteColor),
+        // style: IconButton.styleFrom(backgroundColor: whiteColor),
         onPressed: onTap,
         icon: Icon(iconData, color: color));
   }

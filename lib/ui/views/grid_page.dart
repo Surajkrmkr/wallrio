@@ -124,8 +124,9 @@ class GridPage extends StatelessWidget {
         color: isFav ? Colors.redAccent : Colors.white,
         iconData:
             isFav ? Icons.favorite_rounded : Icons.favorite_border_rounded,
-        onTap: () =>
-            isFav ? provider.removeFromFav(wall.url) : provider.addToFav(wall),
+        onTap: () => isFav
+            ? provider.removeFromFav(id: wall.id)
+            : provider.addToFav(wall: wall),
       );
     });
   }

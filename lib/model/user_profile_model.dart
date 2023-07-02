@@ -1,34 +1,28 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 class UserProfile {
-  final String avatarUrl;
-  final String email;
-  final bool emailVerified;
-  final String fullName;
-  final String iss;
-  final String name;
-  final String picture;
-  final String providerId;
-  final String sub;
+  static String _avatarUrl = "";
+  static String _email = "";
+  static String _name = "";
+  static bool _plusMember = false;
 
-  UserProfile(
-      {this.avatarUrl = "",
-      this.email = "",
-      this.emailVerified = false,
-      this.fullName = "",
-      this.iss = "",
-      this.name = "",
-      this.picture = "",
-      this.providerId = "",
-      this.sub = ""});
+  static String get avatarUrl => _avatarUrl;
+  static String get email => _email;
+  static String get name => _name;
+  static bool get plusMember => _plusMember;
 
-  factory UserProfile.fromJson(Map<String, dynamic> json) => UserProfile(
-        avatarUrl: json['avatar_url'] ?? "",
-        email: json['email'] ?? "",
-        emailVerified: json['email_verified'] ?? false,
-        fullName: json['full_name'] ?? "",
-        iss: json['iss'] ?? "",
-        name: json['name'] ?? "",
-        picture: json['picture'] ?? "",
-        providerId: json['provider_id'] ?? "",
-        sub: json['sub'] ?? "",
-      );
+  static set _setAvatarUrl(String val) => _avatarUrl = val;
+  static set _setEmail(String val) => _email = val;
+  static set _setName(String val) => _name = val;
+  static set _setPlusMember(bool val) => _plusMember = val;
+
+  static setUserData(User user) {
+    _setName = user.displayName!;
+    _setEmail = user.email!;
+    _setAvatarUrl = user.photoURL!;
+  }
+
+  static setPlusMemberInfo(bool val) {
+    _setPlusMember = val;
+  }
 }

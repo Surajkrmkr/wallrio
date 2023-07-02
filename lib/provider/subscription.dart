@@ -7,9 +7,12 @@ import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../log.dart';
+import '../model/user_profile_model.dart';
 import '../ui/widgets/toast_widget.dart';
 
 class SubscriptionProvider extends ChangeNotifier {
+  final String subscriptionFirebasePath = "purchases";
+
   bool isLoading = false;
   bool isSupported = false;
   bool isSubscriptionLoading = false;
@@ -120,7 +123,7 @@ class SubscriptionProvider extends ChangeNotifier {
     try {
       await inAppPurchase.completePurchase(purchase);
       final CollectionReference purchases =
-          FirebaseFirestore.instance.collection('purchases');
+          FirebaseFirestore.instance.collection(subscriptionFirebasePath);
       final int subscriptionDays =
           int.parse(purchase.productID.split("_").last);
       final now = DateTime.now();
@@ -147,9 +150,10 @@ class SubscriptionProvider extends ChangeNotifier {
     setIsSubscriptionIdLoading = true;
     try {
       final CollectionReference purchases =
-          FirebaseFirestore.instance.collection('purchases');
+          FirebaseFirestore.instance.collection(subscriptionFirebasePath);
       final QuerySnapshot<Object?> querySnapshot = await purchases.get();
       final now = DateTime.now();
+      UserProfile.setPlusMemberInfo(false);
       for (var element in querySnapshot.docs) {
         if (element["email"] == email) {
           final purchaseStartDate =
@@ -163,6 +167,8 @@ class SubscriptionProvider extends ChangeNotifier {
           if (isPurchaseActive) {
             setSubscriptionDaysLeft =
                 (purchaseEndDate.difference(now).inDays + 1).toString();
+            UserProfile.setPlusMemberInfo(true);
+            return;
           }
         }
       }

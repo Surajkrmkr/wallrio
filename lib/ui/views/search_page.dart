@@ -26,6 +26,7 @@ class SearchPage extends StatelessWidget {
                 showSearchBtn: false,
                 centeredTitle: true,
                 showBackBtn: true,
+                clearSearchedData: true,
                 text: "Search it..."),
             _buildSearchBarUI(),
             _buildChipsUI(),

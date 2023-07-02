@@ -128,28 +128,36 @@ class PlusSubscription extends StatelessWidget {
         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
         color: Theme.of(context).navigationBarTheme.indicatorColor,
       ),
-      child: Column(
+      child: Stack(
         children: [
-          Image.asset("assets/app_icon/icon-foreground.png", height: 90),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          Image.asset("assets/watermark.png"),
+          Column(
             children: [
-              Consumer<DarkThemeProvider>(builder: (context, provider, _) {
-                return GradientText(
-                  " WallRio ",
-                  style: Theme.of(context).textTheme.displayLarge,
-                  colors: gradientColorMap[provider.gradType]!,
-                );
-              }),
-              Text(
-                "Plus",
-                style: Theme.of(context).textTheme.displayLarge,
+              Image.asset("assets/app_icon/icon-foreground.png", height: 90),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Consumer<DarkThemeProvider>(builder: (context, provider, _) {
+                    return GradientText(
+                      " WallRio ",
+                      style: Theme.of(context).textTheme.displayLarge,
+                      colors: gradientColorMap[provider.gradType]!,
+                    );
+                  }),
+                  Text(
+                    "Plus",
+                    style: Theme.of(context)
+                        .textTheme
+                        .displayLarge!
+                        .copyWith(color: whiteColor),
+                  ),
+                  const SizedBox(width: 12),
+                  _buildPlusIcon(size: 24)
+                ],
               ),
-              const SizedBox(width: 12),
-              _buildPlusIcon(size: 24)
+              const SizedBox(height: 20),
             ],
           ),
-          const SizedBox(height: 20),
         ],
       ),
     );
@@ -173,10 +181,8 @@ class PlusSubscription extends StatelessWidget {
       isThreeLine: true,
       subtitle: Text(
         product.description,
-        style: Theme.of(context)
-            .textTheme
-            .labelSmall!
-            .copyWith(color: Theme.of(context).primaryColorDark),
+        style:
+            Theme.of(context).textTheme.labelSmall!.copyWith(color: blackColor),
       ),
     );
   }

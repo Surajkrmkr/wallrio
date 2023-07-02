@@ -14,6 +14,7 @@ class SliverAppBarWidget extends StatelessWidget {
   final bool showSearchBtn;
   final String text;
   final bool showBackBtn;
+  final bool clearSearchedData;
   final bool centeredTitle;
   final bool showUserProfileIcon;
   final bool userProfileIconRight;
@@ -23,6 +24,7 @@ class SliverAppBarWidget extends StatelessWidget {
       required this.text,
       required this.showSearchBtn,
       this.showBackBtn = false,
+      this.clearSearchedData = false,
       this.centeredTitle = true,
       this.showUserProfileIcon = false,
       this.userProfileIconRight = true});
@@ -51,7 +53,9 @@ class SliverAppBarWidget extends StatelessWidget {
           _buildUserProfileIcon(context, userProfileIconRight),
           Offstage(
               offstage: !showBackBtn,
-              child: BackBtnWidget(color: Theme.of(context).primaryColorLight))
+              child: BackBtnWidget(
+                  color: Theme.of(context).primaryColorLight,
+                  isActionReset: clearSearchedData))
         ],
       ),
       toolbarHeight: MediaQuery.of(context).size.height * 0.10,
@@ -120,8 +124,7 @@ class SliverAppBarWidget extends StatelessWidget {
                           ? const Icon(Icons.account_circle_rounded)
                           : CircleAvatar(
                               radius: 18,
-                              backgroundColor:
-                                  Theme.of(context).primaryColorDark,
+                              backgroundColor: Theme.of(context).primaryColor,
                               backgroundImage:
                                   NetworkImage(provider.user.photoURL!),
                             );

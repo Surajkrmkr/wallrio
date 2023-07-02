@@ -76,9 +76,9 @@ class Walls {
         author: json['author'] ?? "",
         url: json['url'] ?? "",
         thumbnail: json['thumbnail'] ?? "",
-        tags: json['tags'].cast<String>() ?? [],
+        tags: json['tags'] != null ? json['tags'].cast<String>() : [],
         category: json['category'] ?? "",
-        colorsString: json['color'].cast<String>() ?? [],
+        colorsString: json['color'] != null ? json['color'].cast<String>() : [],
         colorList: json['color'] != null
             ? (json['color'] as List<dynamic>)
                 .map((color) => color.toString().toLowerCase().toColor())

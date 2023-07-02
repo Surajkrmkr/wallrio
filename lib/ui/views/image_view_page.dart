@@ -221,8 +221,8 @@ class ImageViewPage extends StatelessWidget {
           iconData:
               isFav ? Icons.favorite_rounded : Icons.favorite_border_rounded,
           onTap: () => isFav
-              ? provider.removeFromFav(wallModel.url)
-              : provider.addToFav(wallModel),
+              ? provider.removeFromFav(id: wallModel.id)
+              : provider.addToFav(wall: wallModel),
         );
       })
     ]);

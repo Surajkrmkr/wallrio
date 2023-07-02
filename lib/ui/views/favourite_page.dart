@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:wallrio/provider/navigation.dart';
 import 'package:wallrio/ui/widgets/sliver_app_bar_widget.dart';
 
+import '../../model/user_profile_model.dart';
 import '../../model/wall_rio_model.dart';
 import '../../provider/favourite.dart';
 import '../theme/theme_data.dart';
@@ -12,8 +13,21 @@ import '../widgets/image_widget.dart';
 import '../widgets/shimmer_widget.dart';
 import 'image_view_page.dart';
 
-class FavouritePage extends StatelessWidget {
+class FavouritePage extends StatefulWidget {
   const FavouritePage({super.key});
+
+  @override
+  State<FavouritePage> createState() => _FavouritePageState();
+}
+
+class _FavouritePageState extends State<FavouritePage> {
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      Provider.of<FavouriteProvider>(context, listen: false).getDir();
+    });
+  }
 
   void _onLongPressHandler(context, model) {
     showModalBottomSheet(

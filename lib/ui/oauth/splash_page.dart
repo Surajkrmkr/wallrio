@@ -4,8 +4,10 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
 
 import '../../log.dart';
+import '../../model/user_profile_model.dart';
 import '../../provider/subscription.dart';
 import '../views/navigation_page.dart';
+import '../widgets/shimmer_widget.dart';
 import 'login_page.dart';
 
 class SplashPage extends StatefulWidget {
@@ -45,7 +47,7 @@ class _SplashPageState extends State<SplashPage> {
   void _checkSubscription(String email) async {
     final subscriptionProvider =
         Provider.of<SubscriptionProvider>(context, listen: false);
-    _checkPastPurchases(subscriptionProvider, email);
+    subscriptionProvider.checkPastPurchases(email: email);
     subscriptionProvider.checkSupportForIAP();
     subscriptionProvider.successPurchasedStream.listen((event) {
       if (mounted && event) {
@@ -54,26 +56,20 @@ class _SplashPageState extends State<SplashPage> {
     });
   }
 
-  Future<void> _checkPastPurchases(
-          SubscriptionProvider subscriptionProvider, String email) async =>
-      await subscriptionProvider.checkPastPurchases(email: email);
-
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
+          final Size size = MediaQuery.of(context).size;
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return _getShimmer(size);
           } else if (snapshot.hasData) {
+            UserProfile.setUserData(snapshot.data!);
             return Consumer<SubscriptionProvider>(
                 builder: (context, provider, _) {
               return provider.isSubscriptionLoading
-                  ? const Center(
-                      child: CircularProgressIndicator(),
-                    )
+                  ? _getShimmer(size)
                   : const NavigationPage();
             });
           } else if (snapshot.hasError) {
@@ -84,4 +80,12 @@ class _SplashPageState extends State<SplashPage> {
           }
         });
   }
+
+  Widget _getShimmer(Size size) => Scaffold(
+        body: ShimmerWidget(
+          height: size.height,
+          width: size.width,
+          radius: 0,
+        ),
+      );
 }
