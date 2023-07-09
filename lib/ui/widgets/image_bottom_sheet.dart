@@ -10,12 +10,27 @@ class ImageBottomSheet extends StatelessWidget {
   const ImageBottomSheet({super.key, required this.wallModel});
 
   void _onTapHandler(context, model) {
-    Navigator.pop(context);
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ImageViewPage(wallModel: model)));
+    Navigator.of(context)
+      ..pop()
+      ..push(MaterialPageRoute(
+          builder: (context) => ImageViewPage(wallModel: model)));
   }
+
+  void _showPlusDialog(context) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) =>
+            AdsWidget.getPlusDialog(context, onWatchAdClick: () {
+              Provider.of<AdsProvider>(context, listen: false).loadRewardedAd(
+                  context,
+                  onRewarded: () => _applyImgHandler(context));
+            }));
+  }
+
+  void _applyImgHandler(context) =>
+      Provider.of<WallActionProvider>(context, listen: false)
+          .setWall(wallModel.url, context);
 
   @override
   Widget build(BuildContext context) {
@@ -66,10 +81,7 @@ class ImageBottomSheet extends StatelessWidget {
           const SizedBox(height: 20),
           const AdsWidget(bottomPadding: 20),
           PrimaryBtnWidget(
-              btnText: "Apply",
-              onTap: () =>
-                  Provider.of<WallActionProvider>(context, listen: false)
-                      .setWall(wallModel.url, context)),
+              btnText: "Apply", onTap: () => _showPlusDialog(context)),
         ])
       ]),
     );

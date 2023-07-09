@@ -14,7 +14,7 @@ class AdsWidget extends StatefulWidget {
   State<AdsWidget> createState() => _AdsWidgetState();
 
   static Widget getPlusDialog(BuildContext context,
-      {required Function() onWatchAdClick}) {
+      {required void Function() onWatchAdClick}) {
     return AlertDialog(
       title: const Row(
         children: [
@@ -26,18 +26,15 @@ class AdsWidget extends StatefulWidget {
         ],
       ),
       content: Text(
-        "Get access to the wallpapers by either watching an ad or purchasing the Plus Subscription, which offers unlimited downloads and access to the exclusive plus collection",
+        "Get access to the wallpapers by either watching an ad or purchasing the Plus Subscription.",
         style: Theme.of(context).textTheme.titleMedium,
       ),
       actions: [
         Consumer<AdsProvider>(builder: (context, provider, _) {
           return provider.isRewardedAdLoading
               ? ShimmerWidget.withWidget(
-                  FilledButton(
-                      onPressed: onWatchAdClick, child: const Text("Watch AD")),
-                  context)
-              : FilledButton(
-                  onPressed: onWatchAdClick, child: const Text("Watch AD"));
+                  _getWatchAdBtnUI(onWatchAdClick), context)
+              : _getWatchAdBtnUI(onWatchAdClick);
         }),
         OutlinedButton.icon(
             icon: const Icon(Icons.verified),
@@ -52,6 +49,11 @@ class AdsWidget extends StatefulWidget {
             label: const Text("Go Plus"))
       ],
     );
+  }
+
+  static FilledButton _getWatchAdBtnUI(void Function() onWatchAdClick) {
+    return FilledButton(
+        onPressed: onWatchAdClick, child: const Text("Watch AD"));
   }
 }
 

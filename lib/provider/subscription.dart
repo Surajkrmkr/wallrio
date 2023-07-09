@@ -134,6 +134,7 @@ class SubscriptionProvider extends ChangeNotifier {
         'purchaseEndDate': endDate.toUtc(),
       });
       setSubscriptionDaysLeft = endDate.difference(now).inDays.toString();
+      UserProfile.setPlusMemberInfo(true);
       _successPurchased.sink.add(true);
     } catch (error) {
       logger.e(error);
