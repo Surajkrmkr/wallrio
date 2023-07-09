@@ -1,18 +1,17 @@
-import 'package:shared_preferences/shared_preferences.dart';
-
-import '../ui/theme/theme_data.dart';
+import 'package:wallrio/services/export.dart';
+import 'package:wallrio/services/packages/export.dart';
 
 class ThemeService {
   final darkKey = "isDarkMode";
   final gradientKey = "gradient";
 
   static bool darkTheme = true;
-  static GradientType gradType = GradientType.defaultType;
+  static GradientAccentType gradType = GradientAccentType.defaultType;
 
   Future getData() async {
     final prefs = await SharedPreferences.getInstance();
     final bool isDarkMode = prefs.getBool(darkKey) ?? true;
-    final GradientType savedGradType = getGradType(prefs);
+    final GradientAccentType savedGradType = getGradType(prefs);
     darkTheme = isDarkMode;
     gradType = savedGradType;
   }
@@ -22,18 +21,18 @@ class ThemeService {
     await prefs.setBool(darkKey, val);
   }
 
-  void saveGradient(GradientType type) async {
+  void saveGradient(GradientAccentType type) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(gradientKey, type.name);
   }
 
-  GradientType getGradType(prefs) {
+  GradientAccentType getGradType(prefs) {
     final val = prefs.getString(gradientKey);
     if (val == null) {
-      return GradientType.defaultType;
+      return GradientAccentType.defaultType;
     }
-    final GradientType type =
-        GradientType.values.firstWhere((grad) => grad.name == val);
+    final GradientAccentType type =
+        GradientAccentType.values.firstWhere((grad) => grad.name == val);
     return type;
   }
 }

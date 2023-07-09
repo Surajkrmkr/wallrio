@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-import 'package:wallrio/model/wall_rio_model.dart';
-import 'package:wallrio/services/api_services.dart';
 
-import '../model/tag_model.dart';
-import '../ui/widgets/user_bottom_sheet.dart';
+import 'package:wallrio/model/export.dart';
+import 'package:wallrio/services/export.dart';
+import 'package:wallrio/services/packages/export.dart';
+import 'package:wallrio/ui/widgets/export.dart';
 
 class WallRio extends ChangeNotifier {
   List<Walls> originalWallList = [];
@@ -46,7 +45,9 @@ class WallRio extends ChangeNotifier {
   }
 
   set setActionWallList(List<Walls> list) {
-    actionWallList..clear()..addAll(list);
+    actionWallList
+      ..clear()
+      ..addAll(list);
     actionWallList.shuffle();
     notifyListeners();
   }

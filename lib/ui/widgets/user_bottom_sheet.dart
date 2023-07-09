@@ -1,13 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../../provider/auth.dart';
-import '../../provider/subscription.dart';
-import '../../provider/wall_rio.dart';
-import '../views/settings_page.dart';
-import 'change_log.dart';
-import 'primary_btn_widget.dart';
-import 'shimmer_widget.dart';
+import 'package:wallrio/provider/export.dart';
+import 'package:wallrio/ui/views/export.dart';
+import 'package:wallrio/ui/widgets/export.dart';
 
 class UserBottomSheet extends StatelessWidget {
   const UserBottomSheet({super.key});

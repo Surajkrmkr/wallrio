@@ -1,20 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
-import 'package:wallrio/ui/theme/theme_data.dart';
-
-import '../../model/wall_rio_model.dart';
-import '../../provider/ads.dart';
-import '../../provider/favourite.dart';
-import '../../provider/wall_action.dart';
-import '../../provider/wall_details.dart';
-import '../widgets/ads_widget.dart';
-import '../widgets/back_btn_widget.dart';
-import '../widgets/image_widget.dart';
-import '../widgets/primary_btn_widget.dart';
-import '../widgets/shimmer_widget.dart';
-import '../widgets/toast_widget.dart';
-import 'full_image.dart';
+import 'package:wallrio/model/export.dart';
+import 'package:wallrio/provider/export.dart';
+import 'package:wallrio/services/export.dart';
+import 'package:wallrio/ui/views/export.dart';
+import 'package:wallrio/ui/widgets/export.dart';
 
 // ignore: must_be_immutable
 class ImageViewPage extends StatelessWidget {

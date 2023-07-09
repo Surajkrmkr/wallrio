@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../../provider/wall_rio.dart';
+import 'package:wallrio/provider/export.dart';
 
 class BackBtnWidget extends StatelessWidget {
   final Color color;

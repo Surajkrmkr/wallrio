@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:wallrio/provider/wall_rio.dart';
+import 'package:wallrio/provider/export.dart';
 
 class RefreshIndicatorWidget extends StatelessWidget {
   final Widget child;

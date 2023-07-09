@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:wallrio/model/wall_rio_model.dart';
-import 'package:wallrio/ui/widgets/image_widget.dart';
-import 'package:wallrio/ui/widgets/primary_btn_widget.dart';
-
-import '../../provider/wall_action.dart';
-import '../theme/theme_data.dart';
-import '../views/image_view_page.dart';
-import 'ads_widget.dart';
+import 'package:wallrio/model/export.dart';
+import 'package:wallrio/provider/export.dart';
+import 'package:wallrio/services/export.dart';
+import 'package:wallrio/ui/views/export.dart';
+import 'package:wallrio/ui/widgets/export.dart';
 
 class ImageBottomSheet extends StatelessWidget {
   final Walls wallModel;

@@ -1,9 +1,8 @@
 import 'dart:async';
 import 'dart:math';
-import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:palette_generator/palette_generator.dart';
+import 'package:wallrio/services/packages/export.dart';
 
 class WallDetails extends ChangeNotifier {
   List<Color> colorSwatch = [];

@@ -1,10 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:wallrio/log.dart';
-
-import '../model/user_profile_model.dart';
-import '../model/wall_rio_model.dart';
-import '../ui/widgets/toast_widget.dart';
+import 'package:wallrio/model/export.dart';
+import 'package:wallrio/services/firebase/export.dart';
+import 'package:wallrio/services/packages/export.dart';
+import 'package:wallrio/ui/widgets/export.dart';
 
 class FavouriteProvider extends ChangeNotifier {
   // Map<String, dynamic> favJson = {"walls": []};

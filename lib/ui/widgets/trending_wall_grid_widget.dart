@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
-import 'package:provider/provider.dart';
-import 'package:wallrio/provider/wall_rio.dart';
-import 'package:wallrio/ui/theme/theme_data.dart';
-import 'package:wallrio/ui/widgets/image_bottom_sheet.dart';
-import 'package:wallrio/ui/widgets/image_widget.dart';
-
-import '../../model/wall_rio_model.dart';
-import '../../provider/favourite.dart';
-import '../views/image_view_page.dart';
-import 'shimmer_widget.dart';
+import 'package:wallrio/model/export.dart';
+import 'package:wallrio/provider/export.dart';
+import 'package:wallrio/services/export.dart';
+import 'package:wallrio/services/packages/export.dart';
+import 'package:wallrio/ui/views/export.dart';
+import 'package:wallrio/ui/widgets/export.dart';
 
 class TrendingWallGridWidget extends StatelessWidget {
   final bool isShuffled;

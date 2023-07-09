@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
-
-import '../services/dark_mode_services.dart';
-import '../ui/theme/theme_data.dart';
-import '../ui/widgets/toast_widget.dart';
+import 'package:wallrio/services/export.dart';
+import 'package:wallrio/ui/widgets/export.dart';
 
 class DarkThemeProvider with ChangeNotifier {
   bool _darkTheme = true;
 
-  GradientType _gradType = GradientType.sunset;
+  GradientAccentType _gradType = GradientAccentType.sunset;
 
   bool get darkTheme => _darkTheme;
 
-  GradientType get gradType => _gradType;
+  GradientAccentType get gradType => _gradType;
 
   set darkTheme(bool value) {
     _darkTheme = value;
@@ -19,7 +17,7 @@ class DarkThemeProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  set gradType(GradientType type) {
+  set gradType(GradientAccentType type) {
     _gradType = type;
     ThemeService().saveGradient(type);
     ToastWidget.showToast("Gradient Changed");

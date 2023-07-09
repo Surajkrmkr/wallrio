@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:wallrio/model/wall_rio_model.dart';
+import 'package:wallrio/model/export.dart';
+import 'package:wallrio/services/packages/export.dart';
 
 class ApiServices {
   static Future<WallRioModel> getData() async {

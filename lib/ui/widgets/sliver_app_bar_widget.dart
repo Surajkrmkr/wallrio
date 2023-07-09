@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:simple_gradient_text/simple_gradient_text.dart';
-
-import '../../provider/auth.dart';
-import '../../provider/dark_theme.dart';
-import '../theme/theme_data.dart';
-import '../views/search_page.dart';
-import 'back_btn_widget.dart';
-import 'user_bottom_sheet.dart';
+import 'package:wallrio/provider/export.dart';
+import 'package:wallrio/services/export.dart';
+import 'package:wallrio/services/packages/export.dart';
+import 'package:wallrio/ui/views/export.dart';
+import 'package:wallrio/ui/widgets/export.dart';
 
 class SliverAppBarWidget extends StatelessWidget {
   final bool showLogo;

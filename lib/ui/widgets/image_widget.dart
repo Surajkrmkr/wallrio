@@ -1,6 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:wallrio/ui/widgets/shimmer_widget.dart';
+import 'package:wallrio/services/packages/export.dart';
+import 'package:wallrio/ui/widgets/export.dart';
 
 class CNImage extends StatelessWidget {
   const CNImage({Key? key, @required this.imageUrl, this.isOriginalImg = false})
@@ -14,8 +14,7 @@ class CNImage extends StatelessWidget {
       filterQuality: FilterQuality.high,
       // errorWidget: (context, url, error) => errorWidget(),
       fit: BoxFit.cover,
-      memCacheHeight:
-          isOriginalImg ? 1080 : 800,
+      memCacheHeight: isOriginalImg ? 1080 : 800,
       imageUrl: imageUrl!,
       placeholder: (context, url) {
         return const ShimmerWidget(

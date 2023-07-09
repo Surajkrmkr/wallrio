@@ -1,17 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
-import 'package:provider/provider.dart';
-import 'package:simple_gradient_text/simple_gradient_text.dart';
-import 'package:url_launcher/url_launcher.dart';
-
-import '../../provider/dark_theme.dart';
-import '../../provider/subscription.dart';
-import '../../provider/wall_rio.dart';
-import '../theme/theme_data.dart';
-import '../widgets/clear_cache_widget.dart';
-import '../widgets/plus_subscription.dart';
-import '../widgets/shimmer_widget.dart';
-import '../widgets/sliver_app_bar_widget.dart';
+import 'package:wallrio/provider/export.dart';
+import 'package:wallrio/services/export.dart';
+import 'package:wallrio/services/packages/export.dart';
+import 'package:wallrio/ui/widgets/export.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});

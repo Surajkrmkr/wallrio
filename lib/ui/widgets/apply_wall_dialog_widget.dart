@@ -1,9 +1,7 @@
-import 'package:async_wallpaper/async_wallpaper.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../../provider/wall_action.dart';
-import 'primary_btn_widget.dart';
+import 'package:wallrio/provider/export.dart';
+import 'package:wallrio/services/packages/export.dart';
+import 'package:wallrio/ui/widgets/export.dart';
 
 class ApplyWallDialogWidget extends StatelessWidget {
   final String imgUrl;

@@ -101,20 +101,20 @@ const Color blackColor = Colors.black;
 const Color bgDarkColor = Color(0xFF0A0A1E);
 const Color bgDarkAccentColor = Color(0xFF2B2B52);
 
-const Map<GradientType, List<Color>> gradientColorMap = {
-  GradientType.defaultType: [Color(0xFFFF4949), Color(0xFF5344FF)],
-  GradientType.mild: [Color(0xFF67B26F), Color(0xFF4ca2cd)],
-  GradientType.sunset: [Color(0xFFee0979), Color(0xFFff6a00)],
-  GradientType.radar: [Color(0xFFA770EF), Color(0xFFCF8BF3), Color(0xFFFDB99B)],
-  GradientType.viceCity: [Color(0xFF3494E6), Color(0xFFEC6EAD)],
-  GradientType.bradyFun: [Color(0xFF00c3ff), Color(0xFFffff1c)],
-  GradientType.bloodRed: [Color(0xFFf85032), Color(0xFFe73827)],
-  GradientType.sherbert: [Color(0xFFf79d00), Color(0xFF64f38c)],
-  GradientType.grapeFruit: [Color(0xFFe96443), Color(0xFF64f38c)],
-  GradientType.sweetMorning: [Color(0xFFff5f6d), Color(0xFFffc371)],
+const Map<GradientAccentType, List<Color>> gradientColorMap = {
+  GradientAccentType.defaultType: [Color(0xFFFF4949), Color(0xFF5344FF)],
+  GradientAccentType.mild: [Color(0xFF67B26F), Color(0xFF4ca2cd)],
+  GradientAccentType.sunset: [Color(0xFFee0979), Color(0xFFff6a00)],
+  GradientAccentType.radar: [Color(0xFFA770EF), Color(0xFFCF8BF3), Color(0xFFFDB99B)],
+  GradientAccentType.viceCity: [Color(0xFF3494E6), Color(0xFFEC6EAD)],
+  GradientAccentType.bradyFun: [Color(0xFF00c3ff), Color(0xFFffff1c)],
+  GradientAccentType.bloodRed: [Color(0xFFf85032), Color(0xFFe73827)],
+  GradientAccentType.sherbert: [Color(0xFFf79d00), Color(0xFF64f38c)],
+  GradientAccentType.grapeFruit: [Color(0xFFe96443), Color(0xFF64f38c)],
+  GradientAccentType.sweetMorning: [Color(0xFFff5f6d), Color(0xFFffc371)],
 };
 
-enum GradientType {
+enum GradientAccentType {
   defaultType,
   viceCity,
   mild,

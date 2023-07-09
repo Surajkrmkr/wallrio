@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../../provider/wall_rio.dart';
-import '../views/settings_page.dart';
-import 'primary_btn_widget.dart';
-import 'shimmer_widget.dart';
+import 'package:wallrio/provider/export.dart';
+import 'package:wallrio/ui/views/export.dart';
+import 'package:wallrio/ui/widgets/export.dart';
 
 class ChangeLog extends StatelessWidget {
   const ChangeLog({super.key});

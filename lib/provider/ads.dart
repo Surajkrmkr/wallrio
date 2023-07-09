@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:wallrio/log.dart';
+import 'package:wallrio/services/packages/export.dart';
 
 class AdsProvider extends ChangeNotifier {
   final String bannerId = "ca-app-pub-4861691653340010/8536832813";

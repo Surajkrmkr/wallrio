@@ -1,13 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart' as provider;
-import 'package:simple_gradient_text/simple_gradient_text.dart';
-
-import '../../provider/auth.dart';
-import '../theme/theme_data.dart' as theme;
-import '../widgets/primary_btn_widget.dart';
-import '../widgets/shimmer_widget.dart';
+import 'package:wallrio/provider/export.dart';
+import 'package:wallrio/services/export.dart';
+import 'package:wallrio/services/packages/export.dart';
+import 'package:wallrio/ui/widgets/export.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -50,8 +47,7 @@ class LoginPage extends StatelessWidget {
                       .textTheme
                       .displayLarge!
                       .copyWith(fontSize: 35),
-                  colors:
-                      theme.gradientColorMap[theme.GradientType.defaultType]!,
+                  colors: gradientColorMap[GradientAccentType.defaultType]!,
                 ),
                 Text("Team Shadow",
                     style: Theme.of(context)
@@ -63,7 +59,7 @@ class LoginPage extends StatelessWidget {
                   margin: const EdgeInsets.only(bottom: 60),
                   height: 50,
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: provider.Consumer<AuthProvider>(
+                  child: Consumer<AuthProvider>(
                     builder: (context, provider, _) {
                       return provider.isLoading
                           ? ShimmerWidget.withWidget(

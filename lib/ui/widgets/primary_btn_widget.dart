@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../theme/theme_data.dart';
+import 'package:wallrio/services/export.dart';
 
 class PrimaryBtnWidget extends StatelessWidget {
   final String btnText;
@@ -23,6 +22,7 @@ class PrimaryBtnWidget extends StatelessWidget {
                 child: icon!),
             onPressed: onTap,
             label: Text(btnText.toUpperCase(),
+                maxLines: 1,
                 style: Theme.of(context)
                     .textTheme
                     .titleMedium!

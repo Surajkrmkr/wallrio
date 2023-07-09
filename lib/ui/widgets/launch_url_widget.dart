@@ -1,6 +1,5 @@
-import 'package:url_launcher/url_launcher.dart';
-
-import 'toast_widget.dart';
+import 'package:wallrio/services/packages/export.dart';
+import 'package:wallrio/ui/widgets/export.dart';
 
 class LaunchUrlWidget {
   static Future<void> launch(String url) async {

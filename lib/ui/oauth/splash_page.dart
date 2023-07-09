@@ -1,15 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:in_app_update/in_app_update.dart';
-import 'package:provider/provider.dart';
-
-import '../../log.dart';
-import '../../model/user_profile_model.dart';
-import '../../provider/subscription.dart';
-import '../views/navigation_page.dart';
-import '../widgets/shimmer_widget.dart';
-import 'login_page.dart';
+import 'package:wallrio/model/export.dart';
+import 'package:wallrio/provider/export.dart';
+import 'package:wallrio/services/firebase/export.dart';
+import 'package:wallrio/services/packages/export.dart';
+import 'package:wallrio/ui/oauth/export.dart';
+import 'package:wallrio/ui/views/export.dart';
+import 'package:wallrio/ui/widgets/export.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -21,13 +17,7 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
-    InAppUpdate.checkForUpdate().then((updateInfo) async {
-      if (updateInfo.updateAvailability == UpdateAvailability.updateAvailable) {
-        await InAppUpdate.performImmediateUpdate();
-      }
-    }, onError: (error) {
-      logger.e(error);
-    });
+    _checkInAppUpdate();
     final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
     firebaseAuth.authStateChanges().listen((event) {
       if (mounted && event != null) {
@@ -54,6 +44,16 @@ class _SplashPageState extends State<SplashPage> {
       if (mounted && event) {
         Navigator.pop(context, true);
       }
+    });
+  }
+
+  void _checkInAppUpdate() {
+    InAppUpdate.checkForUpdate().then((updateInfo) async {
+      if (updateInfo.updateAvailability == UpdateAvailability.updateAvailable) {
+        await InAppUpdate.performImmediateUpdate();
+      }
+    }, onError: (error) {
+      logger.e(error);
     });
   }
 

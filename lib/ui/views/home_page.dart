@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:wallrio/provider/navigation.dart';
-import 'package:wallrio/ui/widgets/banner_widget.dart';
-import 'package:wallrio/ui/widgets/sliver_app_bar_widget.dart';
-import 'package:wallrio/ui/widgets/trending_wall_grid_widget.dart';
-
-import '../widgets/ads_widget.dart';
-import '../widgets/refresh_indicator_widget.dart';
+import 'package:wallrio/provider/export.dart';
+import 'package:wallrio/ui/widgets/export.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

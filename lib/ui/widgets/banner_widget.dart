@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../../model/wall_rio_model.dart';
-import '../../provider/wall_rio.dart';
-import '../theme/theme_data.dart';
-import '../views/grid_page.dart';
-import 'image_widget.dart';
-import 'launch_url_widget.dart';
-import 'shimmer_widget.dart';
+import 'package:wallrio/model/export.dart';
+import 'package:wallrio/provider/export.dart';
+import 'package:wallrio/services/export.dart';
+import 'package:wallrio/ui/views/export.dart';
+import 'package:wallrio/ui/widgets/export.dart';
 
 class BannerWidget extends StatelessWidget {
   const BannerWidget({super.key});

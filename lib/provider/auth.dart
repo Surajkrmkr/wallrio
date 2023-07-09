@@ -1,9 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-
-import '../log.dart';
-import '../ui/widgets/toast_widget.dart';
+import 'package:wallrio/services/firebase/export.dart';
+import 'package:wallrio/services/packages/export.dart';
+import 'package:wallrio/ui/widgets/export.dart';
 
 class AuthProvider with ChangeNotifier {
   bool isLoading = false;

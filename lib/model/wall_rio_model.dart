@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wallrio/ui/theme/theme_data.dart';
+import 'package:wallrio/services/export.dart';
 
 class WallRioModel {
   final List<Banners> banners;

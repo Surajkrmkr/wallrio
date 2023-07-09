@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-
-import 'toast_widget.dart';
+import 'package:wallrio/services/packages/export.dart';
+import 'package:wallrio/ui/widgets/export.dart';
 
 class ClearCacheWidget extends StatelessWidget {
   const ClearCacheWidget({super.key});

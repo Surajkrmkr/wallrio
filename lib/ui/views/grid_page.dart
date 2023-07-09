@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:wallrio/ui/theme/theme_data.dart';
-import 'package:wallrio/ui/views/image_view_page.dart';
-import 'package:wallrio/ui/widgets/image_bottom_sheet.dart';
-
-import '../../model/wall_rio_model.dart';
-import '../../provider/favourite.dart';
-import '../widgets/ads_widget.dart';
-import '../widgets/image_widget.dart';
-import '../widgets/sliver_app_bar_widget.dart';
+import 'package:wallrio/model/export.dart';
+import 'package:wallrio/provider/export.dart';
+import 'package:wallrio/services/export.dart';
+import 'package:wallrio/ui/views/export.dart';
+import 'package:wallrio/ui/widgets/export.dart';
 
 class GridPage extends StatelessWidget {
   final String categoryName;

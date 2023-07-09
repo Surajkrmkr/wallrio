@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../../provider/wall_rio.dart';
-import '../theme/theme_data.dart';
-import '../widgets/ads_widget.dart';
-import '../widgets/sliver_app_bar_widget.dart';
-import '../widgets/trending_wall_grid_widget.dart';
+import 'package:wallrio/provider/export.dart';
+import 'package:wallrio/services/export.dart';
+import 'package:wallrio/ui/widgets/export.dart';
 
 class SearchPage extends StatelessWidget {
   SearchPage({super.key});

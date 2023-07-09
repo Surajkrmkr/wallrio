@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
-
-import '../../model/wall_rio_model.dart';
-import '../theme/theme_data.dart';
-import '../widgets/back_btn_widget.dart';
-import '../widgets/image_widget.dart';
+import 'package:wallrio/model/export.dart';
+import 'package:wallrio/services/export.dart';
+import 'package:wallrio/ui/widgets/export.dart';
 
 class FullImage extends StatefulWidget {
   final Walls wallModel;
@@ -15,9 +13,8 @@ class FullImage extends StatefulWidget {
 }
 
 class _FullImageState extends State<FullImage> {
-  Future<void> _secureScreen() async {
-    await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
-  }
+  _secureScreen() =>
+      FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
 
   @override
   void initState() {

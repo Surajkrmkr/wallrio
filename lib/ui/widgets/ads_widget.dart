@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:provider/provider.dart';
-
-import '../../provider/ads.dart';
-import '../views/settings_page.dart';
-import 'shimmer_widget.dart';
+import 'package:wallrio/provider/export.dart';
+import 'package:wallrio/services/packages/export.dart';
+import 'package:wallrio/ui/views/export.dart';
+import 'package:wallrio/ui/widgets/export.dart';
 
 class AdsWidget extends StatefulWidget {
   final double bottomPadding;
