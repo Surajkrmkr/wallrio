@@ -1,5 +1,5 @@
 export 'package:provider/provider.dart';
-export 'package:wallrio/providers.dart';
+export 'package:wallrio/provider/providers.dart';
 export 'ads.dart';
 export 'auth.dart';
 export 'dark_theme.dart';

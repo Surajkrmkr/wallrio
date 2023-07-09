@@ -19,3 +19,4 @@ export 'package:flutter_windowmanager/flutter_windowmanager.dart';
 export 'package:animations/animations.dart';
 export 'package:url_launcher/url_launcher.dart';
 export 'package:in_app_update/in_app_update.dart';
+export 'package:permission_handler/permission_handler.dart';

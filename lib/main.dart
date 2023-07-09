@@ -16,6 +16,14 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  void setStatusBarTheme(DarkThemeProvider provider) =>
+      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness:
+              provider.darkTheme ? Brightness.light : Brightness.dark,
+          statusBarBrightness:
+              provider.darkTheme ? Brightness.light : Brightness.dark));
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -58,11 +66,3 @@ Future<void> initializationHandler() async {
     };
   }
 }
-
-void setStatusBarTheme(DarkThemeProvider provider) =>
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        statusBarIconBrightness:
-            provider.darkTheme ? Brightness.light : Brightness.dark,
-        statusBarBrightness:
-            provider.darkTheme ? Brightness.light : Brightness.dark));

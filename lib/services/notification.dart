@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:wallrio/services/firebase/export.dart';
 import 'package:wallrio/services/packages/export.dart';
 
 class NotificationService {
@@ -16,6 +16,8 @@ class NotificationService {
       FlutterLocalNotificationsPlugin();
 
   Future<void> init() async {
+    await Permission.notification.request();
+
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@drawable/splash');
 
@@ -60,7 +62,6 @@ class NotificationService {
   void onDidReceiveLocalNotification(String payload) {}
 
   void initFirebaseListeners() {
-    // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {});
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       showNotifications(message: message);
     });
