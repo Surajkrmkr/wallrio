@@ -44,11 +44,13 @@
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="high_importance_channel" />
         <meta-data android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@mipmap/launcher_icon" />
+            android:resource="@drawable/ic_notification" />
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-4861691653340010~3248847115"/>
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
 </manifest>

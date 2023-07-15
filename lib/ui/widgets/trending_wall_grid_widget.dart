@@ -103,6 +103,7 @@ class TrendingWallGridWidget extends StatelessWidget {
             ),
           ),
           _buildImgDetailsUI(context, wall),
+          VerifyIconWidget(visibility: !wall.isPremium)
         ]),
       ),
     );

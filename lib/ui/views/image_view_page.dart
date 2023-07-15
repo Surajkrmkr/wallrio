@@ -26,7 +26,7 @@ class ImageViewPage extends StatelessWidget {
 
   void _downloadHandler(context) {
     Provider.of<WallActionProvider>(context, listen: false)
-        .downloadImg(wallModel.url, wallModel.name + wallModel.id.toString());
+        .downloadImg(wallModel.url, "${wallModel.name}_${wallModel.id}");
   }
 
   void _applyImgHandler(context) {
@@ -216,14 +216,14 @@ class ImageViewPage extends StatelessWidget {
       Expanded(
           child: PrimaryBtnWidget(
               btnText: "Download",
-              onTap: () => UserProfile.plusMember
+              onTap: () => UserProfile.plusMember || !wallModel.isPremium
                   ? _downloadHandler(context)
                   : _showPlusDialog(context, true))),
       const SizedBox(width: 10),
       Expanded(
           child: PrimaryBtnWidget(
               btnText: "Apply",
-              onTap: () => UserProfile.plusMember
+              onTap: () => UserProfile.plusMember || !wallModel.isPremium
                   ? _applyImgHandler(context)
                   : _showPlusDialog(context, false)))
     ]);

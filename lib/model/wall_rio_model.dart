@@ -47,6 +47,7 @@ class Walls {
   final String author;
   final String url;
   final String thumbnail;
+  final bool isPremium;
   final List<String> tags;
   final String category;
   final List<String> colorsString;
@@ -57,6 +58,7 @@ class Walls {
       required this.name,
       required this.author,
       required this.url,
+      required this.isPremium,
       required this.thumbnail,
       required this.tags,
       required this.category,
@@ -69,6 +71,7 @@ class Walls {
         author: json['author'] ?? "",
         url: json['url'] ?? "",
         thumbnail: json['thumbnail'] ?? "",
+        isPremium: json['isPremium'] ?? false,
         tags: json['tags'] != null ? json['tags'].cast<String>() : [],
         category: json['category'] ?? "",
         colorsString: json['color'] != null ? json['color'].cast<String>() : [],
@@ -86,6 +89,7 @@ class Walls {
     data['author'] = wall.author;
     data['url'] = wall.url;
     data['thumbnail'] = wall.thumbnail;
+    data['isPremium'] = wall.isPremium;
     data['tags'] = wall.tags;
     data['category'] = wall.category;
     data['color'] = wall.colorsString;

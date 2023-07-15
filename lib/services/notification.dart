@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:wallrio/services/export.dart';
 import 'package:wallrio/services/firebase/export.dart';
 import 'package:wallrio/services/packages/export.dart';
 import 'package:wallrio/ui/widgets/export.dart';
@@ -20,7 +21,7 @@ class NotificationService {
     await Permission.notification.request();
 
     const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('@drawable/splash');
+        AndroidInitializationSettings('ic_notification');
 
     const InitializationSettings initializationSettings =
         InitializationSettings(
@@ -79,12 +80,13 @@ class NotificationService {
             channelDescription: channel.description,
             channelShowBadge: true,
             playSound: true,
+            color: bgDarkAccentColor,
             priority: Priority.high,
             importance: Importance.high,
             styleInformation: BigTextStyleInformation(notification.body!),
           ),
         ),
-        payload: message.data["link"] ?? "");
+        payload: message.data["link"]);
   }
 
   void launch(String url) => LaunchUrlWidget.launch(url);

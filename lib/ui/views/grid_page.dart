@@ -83,6 +83,7 @@ class GridPage extends StatelessWidget {
                                       context, walls[index]),
                                   splashColor: blackColor.withOpacity(0.3))),
                           _buildImgDetailsUI(context, walls[index]!),
+                          VerifyIconWidget(visibility: !walls[index]!.isPremium)
                         ]),
                       ),
                     ))));

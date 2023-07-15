@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:wallrio/services/packages/export.dart';
 import 'package:wallrio/ui/widgets/export.dart';
+import 'package:android_download_manager/android_download_manager.dart';
 
 class WallActionProvider extends ChangeNotifier {
   bool isDownloading = false;
@@ -20,19 +20,25 @@ class WallActionProvider extends ChangeNotifier {
   void downloadImg(url, name) async {
     ToastWidget.showToast("Downloading wallpaper");
     setIsDownloading = true;
-    bool? isSuccessfullyDownloaded;
     try {
       final String downloadDir = await AndroidPathProvider.downloadsPath;
-      final cache = DefaultCacheManager();
-      final imgFile = await cache.getSingleFile(url);
-      await imgFile.copy('$downloadDir/$name.png');
-      isSuccessfullyDownloaded = true;
-    } on Exception {
-      isSuccessfullyDownloaded = false;
+      final PermissionStatus permissionStatus =
+          await Permission.storage.request();
+      if (permissionStatus == PermissionStatus.granted) {
+        await AndroidDownloadManager.enqueue(
+          downloadUrl: url,
+          downloadPath: downloadDir,
+          fileName: "$name.png",
+        );
+        ToastWidget.showToast("Wallpaper Downloaded successfully");
+      } else {
+        throw Exception("Permission denied");
+      }
+    } catch (error) {
+      logger.e(error);
+      ToastWidget.showToast("Failed to download wallpaper");
     }
-    ToastWidget.showToast(isSuccessfullyDownloaded
-        ? "Wallpaper Downloaded successfully"
-        : "Failed to download wallpaper");
+
     setIsDownloading = false;
   }
 
@@ -41,6 +47,14 @@ class WallActionProvider extends ChangeNotifier {
       barrierDismissible: false,
       builder: (context) => ApplyWallDialogWidget(imgUrl: url));
 
+  ToastDetails _getToast(String msg) => ToastDetails(
+      message: msg,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: Colors.black,
+      textColor: Colors.white,
+      fontSize: 16.0);
+
   void applyWall(context,
       {required String url,
       required int wallLocation,
@@ -48,27 +62,26 @@ class WallActionProvider extends ChangeNotifier {
     setIsApplying = true;
     Navigator.pop(context);
     ToastWidget.showToast("Applying wallpaper");
-    bool? isSuccessfullyApplied;
     var file = await DefaultCacheManager().getSingleFile(url);
     try {
-      isSuccessfullyApplied = isNative
+      isNative
           ? await AsyncWallpaper.setWallpaperNative(
               url: url,
-              goToHome: false,
+              goToHome: true,
+              errorToastDetails: _getToast("Failed to apply wallpaper"),
+              toastDetails: _getToast("Wallpaper applied successfully"),
             )
           : await AsyncWallpaper.setWallpaperFromFile(
               filePath: file.path,
               wallpaperLocation: wallLocation,
-              goToHome: false,
+              goToHome: true,
+              errorToastDetails: _getToast("Failed to apply wallpaper"),
+              toastDetails: _getToast("Wallpaper applied successfully"),
             );
-    } on PlatformException {
-      isSuccessfullyApplied = false;
+    } catch (error) {
+      logger.e(error);
     } finally {
       setIsApplying = false;
-
-      ToastWidget.showToast(isSuccessfullyApplied!
-          ? "Wallpaper applied successfully"
-          : "Failed to apply wallpaper");
     }
   }
 }

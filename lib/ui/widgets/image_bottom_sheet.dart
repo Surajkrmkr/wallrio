@@ -73,6 +73,7 @@ class ImageBottomSheet extends StatelessWidget {
                             splashColor: blackColor.withOpacity(0.3),
                           ),
                         ),
+                        VerifyIconWidget(visibility: !wallModel.isPremium)
                       ],
                     ))),
           ),
@@ -80,7 +81,7 @@ class ImageBottomSheet extends StatelessWidget {
           const AdsWidget(bottomPadding: 20),
           PrimaryBtnWidget(
               btnText: "Apply",
-              onTap: () => UserProfile.plusMember
+              onTap: () => UserProfile.plusMember || !wallModel.isPremium
                   ? _applyImgHandler(context)
                   : _showPlusDialog(context)),
         ])

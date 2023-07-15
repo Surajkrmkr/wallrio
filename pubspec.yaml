@@ -67,6 +67,7 @@ dependencies:
   google_mobile_ads: ^3.0.0
   flutter_windowmanager: ^0.2.0
   permission_handler: ^10.4.3
+  android_download_manager: ^1.0.3
 
 dev_dependencies:
   flutter_test:

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:wallrio/services/packages/export.dart';
 
 class ToastWidget {
   static void showToast(String msg) => Fluttertoast.showToast(
