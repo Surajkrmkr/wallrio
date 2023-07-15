@@ -125,6 +125,12 @@ class PlusSubscription extends StatelessWidget {
               const SizedBox(height: 20),
             ],
           ),
+          const Align(
+              alignment: Alignment.topRight,
+              child: Padding(
+                padding: EdgeInsets.only(right: 10, top: 10),
+                child: CloseButton(color: whiteColor),
+              ))
         ],
       ),
     );

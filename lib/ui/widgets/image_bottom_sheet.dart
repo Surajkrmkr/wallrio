@@ -39,10 +39,8 @@ class ImageBottomSheet extends StatelessWidget {
       child: Wrap(children: [
         Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.4,
+              Expanded(
                 child: Text(
                   wallModel.name,
                   style: Theme.of(context).textTheme.displayMedium,

@@ -58,35 +58,55 @@ class AdsWidget extends StatefulWidget {
 }
 
 class _AdsWidgetState extends State<AdsWidget> {
+  final String _bannerId = "ca-app-pub-4861691653340010/8536832813";
+  bool _isBannerLoading = false;
+  BannerAd? bannerAd;
+
   @override
   void initState() {
-    Provider.of<AdsProvider>(context, listen: false)
-        .loadBannerAd(size: widget.size);
+    loadBannerAd();
     super.initState();
   }
 
   @override
   void dispose() {
-    Provider.of<AdsProvider>(context, listen: false).dispose();
+    bannerAd!.dispose();
     super.dispose();
+  }
+
+  set setBannerLoading(bool val) => setState(() => _isBannerLoading = val);
+
+  void loadBannerAd() {
+    setBannerLoading = true;
+    bannerAd = BannerAd(
+      adUnitId: _bannerId,
+      request: const AdRequest(),
+      size: widget.size,
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          setBannerLoading = false;
+        },
+        onAdFailedToLoad: (ad, err) {
+          logger.e('BannerAd failed to load: $err');
+          setBannerLoading = false;
+          ad.dispose();
+        },
+      ),
+    )..load();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AdsProvider>(
-      builder: (context, provider, _) {
-        return provider.isBannerLoaded
-            ? Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  margin: EdgeInsets.only(bottom: widget.bottomPadding),
-                  width: provider.bannerAd!.size.width.toDouble(),
-                  height: provider.bannerAd!.size.height.toDouble(),
-                  child: AdWidget(ad: provider.bannerAd!),
-                ),
-              )
-            : Container();
-      },
-    );
+    return _isBannerLoading
+        ? Container()
+        : Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              margin: EdgeInsets.only(bottom: widget.bottomPadding),
+              width: bannerAd!.size.width.toDouble(),
+              height: bannerAd!.size.height.toDouble(),
+              child: AdWidget(ad: bannerAd!),
+            ),
+          );
   }
 }

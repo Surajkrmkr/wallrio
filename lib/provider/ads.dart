@@ -2,40 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:wallrio/services/packages/export.dart';
 
 class AdsProvider extends ChangeNotifier {
-  final String bannerId = "ca-app-pub-4861691653340010/8536832813";
   final String rewardedId = "ca-app-pub-4861691653340010/4965253463";
 
-  BannerAd? bannerAd;
   RewardedAd? rewardedAd;
 
-  bool isBannerLoaded = false;
   bool isRewardedAdLoading = false;
-
-  set setIsBannerLoaded(val) {
-    isBannerLoaded = val;
-    notifyListeners();
-  }
 
   set setIsRewardedAdLoading(val) {
     isRewardedAdLoading = val;
     notifyListeners();
-  }
-
-  void loadBannerAd({required AdSize size}) {
-    bannerAd = BannerAd(
-      adUnitId: bannerId,
-      request: const AdRequest(),
-      size: size,
-      listener: BannerAdListener(
-        onAdLoaded: (ad) {
-          setIsBannerLoaded = true;
-        },
-        onAdFailedToLoad: (ad, err) {
-          logger.e('BannerAd failed to load: $err');
-          ad.dispose();
-        },
-      ),
-    )..load();
   }
 
   void loadRewardedAd(BuildContext context, {required Function() onRewarded}) {
@@ -62,11 +37,5 @@ class AdsProvider extends ChangeNotifier {
             setIsRewardedAdLoading = false;
           },
         ));
-  }
-
-  @override
-  void dispose() {
-    bannerAd!.dispose();
-    super.dispose();
   }
 }
