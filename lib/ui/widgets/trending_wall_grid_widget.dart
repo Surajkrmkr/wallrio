@@ -23,6 +23,13 @@ class TrendingWallGridWidget extends StatelessWidget {
         builder: (context) => ImageBottomSheet(wallModel: model));
   }
 
+  void _showExplorePlusDialog(context) {
+    showDialog(
+        context: context,
+        builder: (context) =>
+            AdsWidget.getPlusDialog(context, isExplorePlus: true));
+  }
+
   void _onTapHandler(context, model) {
     Navigator.push(
         context,
@@ -161,13 +168,14 @@ class TrendingWallGridWidget extends StatelessWidget {
             onTap: () {});
       }
       return _buildFavBtn(
-        color: isFav ? Colors.redAccent : Colors.white,
-        iconData:
-            isFav ? Icons.favorite_rounded : Icons.favorite_border_rounded,
-        onTap: () => isFav
-            ? provider.removeFromFav(id: wall.id)
-            : provider.addToFav(wall: wall),
-      );
+          color: isFav ? Colors.redAccent : Colors.white,
+          iconData:
+              isFav ? Icons.favorite_rounded : Icons.favorite_border_rounded,
+          onTap: (() => UserProfile.plusMember
+              ? isFav
+                  ? provider.removeFromFav(id: wall.id)
+                  : provider.addToFav(wall: wall)
+              : _showExplorePlusDialog(context)));
     });
   }
 

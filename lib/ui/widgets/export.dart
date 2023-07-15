@@ -2,7 +2,6 @@ export 'ads_widget.dart';
 export 'apply_wall_dialog_widget.dart';
 export 'back_btn_widget.dart';
 export 'banner_widget.dart';
-export 'change_log.dart';
 export 'clear_cache_widget.dart';
 export 'image_bottom_sheet.dart';
 export 'image_widget.dart';

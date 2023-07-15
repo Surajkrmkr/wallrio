@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wallrio/model/export.dart';
 import 'package:wallrio/provider/export.dart';
 import 'package:wallrio/services/packages/export.dart';
 import 'package:wallrio/ui/views/export.dart';
@@ -14,39 +15,44 @@ class AdsWidget extends StatefulWidget {
   State<AdsWidget> createState() => _AdsWidgetState();
 
   static Widget getPlusDialog(BuildContext context,
-      {required void Function() onWatchAdClick}) {
+      {void Function()? onWatchAdClick, bool isExplorePlus = false}) {
     return AlertDialog(
-      title: const Row(
+      title: Row(
         children: [
           Expanded(
               child: Text(
-            "Unlock Wallpaper",
+            isExplorePlus ? "Explore Plus" : "Unlock Wallpaper",
           )),
-          CloseButton()
+          const CloseButton()
         ],
       ),
       content: Text(
-        "Get access to the wallpapers by either watching an ad or purchasing the Plus Subscription.",
+        isExplorePlus
+            ? "Upgrade to Plus to unlock exclusive features and take your experience to the next level!"
+            : "Get access to the wallpapers by either watching an ad or purchasing the Plus Subscription.",
         style: Theme.of(context).textTheme.titleMedium,
       ),
       actions: [
-        Consumer<AdsProvider>(builder: (context, provider, _) {
-          return provider.isRewardedAdLoading
-              ? ShimmerWidget.withWidget(
-                  _getWatchAdBtnUI(onWatchAdClick), context)
-              : _getWatchAdBtnUI(onWatchAdClick);
-        }),
-        OutlinedButton.icon(
-            icon: const Icon(Icons.verified),
-            onPressed: () {
-              Navigator.pop(context);
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const SettingsPage(),
-                  ));
-            },
-            label: const Text("Go Plus"))
+        Offstage(
+          offstage: isExplorePlus,
+          child: Consumer<AdsProvider>(builder: (context, provider, _) {
+            return provider.isRewardedAdLoading
+                ? ShimmerWidget.withWidget(
+                    _getWatchAdBtnUI(onWatchAdClick ?? () {}), context)
+                : _getWatchAdBtnUI(onWatchAdClick ?? () {});
+          }),
+        ),
+        Visibility(
+          visible: isExplorePlus,
+          replacement: OutlinedButton.icon(
+              icon: const Icon(Icons.verified),
+              onPressed: () => _onPlusClick(context),
+              label: const Text("Go Plus")),
+          child: FilledButton.icon(
+              onPressed: () => _onPlusClick(context),
+              icon: const Icon(Icons.verified),
+              label: const Text("Go Plus")),
+        )
       ],
     );
   }
@@ -54,6 +60,15 @@ class AdsWidget extends StatefulWidget {
   static FilledButton _getWatchAdBtnUI(void Function() onWatchAdClick) {
     return FilledButton(
         onPressed: onWatchAdClick, child: const Text("Watch AD"));
+  }
+
+  static void _onPlusClick(context) {
+    Navigator.pop(context);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const SettingsPage(),
+        ));
   }
 }
 
@@ -64,13 +79,13 @@ class _AdsWidgetState extends State<AdsWidget> {
 
   @override
   void initState() {
-    loadBannerAd();
+    if (!UserProfile.plusMember) loadBannerAd();
     super.initState();
   }
 
   @override
   void dispose() {
-    bannerAd!.dispose();
+    if (!UserProfile.plusMember) bannerAd!.dispose();
     super.dispose();
   }
 
@@ -97,7 +112,7 @@ class _AdsWidgetState extends State<AdsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return _isBannerLoading
+    return _isBannerLoading || UserProfile.plusMember
         ? Container()
         : Align(
             alignment: Alignment.bottomCenter,

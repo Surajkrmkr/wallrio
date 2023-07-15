@@ -5,7 +5,6 @@ import 'package:wallrio/services/export.dart';
 import 'package:wallrio/ui/views/export.dart';
 import 'package:wallrio/ui/widgets/export.dart';
 
-
 class CategoryPage extends StatelessWidget {
   const CategoryPage({super.key});
 
@@ -17,6 +16,13 @@ class CategoryPage extends StatelessWidget {
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(25))),
         builder: (context) => ImageBottomSheet(wallModel: model));
+  }
+
+  void _showPlusDialog(context) {
+    showDialog(
+        context: context,
+        builder: (context) =>
+            AdsWidget.getPlusDialog(context, isExplorePlus: true));
   }
 
   void _onTapHandler(context, model) {
@@ -166,13 +172,14 @@ class CategoryPage extends StatelessWidget {
             onTap: () {});
       }
       return _buildFavBtn(
-        color: isFav ? Colors.redAccent : whiteColor,
-        iconData:
-            isFav ? Icons.favorite_rounded : Icons.favorite_border_rounded,
-        onTap: () => isFav
-            ? provider.removeFromFav(id: wall.id)
-            : provider.addToFav(wall: wall),
-      );
+          color: isFav ? Colors.redAccent : whiteColor,
+          iconData:
+              isFav ? Icons.favorite_rounded : Icons.favorite_border_rounded,
+          onTap: () => UserProfile.plusMember
+              ? isFav
+                  ? provider.removeFromFav(id: wall.id)
+                  : provider.addToFav(wall: wall)
+              : _showPlusDialog(context));
     });
   }
 
@@ -180,10 +187,7 @@ class CategoryPage extends StatelessWidget {
       {required Function() onTap,
       required IconData iconData,
       required Color color}) {
-    return IconButton(
-        // style: IconButton.styleFrom(backgroundColor: whiteColor),
-        onPressed: onTap,
-        icon: Icon(iconData, color: color));
+    return IconButton(onPressed: onTap, icon: Icon(iconData, color: color));
   }
 
   Widget _buildCategoryHeaderUI(

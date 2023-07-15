@@ -6,21 +6,8 @@ import 'package:wallrio/services/packages/export.dart';
 import 'package:wallrio/ui/views/export.dart';
 import 'package:wallrio/ui/widgets/export.dart';
 
-class FavouritePage extends StatefulWidget {
+class FavouritePage extends StatelessWidget {
   const FavouritePage({super.key});
-
-  @override
-  State<FavouritePage> createState() => _FavouritePageState();
-}
-
-class _FavouritePageState extends State<FavouritePage> {
-  @override
-  void initState() {
-    super.initState();
-    Future.delayed(Duration.zero, () {
-      Provider.of<FavouriteProvider>(context, listen: false).getDir();
-    });
-  }
 
   void _onLongPressHandler(context, model) {
     showModalBottomSheet(
@@ -125,7 +112,6 @@ class _FavouritePageState extends State<FavouritePage> {
     return Align(
         alignment: Alignment.bottomCenter,
         child: Container(
-          // color: wall.colorList.last,
           decoration: const BoxDecoration(
               gradient: LinearGradient(
                   colors: [Colors.transparent, Colors.black54],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wallrio/model/export.dart';
 import 'package:wallrio/pages.dart';
 import 'package:wallrio/provider/export.dart';
 import 'package:wallrio/services/packages/export.dart';
@@ -15,6 +16,10 @@ class _NavigationPageState extends State<NavigationPage> {
   void initState() {
     Future.delayed(Duration.zero, () {
       Provider.of<WallRio>(context, listen: false).getListFromAPI(context);
+      if (UserProfile.plusMember) {
+        Provider.of<FavouriteProvider>(context, listen: false)
+            .getFavouritesFromFirebase();
+      }
     });
 
     // FirebaseAuth.instance.userChanges().listen((event) {

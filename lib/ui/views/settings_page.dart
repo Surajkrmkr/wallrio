@@ -146,7 +146,10 @@ class SettingsPage extends StatelessWidget {
                 if (hasSubscription)
                   Text(
                     "${provider.subscriptionDaysLeft} Days Left",
-                    style: Theme.of(context).textTheme.labelMedium,
+                    style: Theme.of(context)
+                        .textTheme
+                        .labelMedium!
+                        .copyWith(color: whiteColor),
                     textAlign: TextAlign.center,
                   )
               ]),

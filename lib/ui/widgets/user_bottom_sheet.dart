@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:wallrio/provider/export.dart';
+import 'package:wallrio/services/packages/export.dart';
 import 'package:wallrio/ui/views/export.dart';
 import 'package:wallrio/ui/widgets/export.dart';
 
 class UserBottomSheet extends StatelessWidget {
   const UserBottomSheet({super.key});
 
-  static void changeLog(context) =>
-      showDialog(context: context, builder: (context) => const ChangeLog());
+  void moreApps() =>
+      launch("https://play.google.com/store/apps/dev?id=5668598285863173548");
 
   void _settings(context) {
     Navigator.of(context).pop();
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => const SettingsPage()));
   }
+
+  void launch(String url) =>
+      launchUrl(Uri.parse(url), mode: LaunchMode.externalNonBrowserApplication);
 
   @override
   Widget build(BuildContext context) {
@@ -84,13 +88,7 @@ class UserBottomSheet extends StatelessWidget {
             btnText: 'SETTINGS',
             onTap: () => _settings(context),
           ),
-          Consumer<WallRio>(
-            builder: (context, provider, _) {
-              return PrimaryBtnWidget(
-                  btnText: provider.isUpdateAvailable ? 'UPDATE' : 'CHANGELOG',
-                  onTap: () => changeLog(context));
-            },
-          ),
+          PrimaryBtnWidget(btnText: 'MORE APPS', onTap: moreApps),
           Consumer<AuthProvider>(builder: (context, provider, _) {
             return provider.isLoading
                 ? ShimmerWidget.withWidget(_buildSignOutBtn(context), context)

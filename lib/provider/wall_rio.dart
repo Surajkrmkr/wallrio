@@ -3,13 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:wallrio/model/export.dart';
 import 'package:wallrio/services/export.dart';
 import 'package:wallrio/services/packages/export.dart';
-import 'package:wallrio/ui/widgets/export.dart';
 
 class WallRio extends ChangeNotifier {
   List<Walls> originalWallList = [];
   List<Walls> actionWallList = [];
   List<Banners> bannerList = [];
-  AppDetails details = const AppDetails();
 
   Map<String, List<Walls?>>? categories = <String, List<Walls?>>{};
   Tag tag = Tag(selectedTags: [], unSelectedTags: []);
@@ -17,15 +15,9 @@ class WallRio extends ChangeNotifier {
   String error = "";
   String currentVersion = "1.0.0";
   bool isLoading = false;
-  bool isUpdateAvailable = false;
 
   set setIsLoading(bool val) {
     isLoading = val;
-    notifyListeners();
-  }
-
-  set setIsUpdateAvailable(bool val) {
-    isUpdateAvailable = val;
     notifyListeners();
   }
 
@@ -52,11 +44,6 @@ class WallRio extends ChangeNotifier {
     notifyListeners();
   }
 
-  set setAppDetails(AppDetails appDetails) {
-    details = appDetails;
-    notifyListeners();
-  }
-
   set setError(String msg) {
     error = msg;
     notifyListeners();
@@ -70,27 +57,10 @@ class WallRio extends ChangeNotifier {
     notifyListeners();
   }
 
-  WallRio() {
-    // getListFromAPI();
-  }
-
   Future<void> getCurrentVersion() async {
     final PackageInfo packageInfo = await PackageInfo.fromPlatform();
     final String version = packageInfo.version;
     setCurrentVersion = version;
-  }
-
-  void checkUpdate(context) {
-    final int currentVersionInInt =
-        int.parse(currentVersion.replaceAll(".", ""));
-    final int latestVersionInInt =
-        int.parse(details.version.replaceAll(".", ""));
-    if (currentVersionInInt < latestVersionInInt) {
-      setIsUpdateAvailable = true;
-    }
-    if (isUpdateAvailable) {
-      UserBottomSheet.changeLog(context);
-    }
   }
 
   void getListFromAPI(context) async {
@@ -104,8 +74,6 @@ class WallRio extends ChangeNotifier {
       setWallList = model.walls;
       setActionWallList = model.walls;
       setBannerList = model.banners;
-      setAppDetails = model.appDetails;
-      checkUpdate(context);
       _buildCategoryAndTags();
     } else {
       setError = model.error;

@@ -38,14 +38,21 @@ class ImageViewPage extends StatelessWidget {
     showDialog(
         context: context,
         barrierDismissible: false,
-        builder: (context) => AdsWidget.getPlusDialog(context,
-                 onWatchAdClick: () {
+        builder: (context) =>
+            AdsWidget.getPlusDialog(context, onWatchAdClick: () {
               Provider.of<AdsProvider>(context, listen: false).loadRewardedAd(
                   context,
                   onRewarded: () => isForDownload
                       ? _downloadHandler(context)
                       : _applyImgHandler(context));
             }));
+  }
+
+  void _showExplorePlusDialog(context) {
+    showDialog(
+        context: context,
+        builder: (context) =>
+            AdsWidget.getPlusDialog(context, isExplorePlus: true));
   }
 
   @override
@@ -234,13 +241,15 @@ class ImageViewPage extends StatelessWidget {
               onTap: () {});
         }
         return _buildFavBtn(
-          color: isFav ? Colors.redAccent : Theme.of(context).primaryColorLight,
-          iconData:
-              isFav ? Icons.favorite_rounded : Icons.favorite_border_rounded,
-          onTap: () => isFav
-              ? provider.removeFromFav(id: wallModel.id)
-              : provider.addToFav(wall: wallModel),
-        );
+            color:
+                isFav ? Colors.redAccent : Theme.of(context).primaryColorLight,
+            iconData:
+                isFav ? Icons.favorite_rounded : Icons.favorite_border_rounded,
+            onTap: () => UserProfile.plusMember
+                ? isFav
+                    ? provider.removeFromFav(id: wallModel.id)
+                    : provider.addToFav(wall: wallModel)
+                : _showExplorePlusDialog(context));
       })
     ]);
   }
