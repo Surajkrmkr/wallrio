@@ -1,7 +1,10 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+
 import 'package:wallrio/model/export.dart';
 import 'package:wallrio/pages.dart';
 import 'package:wallrio/provider/export.dart';
+import 'package:wallrio/services/firebase/export.dart';
 import 'package:wallrio/services/packages/export.dart';
 
 class NavigationPage extends StatefulWidget {
@@ -12,9 +15,12 @@ class NavigationPage extends StatefulWidget {
 }
 
 class _NavigationPageState extends State<NavigationPage> {
+  Timer _timer = Timer(Duration.zero, () {});
+
   @override
   void initState() {
     Future.delayed(Duration.zero, () {
+      _checkUserIsDisable();
       Provider.of<WallRio>(context, listen: false).getListFromAPI(context);
       if (UserProfile.plusMember) {
         Provider.of<FavouriteProvider>(context, listen: false)
@@ -22,14 +28,23 @@ class _NavigationPageState extends State<NavigationPage> {
       }
     });
 
-    // FirebaseAuth.instance.userChanges().listen((event) {
-    //   if (FirebaseAuth.instance.currentUser == null) {
-    //     Provider.of<AuthProvider>(context, listen: false).signOut(context);
-    //   }
-    // }, onError: (error) {
-    //   logger.e(error.toString());
-    // });
+    _timer = Timer(const Duration(seconds: 30), _checkUserIsDisable);
+
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  void _checkUserIsDisable() {
+    try {
+      FirebaseAuth.instance.currentUser!.reload();
+    } catch (error) {
+      logger.e(error);
+    }
   }
 
   @override

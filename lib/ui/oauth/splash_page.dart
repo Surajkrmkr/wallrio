@@ -26,11 +26,13 @@ class _SplashPageState extends State<SplashPage> {
       }
     });
 
-    Future.delayed(
-        Duration.zero,
-        () => firebaseAuth.currentUser != null
-            ? _checkSubscription(firebaseAuth.currentUser!.email!)
-            : {});
+    Future.delayed(Duration.zero, () {
+      Provider.of<SubscriptionProvider>(context, listen: false)
+          .checkSupportForIAP();
+      firebaseAuth.currentUser != null
+          ? _checkSubscription(firebaseAuth.currentUser!.email!)
+          : {};
+    });
     FlutterNativeSplash.remove();
     super.initState();
   }
@@ -39,7 +41,6 @@ class _SplashPageState extends State<SplashPage> {
     final subscriptionProvider =
         Provider.of<SubscriptionProvider>(context, listen: false);
     subscriptionProvider.checkPastPurchases(email: email);
-    subscriptionProvider.checkSupportForIAP();
     subscriptionProvider.successPurchasedStream.listen((event) {
       if (mounted && event) {
         Navigator.pop(context, true);
