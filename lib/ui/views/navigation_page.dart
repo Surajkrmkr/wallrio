@@ -20,7 +20,7 @@ class _NavigationPageState extends State<NavigationPage> {
   @override
   void initState() {
     Future.delayed(Duration.zero, () {
-      _checkUserIsDisable();
+      _checkUserIsDisable(_timer);
       Provider.of<WallRio>(context, listen: false).getListFromAPI(context);
       if (UserProfile.plusMember) {
         Provider.of<FavouriteProvider>(context, listen: false)
@@ -28,7 +28,7 @@ class _NavigationPageState extends State<NavigationPage> {
       }
     });
 
-    _timer = Timer(const Duration(seconds: 30), _checkUserIsDisable);
+    _timer = Timer.periodic(const Duration(seconds: 30), _checkUserIsDisable);
 
     super.initState();
   }
@@ -39,7 +39,7 @@ class _NavigationPageState extends State<NavigationPage> {
     super.dispose();
   }
 
-  void _checkUserIsDisable() {
+  void _checkUserIsDisable(Timer timer) {
     try {
       FirebaseAuth.instance.currentUser!.reload();
     } catch (error) {
