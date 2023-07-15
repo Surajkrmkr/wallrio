@@ -79,7 +79,10 @@ class ImageBottomSheet extends StatelessWidget {
           const SizedBox(height: 20),
           const AdsWidget(bottomPadding: 20),
           PrimaryBtnWidget(
-              btnText: "Apply", onTap: () => _showPlusDialog(context)),
+              btnText: "Apply",
+              onTap: () => UserProfile.plusMember
+                  ? _applyImgHandler(context)
+                  : _showPlusDialog(context)),
         ])
       ]),
     );

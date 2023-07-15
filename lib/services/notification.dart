@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:wallrio/services/firebase/export.dart';
 import 'package:wallrio/services/packages/export.dart';
+import 'package:wallrio/ui/widgets/export.dart';
 
 class NotificationService {
   AndroidNotificationChannel channel = const AndroidNotificationChannel(
@@ -35,13 +36,6 @@ class NotificationService {
           onDidReceiveLocalNotification(notificationResponse.payload ?? "");
         }
       },
-      // onDidReceiveBackgroundNotificationResponse:
-      //     (NotificationResponse notificationResponse) {
-      //   if (notificationResponse.notificationResponseType ==
-      //       NotificationResponseType.selectedNotification) {
-
-      //       }
-      // },
     );
 
     await flutterLocalNotificationsPlugin
@@ -59,7 +53,11 @@ class NotificationService {
     initFirebaseListeners();
   }
 
-  void onDidReceiveLocalNotification(String payload) {}
+  void onDidReceiveLocalNotification(String payload) {
+    if (payload.isNotEmpty) {
+      launch(payload);
+    }
+  }
 
   void initFirebaseListeners() {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
@@ -86,6 +84,8 @@ class NotificationService {
             styleInformation: BigTextStyleInformation(notification.body!),
           ),
         ),
-        payload: message.data["category"]);
+        payload: message.data["link"] ?? "");
   }
+
+  void launch(String url) => LaunchUrlWidget.launch(url);
 }

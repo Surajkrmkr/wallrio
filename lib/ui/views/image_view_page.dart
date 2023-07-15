@@ -216,11 +216,16 @@ class ImageViewPage extends StatelessWidget {
       Expanded(
           child: PrimaryBtnWidget(
               btnText: "Download",
-              onTap: () => _showPlusDialog(context, true))),
+              onTap: () => UserProfile.plusMember
+                  ? _downloadHandler(context)
+                  : _showPlusDialog(context, true))),
       const SizedBox(width: 10),
       Expanded(
           child: PrimaryBtnWidget(
-              btnText: "Apply", onTap: () => _showPlusDialog(context, false)))
+              btnText: "Apply",
+              onTap: () => UserProfile.plusMember
+                  ? _applyImgHandler(context)
+                  : _showPlusDialog(context, false)))
     ]);
   }
 
