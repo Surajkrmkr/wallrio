@@ -8,20 +8,20 @@ jobs:
   build:
     runs-on: windows-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v2
 
-      - name: Set up Java
-        uses: actions/setup-java@v2
-        with:
-            java-version: 1.8
+#       - name: Set up Java
+#         uses: actions/setup-java@v2
+#         with:
+#             java-version: 1.8
 
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-            flutter-version: 3.10.2
-            flutter-architecture: x64        
+#       - name: Set up Flutter
+#         uses: subosito/flutter-action@v2
+#         with:
+#             flutter-version: 3.10.2
+#             flutter-architecture: x64        
 
-      - name: Build APK
-        run: flutter build apk --split-per-abi
+#       - name: Build APK
+#         run: flutter build apk --split-per-abi

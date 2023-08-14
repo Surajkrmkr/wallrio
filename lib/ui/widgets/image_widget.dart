@@ -12,7 +12,8 @@ class CNImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return CachedNetworkImage(
       filterQuality: FilterQuality.high,
-      // errorWidget: (context, url, error) => errorWidget(),
+      errorWidget: (context, url, error) =>
+          const Icon(Icons.error_outline_rounded, color: Colors.red),
       fit: BoxFit.cover,
       memCacheHeight: isOriginalImg ? 1080 : 800,
       imageUrl: imageUrl!,

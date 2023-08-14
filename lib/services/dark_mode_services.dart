@@ -6,7 +6,7 @@ class ThemeService {
   final gradientKey = "gradient";
 
   static bool darkTheme = true;
-  static GradientAccentType gradType = GradientAccentType.defaultType;
+  static GradientAccentType gradType = GradientAccentType.sunset;
 
   Future getData() async {
     final prefs = await SharedPreferences.getInstance();

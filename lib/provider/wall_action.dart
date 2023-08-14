@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:wallrio/services/packages/export.dart';
 import 'package:wallrio/ui/widgets/export.dart';
@@ -22,18 +24,13 @@ class WallActionProvider extends ChangeNotifier {
     setIsDownloading = true;
     try {
       final String downloadDir = await AndroidPathProvider.downloadsPath;
-      final PermissionStatus permissionStatus =
-          await Permission.storage.request();
-      if (permissionStatus == PermissionStatus.granted) {
-        await AndroidDownloadManager.enqueue(
-          downloadUrl: url,
-          downloadPath: downloadDir,
-          fileName: "$name.png",
-        );
-        ToastWidget.showToast("Wallpaper Downloaded successfully");
-      } else {
-        throw Exception("Permission denied");
-      }
+      final Directory? appStorageDir = await getExternalStorageDirectory();
+      await AndroidDownloadManager.enqueue(
+        downloadUrl: url,
+        downloadPath: appStorageDir != null ? appStorageDir.path : downloadDir,
+        fileName: "$name.png",
+      );
+      ToastWidget.showToast("Wallpaper Downloaded successfully");
     } catch (error) {
       logger.e(error);
       ToastWidget.showToast("Failed to download wallpaper");
