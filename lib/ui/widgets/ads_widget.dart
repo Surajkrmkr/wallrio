@@ -75,6 +75,7 @@ class AdsWidget extends StatefulWidget {
 class _AdsWidgetState extends State<AdsWidget> {
   final String _bannerId = "ca-app-pub-4861691653340010/8536832813";
   bool _isBannerLoading = false;
+  bool _isBannerFailed = false;
   BannerAd? bannerAd;
 
   @override
@@ -103,6 +104,7 @@ class _AdsWidgetState extends State<AdsWidget> {
         },
         onAdFailedToLoad: (ad, err) {
           logger.e('BannerAd failed to load: $err');
+          _isBannerFailed = true;
           setBannerLoading = false;
           ad.dispose();
         },
@@ -112,7 +114,7 @@ class _AdsWidgetState extends State<AdsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return _isBannerLoading || UserProfile.plusMember
+    return _isBannerLoading || UserProfile.plusMember || _isBannerFailed
         ? Container()
         : Align(
             alignment: Alignment.bottomCenter,
