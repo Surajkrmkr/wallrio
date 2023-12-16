@@ -68,6 +68,7 @@ dependencies:
   flutter_windowmanager: ^0.2.0
   permission_handler: ^10.4.5
   android_download_manager: ^1.0.3
+  build_runner: ^2.4.7
 
 dev_dependencies:
   flutter_test:

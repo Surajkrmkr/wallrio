@@ -8,7 +8,7 @@ permissions:
   contents: write
 
 jobs:
-  build-and-release-macos:
+  build-and-release-wallrio:
     runs-on: ubuntu-latest
 
     steps:
