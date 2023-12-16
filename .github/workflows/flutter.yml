@@ -1,27 +1,48 @@
-name: Flutter Build Generate
+name: WallRio Build Generation For Android
+
 on:
   push:
-#     branches:
-#       - master
+    tags: ["build-android"]
+
+permissions:
+  contents: write
 
 jobs:
-  build:
-    runs-on: windows-latest
+  build-and-release-macos:
+    runs-on: ubuntu-latest
 
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v2
-
-#       - name: Set up Java
-#         uses: actions/setup-java@v2
-#         with:
-#             java-version: 1.8
-
-#       - name: Set up Flutter
-#         uses: subosito/flutter-action@v2
-#         with:
-#             flutter-version: 3.10.2
-#             flutter-architecture: x64        
-
-#       - name: Build APK
-#         run: flutter build apk --split-per-abi
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Java to compile the project
+        uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+      - name: Install and setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+          cache: true
+          cache-key: "flutter-:os:-:channel:-:version:-:arch:-:hash:" # optional, change this to force refresh cache
+          cache-path: "${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:" # optional, change this to specify the cache path
+          architecture: x64 # optional, x64 or arm64
+      - run: flutter --version
+      - name: Install project dependencies
+        run: flutter pub get
+      - name: Generate intermediates
+        run: flutter pub run build_runner build --delete-conflicting-outputs
+      - name: Flutter Build Release for Android
+        run: flutter build apk --debug --split-per-abi
+      - name: Archive Release
+        uses: thedoctor0/zip-release@master
+        with:
+          type: "zip"
+          filename: WallRio-${{github.ref_name}}.zip
+          directory: build/app/outputs/flutter-apk/
+      - name: Android Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          files: build/app/outputs/flutter-apk/WallRio-${{github.ref_name}}.zip
