@@ -58,6 +58,10 @@ Future<void> initializationHandler() async {
   await NotificationService().init();
   await MobileAds.instance.initialize();
 
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
+
   if (kReleaseMode) {
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
     PlatformDispatcher.instance.onError = (error, stack) {

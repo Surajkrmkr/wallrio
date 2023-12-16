@@ -24,7 +24,7 @@ jobs:
       - name: Setup Java to compile the project
         uses: actions/setup-java@v1
         with:
-          java-version: '12.x'
+          java-version: "12.x"
       - name: Install and setup Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -44,17 +44,29 @@ jobs:
           SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
           SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
           SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
-        run: flutter build apk --release --split-per-abi
+        run: |
+          flutter build apk --release --split-per-abi
+          # flutter build appbundle --release
       - name: Archive Release
         uses: thedoctor0/zip-release@master
         with:
           type: "zip"
           filename: WallRio-${{github.ref_name}}.zip
-          directory: build/app/outputs/
+          directory: build/app/outputs/flutter-apk/
       - name: Android Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          files: build/app/outputs/WallRio-${{github.ref_name}}.zip
+          files: build/app/outputs/flutter-apk/WallRio-${{github.ref_name}}.zip
+      # - name: Upload Release to Play store
+      #   uses: r0adkll/upload-google-play@v1
+      #   env:
+      #     SERVICE_ACCOUNT_JSON: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+      #   with:
+      #     serviceAccountJsonPlainText: $SERVICE_ACCOUNT_JSON
+      #     packageName: com.shadowteam.wallrio
+      #     releaseFiles: build/app/outputs/bundle/release/app.aab
+      #     track: alpha          
+      #     status: inProgress

@@ -27,7 +27,7 @@ class WallActionProvider extends ChangeNotifier {
       final Directory? appStorageDir = await getExternalStorageDirectory();
       await AndroidDownloadManager.enqueue(
         downloadUrl: url,
-        downloadPath: appStorageDir != null ? appStorageDir.path : downloadDir,
+        downloadPath: appStorageDir != null ? appStorageDir.path.replaceFirst("data", "media") : downloadDir,
         fileName: "$name.png",
       );
       ToastWidget.showToast("Wallpaper Downloaded successfully");
