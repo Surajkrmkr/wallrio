@@ -66,10 +66,8 @@ jobs:
           files: build/app/outputs/flutter-apk/WallRio-${{github.ref_name}}.zip
       - name: Upload Release to Play store
         uses: r0adkll/upload-google-play@v1
-        env:
-          SERVICE_ACCOUNT_JSON_PATH: ${{ secrets.SERVICE_ACCOUNT_JSON_PATH }}
         with:
-          serviceAccountJsonPlainText: $SERVICE_ACCOUNT_JSON_PATH
+          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON_PATH }}
           packageName: com.shadowteam.wallrio
           releaseFiles: build/app/outputs/bundle/release/app-release.aab
           mappingFile: build/app/outputs/mapping/release/mapping.txt
