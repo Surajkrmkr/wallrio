@@ -14,13 +14,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Decode Keystore
+      - name: Decode Keystore & Service JSON
         env:
           ENCODED_STRING: ${{ secrets.SIGNING_KEY_STORE_BASE64 }}
           SIGNING_KEY_STORE_PATH: ${{ secrets.SIGNING_KEY_STORE_PATH }}
+          ENCODED_SERVICE_ACCOUNT_JSON: ${{ secrets.SERVICE_ACCOUNT_JSON_BASE64 }}
+          SERVICE_ACCOUNT_JSON_PATH: ${{ secrets.SERVICE_ACCOUNT_JSON_PATH }}
         run: |
           echo $ENCODED_STRING > keystore-b64.txt
           base64 -d keystore-b64.txt > $SIGNING_KEY_STORE_PATH
+          echo $ENCODED_SERVICE_ACCOUNT_JSON > service-json-b64.json
+          base64 -d service-json-b64.json > $SERVICE_ACCOUNT_JSON_PATH
       - name: Setup Java to compile the project
         uses: actions/setup-java@v1
         with:
@@ -65,11 +69,11 @@ jobs:
         env:
           SERVICE_ACCOUNT_JSON: ${{ secrets.SERVICE_ACCOUNT_JSON }}
         with:
-          serviceAccountJsonPlainText: $SERVICE_ACCOUNT_JSON
+          serviceAccountJsonPlainText: $SERVICE_ACCOUNT_JSON_PATH
           packageName: com.shadowteam.wallrio
           releaseFiles: build/app/outputs/bundle/release/app-release.aab
           mappingFile: build/app/outputs/mapping/release/mapping.txt
           debugSymbols: build/app/intermediates/merged_native_libs/release/out/lib
-          track: alpha          
+          track: alpha
           status: completed
           inAppUpdatePriority: 0
