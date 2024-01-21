@@ -65,7 +65,7 @@ jobs:
       - name: Upload Release to Play store
         uses: r0adkll/upload-google-play@v1
         with:
-          serviceAccountJsonPlainText: service_account.json
+          serviceAccountJson: service_account.json
           packageName: com.shadowteam.wallrio
           releaseFiles: build/app/outputs/bundle/release/app-release.aab
           mappingFile: build/app/outputs/mapping/release/mapping.txt
