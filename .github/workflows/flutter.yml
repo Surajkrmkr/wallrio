@@ -2,7 +2,7 @@ name: WallRio Build Generation For Android
 
 on:
   push:
-    tags: ["build-android"]
+    tags: "v*.*.*"
 
 permissions:
   contents: write
@@ -46,7 +46,7 @@ jobs:
           SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
         run: |
           flutter build apk --release --split-per-abi
-          # flutter build appbundle --release
+          flutter build appbundle --release
       - name: Archive Release
         uses: thedoctor0/zip-release@master
         with:
@@ -60,13 +60,16 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           files: build/app/outputs/flutter-apk/WallRio-${{github.ref_name}}.zip
-      # - name: Upload Release to Play store
-      #   uses: r0adkll/upload-google-play@v1
-      #   env:
-      #     SERVICE_ACCOUNT_JSON: ${{ secrets.SERVICE_ACCOUNT_JSON }}
-      #   with:
-      #     serviceAccountJsonPlainText: $SERVICE_ACCOUNT_JSON
-      #     packageName: com.shadowteam.wallrio
-      #     releaseFiles: build/app/outputs/bundle/release/app.aab
-      #     track: alpha          
-      #     status: inProgress
+      - name: Upload Release to Play store
+        uses: r0adkll/upload-google-play@v1
+        env:
+          SERVICE_ACCOUNT_JSON: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+        with:
+          serviceAccountJsonPlainText: $SERVICE_ACCOUNT_JSON
+          packageName: com.shadowteam.wallrio
+          releaseFiles: build/app/outputs/bundle/release/app.aab
+          mappingFile: build/app/outputs/mapping/release/mapping.txt
+          debugSymbols: build/app/intermediates/merged_native_libs/release/out/lib
+          track: alpha          
+          status: completed
+          inAppUpdatePriority: 0

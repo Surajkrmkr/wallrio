@@ -8,31 +8,35 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicatorWidget(
-      child: Stack(
+      child: Column(
         children: [
-          CustomScrollView(
-            controller: Provider.of<Navigation>(context).controller,
-            primary: false,
-            slivers: [
-              const SliverAppBarWidget(
-                  showLogo: true,
-                  showSearchBtn: true,
-                  text: "WallRio",
-                  userProfileIconRight: false,
-                  showUserProfileIcon: true),
-              const SliverToBoxAdapter(child: BannerWidget()),
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 20, bottom: 20, left: 25),
-                  child: Text(
-                    "Trending Wallpapers",
-                    style: Theme.of(context).textTheme.bodyMedium,
+          Expanded(
+            child: CustomScrollView(
+              controller: Provider.of<Navigation>(context).controller,
+              primary: false,
+              slivers: [
+                const SliverAppBarWidget(
+                    showLogo: true,
+                    showSearchBtn: true,
+                    text: "WallRio",
+                    userProfileIconRight: false,
+                    showUserProfileIcon: true),
+                const SliverToBoxAdapter(child: BannerWidget()),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(top: 20, bottom: 20, left: 25),
+                    child: Text(
+                      "Trending Wallpapers",
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
                   ),
                 ),
-              ),
-              const TrendingWallGridWidget()
-            ],
+                const TrendingWallGridWidget()
+              ],
+            ),
           ),
+          const SizedBox(height: 10),
           const AdsWidget()
         ],
       ),

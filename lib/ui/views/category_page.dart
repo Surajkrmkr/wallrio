@@ -35,21 +35,24 @@ class CategoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicatorWidget(
-      child: Stack(
+      child: Column(
         children: [
-          CustomScrollView(
-            controller: Provider.of<Navigation>(context).controller,
-            slivers: [
-              const SliverAppBarWidget(
-                  showLogo: false,
-                  showSearchBtn: false,
-                  centeredTitle: false,
-                  showUserProfileIcon: true,
-                  userProfileIconRight: true,
-                  text: "Our\nCollections"),
-              _buildCategoryUI()
-            ],
+          Expanded(
+            child: CustomScrollView(
+              controller: Provider.of<Navigation>(context).controller,
+              slivers: [
+                const SliverAppBarWidget(
+                    showLogo: false,
+                    showSearchBtn: false,
+                    centeredTitle: false,
+                    showUserProfileIcon: true,
+                    userProfileIconRight: true,
+                    text: "Our\nCollections"),
+                _buildCategoryUI()
+              ],
+            ),
           ),
+          const SizedBox(height: 10),
           const AdsWidget()
         ],
       ),
