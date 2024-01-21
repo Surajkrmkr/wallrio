@@ -23,8 +23,8 @@ jobs:
         run: |
           echo $ENCODED_STRING > keystore-b64.txt
           base64 -d keystore-b64.txt > $SIGNING_KEY_STORE_PATH
-          echo $ENCODED_SERVICE_ACCOUNT_JSON > service-json-b64.json
-          base64 -d service-json-b64.json > $SERVICE_ACCOUNT_JSON_PATH
+          echo $ENCODED_SERVICE_ACCOUNT_JSON > service-json-b64.txt
+          base64 -d service-json-b64.txt > $SERVICE_ACCOUNT_JSON_PATH
       - name: Setup Java to compile the project
         uses: actions/setup-java@v1
         with:
