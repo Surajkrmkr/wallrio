@@ -67,7 +67,7 @@ jobs:
       - name: Upload Release to Play store
         uses: r0adkll/upload-google-play@v1
         env:
-          SERVICE_ACCOUNT_JSON: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+          SERVICE_ACCOUNT_JSON_PATH: ${{ secrets.SERVICE_ACCOUNT_JSON_PATH }}
         with:
           serviceAccountJsonPlainText: $SERVICE_ACCOUNT_JSON_PATH
           packageName: com.shadowteam.wallrio
