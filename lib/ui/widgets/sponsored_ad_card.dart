@@ -43,12 +43,19 @@ class _SponsoredAdCardState extends State<SponsoredAdCard>
       return;
     }
     _isLoading = true;
+    // DIAGNOSTIC ONLY: this path is independent of BannerAdManager and its
+    // own instance-local `_isLoading` guard, so it is not subject to the
+    // global 2-concurrent-load throttle. Tagged so it can be counted/attributed
+    // separately from BannerAdManager loads.
+    debugPrint('[NativeTelemetry][LOAD_CALL] ts=${DateTime.now().toIso8601String()} '
+        'type=NativeAd source=SponsoredAdCard.initState');
     _nativeAd = NativeAd(
       adUnitId: _adUnitId,
       request: const AdRequest(),
       listener: NativeAdListener(
         onAdLoaded: (ad) {
           _isLoading = false;
+          debugPrint('[NativeTelemetry] NativeAd Loaded');
           if (mounted) setState(() => _isAdLoaded = true);
         },
         onAdImpression: (ad) {
@@ -56,7 +63,7 @@ class _SponsoredAdCardState extends State<SponsoredAdCard>
         },
         onAdFailedToLoad: (ad, err) {
           _isLoading = false;
-          debugPrint('NativeAd failed to load ($err), trying fallback...');
+          debugPrint('[NativeTelemetry] NativeAd failed to load ($err), trying fallback...');
           ad.dispose();
           _nativeAd = null;
           _loadBannerFallback();
@@ -79,6 +86,9 @@ class _SponsoredAdCardState extends State<SponsoredAdCard>
       return;
     }
     _isLoading = true;
+    // DIAGNOSTIC ONLY: fallback ad load, also independent of BannerAdManager.
+    debugPrint('[NativeTelemetry][LOAD_CALL] ts=${DateTime.now().toIso8601String()} '
+        'type=BannerFallback source=SponsoredAdCard.onNativeAdFailed');
     _bannerAd = BannerAd(
       adUnitId: _adUnitId,
       request: const AdRequest(),
@@ -86,6 +96,7 @@ class _SponsoredAdCardState extends State<SponsoredAdCard>
       listener: BannerAdListener(
         onAdLoaded: (ad) {
           _isLoading = false;
+          debugPrint('[NativeTelemetry] BannerFallback Loaded');
           if (mounted) setState(() => _isAdLoaded = true);
         },
         onAdImpression: (ad) {
@@ -93,6 +104,7 @@ class _SponsoredAdCardState extends State<SponsoredAdCard>
         },
         onAdFailedToLoad: (ad, err) {
           _isLoading = false;
+          debugPrint('[NativeTelemetry] BannerFallback failed to load ($err)');
           ad.dispose();
           _bannerAd = null;
           if (mounted) setState(() => _isAdLoaded = false);

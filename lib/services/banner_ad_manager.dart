@@ -8,11 +8,42 @@ import 'package:wallrio/model/export.dart';
 import 'package:wallrio/services/consent_manager.dart';
 import 'package:wallrio/services/packages/export.dart';
 
+/// Ownership state of a single [BannerAd] instance tracked by [BannerAdManager].
+///
+/// Every BannerAd we ever create must be in exactly one of these states.
+/// This exists specifically to make AdMob's server-side banner auto-refresh
+/// safe: auto-refresh re-fires [BannerAdListener.onAdLoaded]/`onAdImpression`
+/// on an ad instance we already own (whether it's sitting in the ready queue
+/// or currently displayed), and those re-fires must never be mistaken for a
+/// brand-new preloaded instance.
+enum _BannerOwnership {
+  /// `.load()` has been called; the network response hasn't landed yet.
+  loading,
+
+  /// Successfully loaded and sitting in [BannerAdManager._readyQueue],
+  /// not yet handed to a widget.
+  ready,
+
+  /// Popped from the queue via [BannerAdManager.acquireBanner] and currently
+  /// owned/displayed by a widget.
+  active,
+
+  /// Released/failed/discarded. Terminal state — never reused.
+  disposed,
+}
+
 /// Centralized Banner Ad Manager maintaining a 4-item preloaded queue
 /// with lightweight performance telemetry, instantaneous consumption, and automatic replenishment.
 class BannerAdManager {
   BannerAdManager._internal();
   static final BannerAdManager instance = BannerAdManager._internal();
+
+  // --- DIAGNOSTIC ONLY: singleton verification ---
+  // Increments every time `BannerAdManager._internal()` is constructed.
+  // Only `instance` above ever constructs one, so this must stay 1 for the
+  // life of the app. Used to prove there is exactly one manager instance.
+  static int _constructedInstanceCount = 0;
+  final int instanceId = ++_constructedInstanceCount;
 
   static const int _targetQueueSize = 4;
   static const int _maxQueueSize = 4;
@@ -28,6 +59,14 @@ class BannerAdManager {
   Timer? _retryTimer;
   bool _isWarmedUp = false;
 
+  // Single source of truth for "what state is this exact BannerAd instance
+  // in right now". Keyed by object identity (BannerAd does not override
+  // == / hashCode, so Map/Set lookups here are already identity-based —
+  // this is intentionally NOT relying on hashCode alone as an ownership
+  // proxy; it is a per-instance state record consulted before every
+  // queue/active-set mutation).
+  final Map<BannerAd, _BannerOwnership> _ownership = <BannerAd, _BannerOwnership>{};
+
   // --- Telemetry Metrics ---
   int _totalLoadTimeMs = 0;
   int _successfulLoadsCount = 0;
@@ -38,6 +77,11 @@ class BannerAdManager {
   int _impressionCount = 0;
   int _disposedCount = 0;
   int _disposedBeforeImpressionCount = 0;
+
+  // DIAGNOSTIC ONLY: counters for the explicit lifecycle-safety events.
+  int _duplicateInsertAttempts = 0;
+  int _queueOverflowAttempts = 0;
+  int _refreshCallbackCount = 0;
 
   final Set<BannerAd> _impressedAds = <BannerAd>{};
 
@@ -57,27 +101,40 @@ class BannerAdManager {
   int get disposedCount => _disposedCount;
   int get disposedBeforeImpressionCount => _disposedBeforeImpressionCount;
 
+  // DIAGNOSTIC ONLY.
+  int get inFlightCount => _inFlightCount;
+  int get duplicateInsertAttempts => _duplicateInsertAttempts;
+  int get queueOverflowAttempts => _queueOverflowAttempts;
+  int get refreshCallbackCount => _refreshCallbackCount;
+
   /// Preload banners in the background upon app launch or initialization.
   void warmUp() {
     if (_isWarmedUp || UserProfile.plusMember || !ConsentManager.instance.canRequestAds) return;
     _isWarmedUp = true;
     _logTelemetry('Queue Warm-up started (Target queue depth: $_targetQueueSize)');
-    _replenishQueue();
+    _replenishQueue(source: 'warmUp');
   }
 
   /// Acquires a unique, ready-to-display [BannerAd] from the preload queue.
   /// - Returns a ready [BannerAd] instantly (0ms) if available and marks it in use.
   /// - Returns `null` immediately if the queue is empty (never blocks the UI thread).
   /// - Triggers asynchronous background queue replenishment.
+  ///
+  /// [source] is a DIAGNOSTIC-ONLY tag identifying the calling code path
+  /// (e.g. 'initState', 'widgetRetry#1', 'widgetRetry#2'). It has no effect
+  /// on queue/concurrency behavior — it is only threaded into telemetry so
+  /// requests can be attributed to their origin.
   BannerAd? acquireBanner({
     String screen = 'UnknownScreen',
     String placement = 'Banner',
+    String source = 'acquire',
   }) {
     _requestedCount++;
     _logTelemetry(
       'Banner Requested',
       screen: screen,
       placement: placement,
+      source: source,
     );
 
     if (UserProfile.plusMember || !ConsentManager.instance.canRequestAds) {
@@ -87,18 +144,31 @@ class BannerAdManager {
     // 1. Pop from ready queue if available (Instantaneous 0ms return)
     while (_readyQueue.isNotEmpty) {
       final ad = _readyQueue.removeAt(0);
-      if (_activeInUse.contains(ad)) {
+      // Ownership guard: only a banner genuinely in the `ready` state may be
+      // handed out. This is the single-owner check — it rejects an ad that
+      // is somehow already active, already disposed, or (defensively)
+      // still loading, rather than trusting queue membership alone.
+      if (_ownership[ad] != _BannerOwnership.ready || _activeInUse.contains(ad)) {
+        _duplicateInsertAttempts++;
+        _logTelemetry(
+          'DUPLICATE_BANNER_INSERT (acquire skipped stale ready-queue entry, ownership=${_ownership[ad]})',
+          screen: screen,
+          placement: placement,
+          source: source,
+        );
         continue;
       }
+      _ownership[ad] = _BannerOwnership.active;
       _activeInUse.add(ad);
       _displayedCount++;
       _logTelemetry(
         'Banner Displayed',
         screen: screen,
         placement: placement,
+        source: source,
       );
       // Immediately schedule background replenishment
-      _replenishQueue();
+      _replenishQueue(source: 'acquire(hit)');
       return ad;
     }
 
@@ -108,8 +178,9 @@ class BannerAdManager {
       'Empty Queue Event (Returned null immediately, triggering background refill)',
       screen: screen,
       placement: placement,
+      source: source,
     );
-    _replenishQueue();
+    _replenishQueue(source: 'acquire(miss)');
     return null;
   }
 
@@ -121,12 +192,18 @@ class BannerAdManager {
     String placement = 'Banner',
   }) {
     if (ad == null) return;
+    if (_ownership[ad] == _BannerOwnership.disposed) {
+      // Already disposed via a failed-load/overflow/refresh path — never
+      // dispose the same instance twice.
+      return;
+    }
     final bool hadImpression = _impressedAds.remove(ad);
     if (!hadImpression) {
       _disposedBeforeImpressionCount++;
     }
     _activeInUse.remove(ad);
     _readyQueue.remove(ad);
+    _ownership[ad] = _BannerOwnership.disposed;
     _disposedCount++;
     _logTelemetry(
       hadImpression
@@ -134,6 +211,7 @@ class BannerAdManager {
           : 'Banner Disposed BEFORE Impression',
       screen: screen,
       placement: placement,
+      source: 'release',
     );
 
     try {
@@ -141,12 +219,16 @@ class BannerAdManager {
     } catch (e) {
       debugPrint('[BannerTelemetry] Error disposing banner: $e');
     }
-    _replenishQueue();
+    _replenishQueue(source: 'release');
   }
 
   /// Automatically fills the preload queue up to [_targetQueueSize].
   /// Throttles concurrent in-flight loads to max 2 to prevent server-side request starvation.
-  void _replenishQueue() {
+  ///
+  /// [source] is DIAGNOSTIC-ONLY: identifies which caller triggered this
+  /// replenish pass (warmUp / acquire(hit) / acquire(miss) / release /
+  /// onLoaded-chain / manager-backoff). Does not alter queue/concurrency logic.
+  void _replenishQueue({String source = 'unknown'}) {
     if (UserProfile.plusMember || !ConsentManager.instance.canRequestAds) {
       clear();
       return;
@@ -164,11 +246,11 @@ class BannerAdManager {
     }
 
     for (int i = 0; i < toLoad; i++) {
-      _loadPreloadBanner();
+      _loadPreloadBanner(source: source);
     }
   }
 
-  void _loadPreloadBanner() {
+  void _loadPreloadBanner({String source = 'unknown'}) {
     if ((_readyQueue.length + _inFlightCount) >= _maxQueueSize ||
         !ConsentManager.instance.canRequestAds) {
       return;
@@ -176,6 +258,12 @@ class BannerAdManager {
 
     _inFlightCount++;
     final stopwatch = Stopwatch()..start();
+    // DIAGNOSTIC ONLY: full identification of this specific load() call.
+    debugPrint(
+      '[BannerTelemetry][LOAD_CALL] ts=${DateTime.now().toIso8601String()} '
+      'instanceId=$instanceId source=$source queueDepth=${_readyQueue.length}/$_targetQueueSize '
+      'inFlight=$_inFlightCount(afterIncrement)',
+    );
 
     BannerAd? banner;
     banner = BannerAd(
@@ -184,39 +272,112 @@ class BannerAdManager {
       size: AdSize.banner,
       listener: BannerAdListener(
         onAdLoaded: (ad) {
+          final bannerAd = ad as BannerAd;
+          final ownership = _ownership[bannerAd];
+
+          // AdMob's ad-unit-level auto-refresh re-fires onAdLoaded on an
+          // ad instance we already own (ready or active), on its own
+          // timer, with no corresponding `.load()` call from us. Only the
+          // FIRST onAdLoaded for a given instance (while it is still
+          // `loading`) represents a genuine new preload — every subsequent
+          // fire is a refresh callback and must never touch the queue,
+          // in-flight count, or success counters again, or the same ad
+          // ends up duplicated into _readyQueue on every refresh cycle.
+          if (ownership != _BannerOwnership.loading) {
+            _refreshCallbackCount++;
+            _logTelemetry(
+              'BANNER_REFRESH_CALLBACK (ownership=$ownership, ignored for queue/counters — '
+              'ad refreshed its creative in place, no new preload)',
+              source: source,
+            );
+            return;
+          }
+
           stopwatch.stop();
           _inFlightCount = max(0, _inFlightCount - 1);
           _consecutiveFailures = 0;
           _successfulLoadsCount++;
           _totalLoadTimeMs += stopwatch.elapsedMilliseconds;
 
-          _readyQueue.add(ad as BannerAd);
+          if (_readyQueue.contains(bannerAd)) {
+            // Defensive: should be unreachable given the ownership check
+            // above, but never insert the same instance twice.
+            _duplicateInsertAttempts++;
+            _logTelemetry(
+              'DUPLICATE_BANNER_INSERT (already present in ready queue)',
+              source: source,
+            );
+            return;
+          }
+
+          if (_readyQueue.length >= _maxQueueSize) {
+            // Defensive: capacity was checked before dispatching this load,
+            // but never let a late-arriving load push the queue past its cap.
+            _queueOverflowAttempts++;
+            _ownership[bannerAd] = _BannerOwnership.disposed;
+            _logTelemetry(
+              'QUEUE_OVERFLOW_ATTEMPT (queue already at $_maxQueueSize, discarding extra banner)',
+              source: source,
+            );
+            try {
+              bannerAd.dispose();
+            } catch (_) {}
+            return;
+          }
+
+          _ownership[bannerAd] = _BannerOwnership.ready;
+          _readyQueue.add(bannerAd);
           _logTelemetry(
             'Banner Loaded in ${stopwatch.elapsedMilliseconds}ms (Avg: ${averageLoadTimeMs}ms)',
+            source: source,
           );
 
           // If more banners needed, continue filling the queue
-          _replenishQueue();
+          _replenishQueue(source: 'onLoaded-chain');
         },
         onAdImpression: (ad) {
+          // Impressions are a genuine revenue signal regardless of
+          // ownership state (an active, displayed banner refreshing its
+          // creative can legitimately record additional impressions) —
+          // intentionally NOT gated by ownership.
           _impressionCount++;
           _impressedAds.add(ad as BannerAd);
           _logTelemetry('Banner Impression Registered (Total Impressions: $_impressionCount)');
         },
         onAdFailedToLoad: (ad, err) {
+          final bannerAd = ad as BannerAd;
+          final ownership = _ownership[bannerAd];
+
+          if (ownership != _BannerOwnership.loading) {
+            // A refresh attempt failed on an ad we already own (ready or
+            // active) — this is not our original in-flight preload failing,
+            // so don't touch _inFlightCount/_failedLoadsCount/backoff for it.
+            _refreshCallbackCount++;
+            _logTelemetry(
+              'BANNER_REFRESH_CALLBACK (refresh failed, ownership=$ownership)',
+              source: source,
+            );
+            return;
+          }
+
           stopwatch.stop();
           _inFlightCount = max(0, _inFlightCount - 1);
           _failedLoadsCount++;
-          ad.dispose();
+          _ownership[bannerAd] = _BannerOwnership.disposed;
+          try {
+            bannerAd.dispose();
+          } catch (_) {}
 
           _logTelemetry(
             'Banner Failed to load in ${stopwatch.elapsedMilliseconds}ms ($err)',
+            source: source,
           );
           _handleLoadFailure();
         },
       ),
     );
 
+    _ownership[banner] = _BannerOwnership.loading;
     banner.load();
   }
 
@@ -227,7 +388,7 @@ class BannerAdManager {
     _retryTimer?.cancel();
     _retryTimer = Timer(Duration(seconds: delaySec), () {
       if (!UserProfile.plusMember) {
-        _replenishQueue();
+        _replenishQueue(source: 'manager-backoff');
       }
     });
   }
@@ -237,12 +398,14 @@ class BannerAdManager {
     _retryTimer?.cancel();
     _retryTimer = null;
     for (final ad in _readyQueue) {
+      _ownership[ad] = _BannerOwnership.disposed;
       try {
         ad.dispose();
       } catch (_) {}
     }
     _readyQueue.clear();
     for (final ad in _activeInUse) {
+      _ownership[ad] = _BannerOwnership.disposed;
       try {
         ad.dispose();
       } catch (_) {}
@@ -253,14 +416,16 @@ class BannerAdManager {
     _isWarmedUp = false;
   }
 
-  void _logTelemetry(String event, {String? screen, String? placement}) {
+  void _logTelemetry(String event, {String? screen, String? placement, String? source}) {
     if (!kDebugMode) return;
     final screenTag = screen != null ? ' [Screen: $screen]' : '';
     final placeTag = placement != null ? ' [Placement: $placement]' : '';
+    // DIAGNOSTIC ONLY: source/instance tag, does not affect ad behavior.
+    final sourceTag = source != null ? ' [Source: $source]' : '';
     final double matchRate = _requestedCount > 0 ? (_successfulLoadsCount / _requestedCount) * 100 : 0;
     final double impressionRate = _displayedCount > 0 ? (_impressionCount / _displayedCount) * 100 : 0;
     debugPrint(
-      '[BannerTelemetry]$screenTag$placeTag $event | Queue: ${_readyQueue.length}/$_targetQueueSize | InFlight: $_inFlightCount | Displayed: $_displayedCount | Impressions: $_impressionCount (${impressionRate.toStringAsFixed(1)}%) | MatchRate: ${matchRate.toStringAsFixed(1)}%',
+      '[BannerTelemetry]$screenTag$placeTag$sourceTag $event | ts=${DateTime.now().toIso8601String()} | instanceId=$instanceId | Queue: ${_readyQueue.length}/$_targetQueueSize | InFlight: $_inFlightCount | Displayed: $_displayedCount | Impressions: $_impressionCount (${impressionRate.toStringAsFixed(1)}%) | MatchRate: ${matchRate.toStringAsFixed(1)}%',
     );
   }
 }

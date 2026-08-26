@@ -40,6 +40,9 @@ class _StickyBottomBannerWidgetState extends State<StickyBottomBannerWidget> {
     final ad = BannerAdManager.instance.acquireBanner(
       screen: widget.screenName,
       placement: widget.placementName,
+      // DIAGNOSTIC ONLY: tags whether this call is the initial acquire or a
+      // widget-level retry, and which retry attempt number.
+      source: _retryAttempts == 0 ? 'initState' : 'widgetRetry#$_retryAttempts',
     );
 
     if (mounted) {
