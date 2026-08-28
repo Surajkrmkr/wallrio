@@ -7,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:wallrio/firebase_options.dart';
 import 'package:wallrio/model/export.dart';
 import 'package:wallrio/services/export.dart';
+import 'package:wallrio/provider/app_theme_manager.dart';
 import 'package:wallpaper_manager_plus/wallpaper_manager_plus.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
@@ -192,6 +193,9 @@ class AutoWallpaperProvider extends ChangeNotifier {
       final randomWall = filteredWalls[Random().nextInt(filteredWalls.length)];
       final file = await DefaultCacheManager().getSingleFile(randomWall.url);
       await WallpaperManagerPlus().setWallpaper(file, location);
+      // Personalization hook: record the applied wallpaper URL so Dynamic
+      // Accent (Theme & Appearance settings) has something to extract from.
+      AppThemeManager.recordAppliedWallpaperUrl(randomWall.url);
     } catch (e) {
       debugPrint("Manual wallpaper change failed: $e");
     }
@@ -282,6 +286,9 @@ void callbackDispatcher() {
         debugPrint("Selected wallpaper: ${randomWall.url}");
         final file = await DefaultCacheManager().getSingleFile(randomWall.url);
         await WallpaperManagerPlus().setWallpaper(file, location);
+        // Personalization hook: record the applied wallpaper URL so Dynamic
+        // Accent (Theme & Appearance settings) has something to extract from.
+        AppThemeManager.recordAppliedWallpaperUrl(randomWall.url);
         debugPrint("Wallpaper set successfully");
       }
 

@@ -276,6 +276,67 @@
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-4861691653340010~3248847115" />
+
+        <!-- Home-screen widgets (native RemoteViews-based, no Glance/Compose) -->
+        <receiver
+            android:name=".widget.StaticWallpaperWidgetProvider"
+            android:exported="false"
+            android:label="WallRio Fresh Wallpapers">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/static_wallpaper_widget_info" />
+        </receiver>
+
+        <receiver
+            android:name=".widget.VideoWallpaperWidgetProvider"
+            android:exported="false"
+            android:label="WallRio Video Wallpapers">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/video_wallpaper_widget_info" />
+        </receiver>
+
+        <receiver
+            android:name=".widget.DesktopWallpaperWidgetProvider"
+            android:exported="false"
+            android:label="WallRio Desktop Wallpapers">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/desktop_wallpaper_widget_info" />
+        </receiver>
+
+        <!-- Defensive re-enqueue of the widget refresh WorkManager job on boot;
+             WorkManager already persists/resumes periodic work across reboots
+             on its own, this is a belt-and-suspenders no-op in the common case. -->
+        <receiver
+            android:name=".widget.BootReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- FileProvider serving cached widget thumbnails (context.filesDir/widget_cache/)
+             to RemoteViews via content:// URIs, avoiding TransactionTooLargeException
+             from embedding bitmaps directly in the widget RemoteViews parcel. -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.widgetfileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/widget_file_paths" />
+        </provider>
     </application>
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
     <uses-permission android:name="android.permission.INTERNET" />

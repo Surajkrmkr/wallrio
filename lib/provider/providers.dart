@@ -17,4 +17,5 @@ List<SingleChildWidget> providers(BuildContext context) => [
       ChangeNotifierProvider(create: (context) => AutoWallpaperProvider()),
       ChangeNotifierProvider(create: (context) => ProgressionProvider()),
       ChangeNotifierProvider(create: (context) => PersonalizationProvider()),
+      ChangeNotifierProvider(create: (context) => AppThemeManager()),
     ];

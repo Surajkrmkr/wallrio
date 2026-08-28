@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:background="@drawable/widget_background"
+    android:padding="14dp"
+    android:gravity="center_vertical">
+
+    <!--
+    Left column: app icon + title/subtitle stacked, matching the reference
+    "Themes"-style widget layout (icon, then a text block, then previews).
+    -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="38"
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        android:paddingEnd="10dp">
+
+        <ImageView
+            android:id="@+id/widget_app_icon"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/widget_icon_background"
+            android:clipToOutline="true"
+            android:src="@mipmap/launcher_icon"
+            android:contentDescription="WallRio" />
+
+        <TextView
+            android:id="@+id/widget_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fresh Wallpapers"
+            android:textColor="@color/widget_title"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:maxLines="2"
+            android:ellipsize="end" />
+
+        <TextView
+            android:id="@+id/widget_subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="Explore new wallpapers →"
+            android:textColor="@color/widget_accent"
+            android:textSize="11sp"
+            android:maxLines="2"
+            android:ellipsize="end" />
+    </LinearLayout>
+
+    <!--
+    Right column: portrait phone-shaped previews (fixed width, flexible
+    height so it never overflows the widget's actual granted size).
+    -->
+    <LinearLayout
+        android:id="@+id/widget_thumb_row"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="62"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/widget_image_1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginEnd="6dp"
+            android:background="@drawable/widget_thumb_background"
+            android:clipToOutline="true"
+            android:scaleType="centerCrop" />
+
+        <ImageView
+            android:id="@+id/widget_image_2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginEnd="6dp"
+            android:background="@drawable/widget_thumb_background"
+            android:clipToOutline="true"
+            android:scaleType="centerCrop" />
+
+        <ImageView
+            android:id="@+id/widget_image_3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/widget_thumb_background"
+            android:clipToOutline="true"
+            android:scaleType="centerCrop" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/widget_placeholder"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="62"
+        android:visibility="gone"
+        android:gravity="center"
+        android:text="Open WallRio to load your wallpapers"
+        android:textColor="@color/widget_subtitle"
+        android:textSize="11sp" />
+
+</LinearLayout>

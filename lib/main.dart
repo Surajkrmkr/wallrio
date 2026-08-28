@@ -31,17 +31,34 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: providers(context),
-      child: Consumer<DarkThemeProvider>(
-        builder: (context, provider, _) {
-          setStatusBarTheme(provider);
+      // Reconciliation note: `DarkThemeProvider.darkTheme` remains the
+      // single legacy on/off switch (persisted under "isDarkMode") that
+      // `_darkModeTile()` in settings_page.dart still flips directly for
+      // backward compatibility. `AppThemeManager.mode` is the new source of
+      // truth for `MaterialApp.themeMode` (it adds `ThemeMode.system`, which
+      // `DarkThemeProvider` cannot express). `AppThemeManager.setMode()` is
+      // what settings_page.dart's dark-mode tile now calls, and it mirrors
+      // the choice back into `DarkThemeProvider` so any other existing code
+      // reading `DarkThemeProvider.darkTheme` keeps working unchanged.
+      child: Consumer2<DarkThemeProvider, AppThemeManager>(
+        builder: (context, darkThemeProvider, appThemeManager, _) {
+          setStatusBarTheme(darkThemeProvider);
+          ThemeMode themeMode;
+          if (appThemeManager.mode == AppThemeMode.system) {
+            themeMode = ThemeMode.system;
+          } else if (appThemeManager.mode == AppThemeMode.light) {
+            themeMode = ThemeMode.light;
+          } else {
+            themeMode = ThemeMode.dark;
+          }
           return MaterialApp(
               title: 'WallRio',
               navigatorKey: ToastWidget.navigatorKey,
-              theme: WallRioThemeData.getLightThemeData(
+              theme: appThemeManager.buildThemeData(
                   context: context, isDarkTheme: false),
-              darkTheme: WallRioThemeData.getLightThemeData(
+              darkTheme: appThemeManager.buildThemeData(
                   context: context, isDarkTheme: true),
-              themeMode: provider.darkTheme ? ThemeMode.dark : ThemeMode.light,
+              themeMode: themeMode,
               debugShowCheckedModeBanner: false,
               navigatorObservers: [
                 FirebaseAnalyticsObserver(
@@ -54,8 +71,15 @@ class MyApp extends StatelessWidget {
               builder: (context, child) => Overlay(
                     initialEntries: [
                       OverlayEntry(
-                          builder: (context) =>
-                              child ?? const SizedBox.shrink()),
+                          builder: (context) {
+                            // Fires once per cold-start/new-intent; the native
+                            // side clears the pending extras after this read so
+                            // it never double-navigates on rebuild.
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              HomeWidgetLaunchService.handleLaunch();
+                            });
+                            return child ?? const SizedBox.shrink();
+                          }),
                     ],
                   ),
               home: const SplashPage());

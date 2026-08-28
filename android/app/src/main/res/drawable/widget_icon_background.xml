@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Not actually painted (transparent) — its only job is to give the app-icon
+ImageView an outline shape to clip to via android:clipToOutline, since the
+launcher_icon mipmap PNG itself has square corners.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <corners android:radius="9dp" />
+    <solid android:color="@android:color/transparent" />
+</shape>

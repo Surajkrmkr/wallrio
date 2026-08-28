@@ -9,8 +9,10 @@ import 'package:wallrio/services/packages/export.dart';
 import 'package:wallrio/ui/oauth/login_page.dart';
 import 'package:wallrio/ui/onboarding/export.dart';
 import 'package:wallrio/ui/views/auto_wallpaper_settings_page.dart';
+import 'package:wallrio/ui/views/home_widgets_sheet.dart';
 import 'package:wallrio/ui/views/personalization_hub_page.dart';
 import 'package:wallrio/ui/views/rewards_hub_page.dart';
+import 'package:wallrio/ui/views/theme_appearance_page.dart';
 import 'package:wallrio/ui/widgets/export.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -22,21 +24,12 @@ class SettingsPage extends StatelessWidget {
 
     final sections = [
       _topBanners(context),
-      _sectionCard(
-        context,
-        label: 'Appearance',
-        children: [
-          _darkModeTile(context),
-          // _previewQualityTile(context),
-          _tile(context,
-              icon: Icons.palette_rounded,
-              title: 'Personalization Hub',
-              subtitle: 'Customize your profile (Pro)',
-              onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => const PersonalizationHubPage()))),
-          if (!hasSub)
+      _personalizationSection(context, hasSub),
+      if (!hasSub)
+        _sectionCard(
+          context,
+          label: 'Rewards',
+          children: [
             _tile(context,
                 icon: Icons.diamond_rounded,
                 title: 'Rewards Hub',
@@ -45,8 +38,8 @@ class SettingsPage extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                         builder: (_) => const RewardsHubPage()))),
-        ],
-      ),
+          ],
+        ),
       _sectionCard(
         context,
         label: 'Advanced',
@@ -568,6 +561,251 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
+  // ─── Personalization — visual card grid ─────────────────────────
+  //
+  // The main feature surface of Settings: App Icon / Profile Frame / Accent
+  // / Theme cards each show the current selection at a glance. The deeper
+  // Theme Mode / Background Style / Dynamic Accent controls already live
+  // inside the Accent/Theme cards' destination (`showThemeAppearanceSheet`)
+  // and are intentionally NOT duplicated here. Everything here reads
+  // through the existing `AppThemeManager` / `PersonalizationProvider` — no
+  // new state or persistence is introduced. App Icon / Profile Frame cards
+  // deep-link into the existing `PersonalizationHubPage` (which still owns
+  // the full icon/frame catalogs and unlock grids); Accent / Theme cards
+  // open the existing `showThemeAppearanceSheet`.
+  Widget _personalizationSection(BuildContext context, bool hasSub) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: Consumer2<PersonalizationProvider, AppThemeManager>(
+        builder: (context, personalization, themeManager, _) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _sectionLabel(context, 'Personalization'),
+              const SizedBox(height: 10),
+              // 2x2 grid: App Icon / Profile Frame / Theme / Widget.
+              Row(
+                children: [
+                  Expanded(
+                      child: SizedBox(
+                          height: 132,
+                          child: _appIconCard(context, personalization, hasSub))),
+                  const SizedBox(width: 14),
+                  Expanded(
+                      child: SizedBox(
+                          height: 132,
+                          child: _profileFrameCard(context, personalization, hasSub))),
+                ],
+              ),
+              const SizedBox(height: 14),
+              Row(
+                children: [
+                  Expanded(
+                      child: SizedBox(
+                          height: 132,
+                          child: _themeCard(context, themeManager))),
+                  const SizedBox(width: 14),
+                  Expanded(
+                      child: SizedBox(
+                          height: 132,
+                          child: _widgetCard(context))),
+                ],
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _personalizationCard({
+    required BuildContext context,
+    required Widget preview,
+    required String title,
+    required String currentLabel,
+    required bool showProBadge,
+    required VoidCallback onTap,
+    bool disabled = false,
+  }) {
+    final colors = context.appColors;
+    return GestureDetector(
+      onTap: disabled ? null : onTap,
+      child: Opacity(
+        opacity: disabled ? 0.45 : 1.0,
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: colors.card,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: colors.divider),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Fixed-size square preview, left-aligned with the text below;
+              // the PRO badge (if any) floats to the far right.
+              Row(
+                children: [
+                  preview,
+                  const Spacer(),
+                  if (showProBadge)
+                    Container(
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: colors.accentContainer,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text(
+                        'PRO',
+                        style: TextStyle(
+                          fontSize: 9,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 0.5,
+                          color: colors.accent,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+              const Spacer(),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                  color: colors.textTertiary,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                currentLabel,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w800,
+                  color: colors.textPrimary,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _appIconCard(
+      BuildContext context, PersonalizationProvider provider, bool hasSub) {
+    final activeKey = provider.personalization?.activeAppIcon ?? 'icon_default';
+    final active = kAppIconCatalog.firstWhere(
+      (i) => i['key'] == activeKey,
+      orElse: () => kAppIconCatalog.first,
+    );
+
+    return _personalizationCard(
+      context: context,
+      disabled: !Platform.isAndroid,
+      showProBadge: !hasSub,
+      preview: ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: Image.asset(
+          active['imageAsset'] as String,
+          width: 64,
+          height: 64,
+          fit: BoxFit.cover,
+        ),
+      ),
+      title: 'App Icon',
+      currentLabel: Platform.isAndroid
+          ? active['name'] as String
+          : '${active['name']} (Android only)',
+      onTap: () => showAppIconsSheet(context),
+    );
+  }
+
+  Widget _profileFrameCard(
+      BuildContext context, PersonalizationProvider provider, bool hasSub) {
+    final activeKey =
+        provider.personalization?.activeProfileFrame ?? 'frame_none';
+    final active = kProfileFrameCatalog.firstWhere(
+      (f) => f['key'] == activeKey,
+      orElse: () => kProfileFrameCatalog.first,
+    );
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
+    return _personalizationCard(
+      context: context,
+      showProBadge: !hasSub,
+      preview: PremiumAvatar(imageUrl: authProvider.photoUrl, radius: 32),
+      title: 'Profile Frame',
+      currentLabel: active['name'] as String,
+      onTap: () => showFramesSheet(context),
+    );
+  }
+
+  // Merged "Theme" card — combines what used to be separate Accent Color
+  // and Theme cards into one, since both opened the exact same
+  // `showThemeAppearanceSheet` destination anyway.
+  // Compact grid card — matches the App Icon / Profile Frame / Widget cards
+  // so all four sit in one consistent 2x2 grid.
+
+  // Same pattern as App Icon / Profile Frame: tapping always opens the sheet
+  // (never blocked at the card level) — the PRO badge here is just an
+  // honest indicator, and locked individual options (accent swatches,
+  // background styles, premium themes) show their own small lock badge and
+  // open the paywall on tap *inside* the sheet, matching how locked
+  // icons/frames behave inside the Personalization Hub.
+  Widget _themeCard(BuildContext context, AppThemeManager manager) {
+    final palette = manager.accent.palette;
+    final currentName =
+        manager.premiumTheme?.name ?? 'WallRio ${manager.accent.label}';
+
+    return _personalizationCard(
+      context: context,
+      showProBadge: !UserProfile.plusMember,
+      preview: Container(
+        width: 44,
+        height: 44,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: palette.primary,
+          boxShadow: [
+            BoxShadow(
+                color: palette.primary.withValues(alpha: 0.35),
+                blurRadius: 10,
+                offset: const Offset(0, 3)),
+          ],
+        ),
+      ),
+      title: 'Theme',
+      currentLabel: currentName,
+      onTap: () => showThemeAppearanceSheet(context),
+    );
+  }
+
+  // ─── Widget card + "Add to Home Screen" bottom sheet ────────────
+
+  Widget _widgetCard(BuildContext context) {
+    final colors = context.appColors;
+    return _personalizationCard(
+      context: context,
+      showProBadge: !UserProfile.plusMember,
+      preview: Container(
+        width: 44,
+        height: 44,
+        decoration: BoxDecoration(
+          color: colors.accentContainer,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Icon(Icons.widgets_rounded, color: colors.accent, size: 24),
+      ),
+      title: 'Widget',
+      currentLabel: 'Home screen',
+      onTap: () => showHomeScreenWidgetsSheet(context),
+    );
+  }
+
   // ─── Section Card ─────────────────────────────────────────────
 
   Widget _sectionCard(BuildContext context,
@@ -580,9 +818,7 @@ class SettingsPage extends StatelessWidget {
           _sectionLabel(context, label),
           const SizedBox(height: 10),
           Material(
-            color: Theme.of(context).brightness == Brightness.dark
-                ? bgDark2Color
-                : const Color(0xFFF2F2F7),
+            color: context.appColors.card,
             borderRadius: BorderRadius.circular(18),
             clipBehavior: Clip.antiAlias,
             child: Column(
@@ -632,9 +868,23 @@ class SettingsPage extends StatelessWidget {
 
   // ─── Tiles ────────────────────────────────────────────────────
 
+  // `AppThemeManager` is now the single source of truth for the theme mode
+  // (it also supports System, unlike the legacy bool). This tile calls
+  // `AppThemeManager.setMode()`, which mirrors light/dark back into
+  // `DarkThemeProvider` so any older code still reading that bool keeps
+  // working. See the reconciliation comment in app_theme_manager.dart.
+  // ignore: unused_element
   Widget _darkModeTile(BuildContext context) {
-    return Consumer<DarkThemeProvider>(
-      builder: (context, provider, _) {
+    return Consumer<AppThemeManager>(
+      builder: (context, manager, _) {
+        final bool isDark = manager.mode == AppThemeMode.dark;
+        void onChanged(bool val) {
+          final darkThemeProvider =
+              Provider.of<DarkThemeProvider>(context, listen: false);
+          manager.setMode(val ? AppThemeMode.dark : AppThemeMode.light,
+              syncDarkThemeProvider: darkThemeProvider);
+        }
+
         if (Platform.isIOS) {
           return ListTile(
             leading: _tileIcon(Icons.dark_mode_rounded),
@@ -644,8 +894,8 @@ class SettingsPage extends StatelessWidget {
               style: Theme.of(context).textTheme.labelSmall,
             ),
             trailing: CNSwitch(
-              value: provider.darkTheme,
-              onChanged: (val) => provider.darkTheme = val,
+              value: isDark,
+              onChanged: onChanged,
               color: bgDarkAccentColor,
             ),
             contentPadding:
@@ -655,8 +905,8 @@ class SettingsPage extends StatelessWidget {
           );
         }
         return SwitchListTile(
-          value: provider.darkTheme,
-          onChanged: (val) => provider.darkTheme = val,
+          value: isDark,
+          onChanged: onChanged,
           secondary: _tileIcon(Icons.dark_mode_rounded),
           title: const Text('Dark Mode'),
           subtitle: Text(

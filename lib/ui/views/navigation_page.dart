@@ -39,6 +39,13 @@ class _NavigationPageState extends State<NavigationPage> with WidgetsBindingObse
     try {
       final file = await DefaultCacheManager().getSingleFile(randomWall.url);
       await WallpaperManagerPlus().setWallpaper(file, 1);
+      // Personalization hook: record the applied wallpaper URL so Dynamic
+      // Accent (Theme & Appearance settings) has something to extract from.
+      AppThemeManager.recordAppliedWallpaperUrl(randomWall.url);
+      if (mounted) {
+        Provider.of<AppThemeManager>(context, listen: false)
+            .refreshDynamicAccentFor(randomWall.url);
+      }
       ToastWidget.showToast('Wallpaper rotated!');
     } catch (e) {
       ToastWidget.showToast('Failed to apply wallpaper');

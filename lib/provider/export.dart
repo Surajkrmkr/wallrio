@@ -14,3 +14,4 @@ export 'wall_rio.dart';
 export 'auto_wallpaper.dart';
 export 'progression_provider.dart';
 export 'personalization_provider.dart';
+export 'app_theme_manager.dart';

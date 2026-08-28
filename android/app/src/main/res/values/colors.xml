@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="ic_launcher_background">#FF0A0A1E</color>
+    <!-- WallRio accent green, reused from lib/services/theme_data.dart bgDarkAccentColor -->
+    <color name="widget_accent">#37C3A3</color>
+    <color name="widget_background">#FFFFFF</color>
+    <color name="widget_surface">#F2F2F2</color>
+    <color name="widget_title">#1A1A1A</color>
+    <color name="widget_subtitle">#6B6B6B</color>
 </resources>

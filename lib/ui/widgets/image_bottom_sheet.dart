@@ -40,8 +40,7 @@ class ImageBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    final sheetColor = isDarkMode ? bgDark2Color : const Color(0xFFF2F2F7);
+    final sheetColor = context.appColors.card;
 
     Widget sheetContent = glassSheetBackground(
       Container(

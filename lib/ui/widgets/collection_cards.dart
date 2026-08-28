@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wallrio/services/app_theme_tokens.dart';
 
 class CategoryChips extends StatelessWidget {
   final List<String> categories;
@@ -24,6 +25,7 @@ class CategoryChips extends StatelessWidget {
         itemBuilder: (context, index) {
           final category = categories[index];
           final isSelected = category == selectedCategory;
+          final colors = context.appColors;
 
           return Padding(
             padding: const EdgeInsets.only(right: 12),
@@ -34,17 +36,17 @@ class CategoryChips extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: isSelected ? Colors.white : Colors.white.withValues(alpha: 0.05),
+                  color: isSelected ? colors.accent : colors.buttonSecondary,
                   borderRadius: BorderRadius.circular(30),
                   border: Border.all(
-                    color: isSelected ? Colors.transparent : Colors.white.withValues(alpha: 0.1),
+                    color: isSelected ? Colors.transparent : colors.divider,
                     width: 1,
                   ),
                 ),
                 child: Text(
                   category.toUpperCase(),
                   style: TextStyle(
-                    color: isSelected ? Colors.black : Colors.white70,
+                    color: isSelected ? Colors.white : colors.textSecondary,
                     fontSize: 11,
                     fontWeight: FontWeight.w900,
                     letterSpacing: 1,

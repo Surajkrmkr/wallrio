@@ -6,3 +6,4 @@ export 'wall_rio_model.dart';
 export 'progression_model.dart';
 export 'personalization_model.dart';
 export 'popup_config.dart';
+export 'theme_configuration.dart';

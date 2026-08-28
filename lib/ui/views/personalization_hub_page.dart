@@ -1,256 +1,195 @@
 import 'dart:io';
+import 'package:cupertino_native_better/cupertino_native_better.dart';
 import 'package:flutter/material.dart';
 import 'package:wallrio/provider/export.dart';
 import 'package:wallrio/services/export.dart';
 import 'package:wallrio/ui/onboarding/export.dart';
 import 'package:wallrio/ui/widgets/export.dart';
 
-class PersonalizationHubPage extends StatefulWidget {
-  const PersonalizationHubPage({super.key});
-
-  @override
-  State<PersonalizationHubPage> createState() => _PersonalizationHubPageState();
+/// Opens the App Icon picker as its own bottom sheet — presented the same
+/// way every other WallRio personalization surface is (Themes, Widgets):
+/// `CNBottomSheet.show`, rounded top, transparent barrier — instead of a
+/// full pushed page. Separate from [showFramesSheet] rather than one sheet
+/// with an internal tab switcher, since each is already reached from its
+/// own distinct card in Settings — a switcher between them added nothing.
+void showAppIconsSheet(BuildContext context) {
+  _showPersonalizationSheet(context, showFrames: false);
 }
 
-class _PersonalizationHubPageState extends State<PersonalizationHubPage>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
+/// Opens the Profile Frame picker as its own bottom sheet. See
+/// [showAppIconsSheet].
+void showFramesSheet(BuildContext context) {
+  _showPersonalizationSheet(context, showFrames: true);
+}
 
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-  }
+void _showPersonalizationSheet(BuildContext context, {required bool showFrames}) {
+  final screenHeight = MediaQuery.sizeOf(context).height;
+  CNBottomSheet.show(
+    context: context,
+    backgroundColor: Colors.transparent,
+    isScrollControlled: true,
+    showDragHandle: Platform.isIOS,
+    constraints: BoxConstraints(maxHeight: screenHeight * 0.88),
+    shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(25))),
+    builder: (context) => PersonalizationHubPage(showFrames: showFrames),
+  );
+}
 
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
+/// App icon catalog — shared between the App Icons tab and the compact
+/// "App Icon" card in the Personalization card grid, so both read the same
+/// data instead of two copies drifting apart.
+const List<Map<String, dynamic>> kAppIconCatalog = [
+  {'key': 'icon_default', 'name': 'Default', 'unlock': 0, 'imageAsset': 'assets/app_icon/icon_default.png'},
+  {'key': 'icon_cosmic_galaxy', 'name': 'Cosmic Galaxy', 'unlock': 0, 'imageAsset': 'assets/app_icon/icon_cosmic_galaxy.png'},
+  {'key': 'icon_aurora', 'name': 'Aurora', 'unlock': 0, 'imageAsset': 'assets/app_icon/icon_aurora.png'},
+  {'key': 'icon_diamond', 'name': 'Diamond', 'unlock': 1, 'imageAsset': 'assets/app_icon/icon_diamond.png'},
+  {'key': 'icon_electric_plasma', 'name': 'Electric Plasma', 'unlock': 2, 'imageAsset': 'assets/app_icon/icon_electric_plasma.png'},
+  {'key': 'icon_emerald_energy', 'name': 'Emerald Energy', 'unlock': 3, 'imageAsset': 'assets/app_icon/icon_emerald_energy.png'},
+  {'key': 'icon_gold_luxury', 'name': 'Gold Luxury', 'unlock': 4, 'imageAsset': 'assets/app_icon/icon_gold_luxury.png'},
+  {'key': 'icon_holographic_crystal', 'name': 'Holo Crystal', 'unlock': 5, 'imageAsset': 'assets/app_icon/icon_holographic_crystal.png'},
+  {'key': 'icon_ice_crystal', 'name': 'Ice Crystal', 'unlock': 6, 'imageAsset': 'assets/app_icon/icon_ice_crystal.png'},
+  {'key': 'icon_jelly_glass', 'name': 'Jelly Glass', 'unlock': 7, 'imageAsset': 'assets/app_icon/icon_jelly_glass.png'},
+  {'key': 'icon_liquid_chrome', 'name': 'Liquid Chrome', 'unlock': 8, 'imageAsset': 'assets/app_icon/icon_liquid_chrome.png'},
+  {'key': 'icon_liquid_glass', 'name': 'Liquid Glass', 'unlock': 9, 'imageAsset': 'assets/app_icon/icon_liquid_glass.png'},
+  {'key': 'icon_marble', 'name': 'Marble', 'unlock': 10, 'imageAsset': 'assets/app_icon/icon_marble.png'},
+  {'key': 'icon_molten_lava', 'name': 'Molten Lava', 'unlock': 11, 'imageAsset': 'assets/app_icon/icon_molten_lava.png'},
+  {'key': 'icon_neon_glow', 'name': 'Neon Glow', 'unlock': 12, 'imageAsset': 'assets/app_icon/icon_neon_glow.png'},
+  {'key': 'icon_obsidian_glass', 'name': 'Obsidian Glass', 'unlock': 13, 'imageAsset': 'assets/app_icon/icon_obsidian_glass.png'},
+  {'key': 'icon_prism_glass', 'name': 'Prism Glass', 'unlock': 14, 'imageAsset': 'assets/app_icon/icon_prism_glass.png'},
+  {'key': 'icon_rose_gold', 'name': 'Rose Gold', 'unlock': 15, 'imageAsset': 'assets/app_icon/icon_rose_gold.png'},
+  {'key': 'icon_ruby_crystal', 'name': 'Ruby Crystal', 'unlock': 16, 'imageAsset': 'assets/app_icon/icon_ruby_crystal.png'},
+  {'key': 'icon_titanium', 'name': 'Titanium', 'unlock': 18, 'imageAsset': 'assets/app_icon/icon_titanium.png'},
+];
+
+/// Profile frame catalog — shared between the Frames tab and the compact
+/// "Profile Frame" card.
+const List<Map<String, dynamic>> kProfileFrameCatalog = [
+  {'key': 'frame_none', 'name': 'No Frame', 'unlock': 0, 'icon': Icons.account_circle_rounded},
+  {'key': 'frame_gold_vip', 'name': 'Gold VIP', 'unlock': 0, 'imageAsset': 'assets/frame_gold_vip.png'},
+  {'key': 'frame_neon_v2', 'name': 'Neon Pulse', 'unlock': 0, 'imageAsset': 'assets/frame_neon_v2.png'},
+  {'key': 'frame_aurora', 'name': 'Aurora', 'unlock': 0, 'imageAsset': 'assets/frame_aurora.png'},
+  {'key': 'frame_galaxy', 'name': 'Galaxy', 'unlock': 0, 'imageAsset': 'assets/frame_galaxy.png'},
+  {'key': 'frame_glossy', 'name': 'Glossy', 'unlock': 0, 'imageAsset': 'assets/frame_glossy.png'},
+  {'key': 'frame_metal_fire', 'name': 'Metal Fire', 'unlock': 0, 'imageAsset': 'assets/frame_metal_fire.png'},
+  {'key': 'frame_fifa', 'name': 'FIFA', 'unlock': 0, 'imageAsset': 'assets/frame_fifa.png'},
+];
+
+class PersonalizationHubPage extends StatelessWidget {
+  /// Which single section this sheet shows — App Icons (false) or Profile
+  /// Frames (true). Each is reached from its own distinct card in Settings,
+  /// so this is a plain either/or rather than an internal tab switcher.
+  final bool showFrames;
+
+  const PersonalizationHubPage({super.key, this.showFrames = false});
 
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    
+    final colors = context.appColors;
+
     // Check if the user is a Pro member
     final subProvider = Provider.of<SubscriptionProvider>(context);
     final hasSub = subProvider.subscriptionDaysLeft.isNotEmpty;
 
     // We no longer block access here. Non-pro users can view the hub to see what they are missing!
 
-    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      bottomNavigationBar: !hasSub
-          ? SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                child: _buildSubscribeButton(context),
-              ),
-            )
-          : null,
-      body: Consumer<PersonalizationProvider>(
-        builder: (context, personalization, _) {
-          if (personalization.isLoading ||
-              personalization.personalization == null) {
-            return const Center(
-                child: CircularProgressIndicator(color: bgDarkAccentColor));
-          }
+    // App Icon switching is Android-only (no iOS native handler exists for
+    // the icon channel yet); the Settings card already disables itself on
+    // iOS, but fall back to Frames defensively if this sheet is somehow
+    // still reached for icons there.
+    final effectiveShowFrames = showFrames || !Platform.isAndroid;
 
-          return SafeArea(
-            child: CustomScrollView(
-              physics: const BouncingScrollPhysics(),
-              slivers: [
-                const SliverAppBarWidget(
-                  showLogo: false,
-                  showSearchBtn: false,
-                  centeredTitle: true,
-                  showBackBtn: true,
-                  text: 'Personalize',
-                ),
-                SliverToBoxAdapter(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Hero Membership Card
-                      _buildMembershipCard(personalization, isDarkMode),
-                      const SizedBox(height: 28),
-  
-                      // Tab Selector — App Icons switching is Android-only
-                      // (no iOS native handler exists for the icon channel yet),
-                      // so iOS goes straight to Frames without a tab bar.
-                      if (Platform.isAndroid) ...[
-                        _buildTabBar(isDarkMode),
-                        const SizedBox(height: 20),
-                        SizedBox(
-                          height: _calculateTabHeight(context, personalization),
-                          child: TabBarView(
-                            controller: _tabController,
-                            physics: const BouncingScrollPhysics(),
-                            children: [
-                              _buildAppIconsTab(context, personalization,
-                                  isDarkMode, hasSub),
-                              _buildProfileFramesTab(context, personalization,
-                                  isDarkMode, hasSub),
-                            ],
-                          ),
-                        ),
-                      ] else
-                        _buildProfileFramesTab(
-                            context, personalization, isDarkMode, hasSub),
-                      const SizedBox(height: 40),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  double _calculateTabHeight(BuildContext context, PersonalizationProvider provider) {
-    final isTablet = ResponsiveHelper.isTablet(context);
-    final screenWidth = MediaQuery.of(context).size.width;
-    final gridWidth = screenWidth - 40; // 20 padding on each side
-    
-    final iconCols = isTablet ? 6 : 4;
-    final iconRows = (20 / iconCols).ceil();
-    final iconCardWidth = (gridWidth - ((iconCols - 1) * 16)) / iconCols;
-    final iconsHeight = (iconRows * (iconCardWidth + 16)) + 120;
-    
-    final frameCols = isTablet ? 5 : 3;
-    final frameRows = (8 / frameCols).ceil();
-    final frameCardWidth = (gridWidth - ((frameCols - 1) * 14)) / frameCols;
-    final frameCardHeight = frameCardWidth / 0.72;
-    final framesHeight = (frameRows * (frameCardHeight + 14)) + 120;
-    
-    final maxHeight = iconsHeight > framesHeight ? iconsHeight : framesHeight;
-    return maxHeight;
-  }
-
-  // ──────────────────────────────────────────────────────────
-  // MEMBERSHIP CARD — Glassmorphic hero card
-  // ──────────────────────────────────────────────────────────
-  Widget _buildMembershipCard(
-      PersonalizationProvider provider, bool isDarkMode) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Container(
-        padding: const EdgeInsets.all(22),
-        width: double.infinity,
+    return glassSheetBackground(
+      Container(
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [Color(0xFF2ABFAA), Color(0xFF178A76)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(22),
-          boxShadow: [
-            BoxShadow(
-              color: const Color(0xFF2ABFAA).withValues(alpha: 0.35),
-              blurRadius: 24,
-              offset: const Offset(0, 10),
-            ),
-          ],
+          color: supportsGlassSheet ? Colors.transparent : colors.card,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(25)),
         ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Row(
-                    children: [
-                      Icon(Icons.verified_rounded, color: whiteColor, size: 18),
-                      SizedBox(width: 6),
-                      Text(
-                        'WallRio Pro',
-                        style: TextStyle(
-                          color: whiteColor,
-                          fontSize: 22,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    '${provider.monthsSubscribed} ${provider.monthsSubscribed == 1 ? 'month' : 'months'} active — Rewards unlock over time',
-                    style: TextStyle(
-                      color: whiteColor.withValues(alpha: 0.85),
-                      fontSize: 12,
+        child: SafeArea(
+          top: false,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (!Platform.isIOS)
+                Padding(
+                  padding: const EdgeInsets.only(top: 10, bottom: 6),
+                  child: Container(
+                    width: 36,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: colors.divider,
+                      borderRadius: BorderRadius.circular(4),
                     ),
                   ),
-                ],
+                ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 6, 12, 6),
+                child: Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        effectiveShowFrames ? 'Frames' : 'App Icons',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLarge
+                            ?.copyWith(fontWeight: FontWeight.w800),
+                      ),
+                    ),
+                    const Spacer(),
+                    IconButton(
+                      onPressed: () => Navigator.of(context).maybePop(),
+                      icon: Icon(Icons.close_rounded,
+                          color: colors.textSecondary),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(width: 12),
-            const Icon(Icons.workspace_premium_rounded,
-                color: whiteColor, size: 64),
-          ],
-        ),
-      ),
-    );
-  }
+              Flexible(
+                child: Consumer<PersonalizationProvider>(
+                  builder: (context, personalization, _) {
+                    if (personalization.isLoading ||
+                        personalization.personalization == null) {
+                      return const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 60),
+                        child: Center(
+                            child: CircularProgressIndicator(
+                                color: bgDarkAccentColor)),
+                      );
+                    }
 
-  // ──────────────────────────────────────────────────────────
-  // TAB BAR — Pill-style segmented control
-  // ──────────────────────────────────────────────────────────
-  Widget _buildTabBar(bool isDarkMode) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Container(
-        height: 48,
-        decoration: BoxDecoration(
-          color: isDarkMode
-              ? Colors.white.withValues(alpha: 0.05)
-              : Colors.black.withValues(alpha: 0.04),
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: TabBar(
-          controller: _tabController,
-          indicator: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
-            color: bgDarkAccentColor.withValues(alpha: 0.15),
-            border: Border.all(
-              color: bgDarkAccentColor.withValues(alpha: 0.4),
-              width: 1.5,
-            ),
+                    return SingleChildScrollView(
+                      padding: const EdgeInsets.only(bottom: 24),
+                      physics: const BouncingScrollPhysics(),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          effectiveShowFrames
+                              ? _buildProfileFramesTab(context,
+                                  personalization, isDarkMode, hasSub)
+                              : _buildAppIconsTab(context, personalization,
+                                  isDarkMode, hasSub),
+                          if (!hasSub) ...[
+                            const SizedBox(height: 24),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              child: _buildSubscribeButton(context),
+                            ),
+                          ],
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
-          indicatorSize: TabBarIndicatorSize.tab,
-          dividerColor: Colors.transparent,
-          labelColor: bgDarkAccentColor,
-          unselectedLabelColor:
-              isDarkMode ? Colors.white.withValues(alpha: 0.4) : Colors.grey,
-          labelStyle:
-              const TextStyle(fontSize: 13, fontWeight: FontWeight.w800),
-          unselectedLabelStyle:
-              const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-          tabs: const [
-            Tab(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.apps_rounded, size: 18),
-                  SizedBox(width: 8),
-                  Text('App Icons'),
-                ],
-              ),
-            ),
-            Tab(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.auto_awesome_outlined, size: 18),
-                  SizedBox(width: 8),
-                  Text('Frames'),
-                ],
-              ),
-            ),
-          ],
         ),
       ),
+      tint: colors.card,
     );
   }
 
@@ -259,128 +198,7 @@ class _PersonalizationHubPageState extends State<PersonalizationHubPage>
   // ──────────────────────────────────────────────────────────
   Widget _buildAppIconsTab(BuildContext context,
       PersonalizationProvider provider, bool isDarkMode, bool hasSub) {
-    final icons = [
-      {
-        'key': 'icon_default',
-        'name': 'Default',
-        'unlock': 0,
-        'imageAsset': 'assets/app_icon/icon_default.png'
-      },
-      {
-        'key': 'icon_cosmic_galaxy',
-        'name': 'Cosmic Galaxy',
-        'unlock': 0,
-        'imageAsset': 'assets/app_icon/icon_cosmic_galaxy.png'
-      },
-      {
-        'key': 'icon_aurora',
-        'name': 'Aurora',
-        'unlock': 0,
-        'imageAsset': 'assets/app_icon/icon_aurora.png'
-      },
-      {
-        'key': 'icon_diamond',
-        'name': 'Diamond',
-        'unlock': 1,
-        'imageAsset': 'assets/app_icon/icon_diamond.png'
-      },
-      {
-        'key': 'icon_electric_plasma',
-        'name': 'Electric Plasma',
-        'unlock': 2,
-        'imageAsset': 'assets/app_icon/icon_electric_plasma.png'
-      },
-      {
-        'key': 'icon_emerald_energy',
-        'name': 'Emerald Energy',
-        'unlock': 3,
-        'imageAsset': 'assets/app_icon/icon_emerald_energy.png'
-      },
-      {
-        'key': 'icon_gold_luxury',
-        'name': 'Gold Luxury',
-        'unlock': 4,
-        'imageAsset': 'assets/app_icon/icon_gold_luxury.png'
-      },
-      {
-        'key': 'icon_holographic_crystal',
-        'name': 'Holo Crystal',
-        'unlock': 5,
-        'imageAsset': 'assets/app_icon/icon_holographic_crystal.png'
-      },
-      {
-        'key': 'icon_ice_crystal',
-        'name': 'Ice Crystal',
-        'unlock': 6,
-        'imageAsset': 'assets/app_icon/icon_ice_crystal.png'
-      },
-      {
-        'key': 'icon_jelly_glass',
-        'name': 'Jelly Glass',
-        'unlock': 7,
-        'imageAsset': 'assets/app_icon/icon_jelly_glass.png'
-      },
-      {
-        'key': 'icon_liquid_chrome',
-        'name': 'Liquid Chrome',
-        'unlock': 8,
-        'imageAsset': 'assets/app_icon/icon_liquid_chrome.png'
-      },
-      {
-        'key': 'icon_liquid_glass',
-        'name': 'Liquid Glass',
-        'unlock': 9,
-        'imageAsset': 'assets/app_icon/icon_liquid_glass.png'
-      },
-      {
-        'key': 'icon_marble',
-        'name': 'Marble',
-        'unlock': 10,
-        'imageAsset': 'assets/app_icon/icon_marble.png'
-      },
-      {
-        'key': 'icon_molten_lava',
-        'name': 'Molten Lava',
-        'unlock': 11,
-        'imageAsset': 'assets/app_icon/icon_molten_lava.png'
-      },
-      {
-        'key': 'icon_neon_glow',
-        'name': 'Neon Glow',
-        'unlock': 12,
-        'imageAsset': 'assets/app_icon/icon_neon_glow.png'
-      },
-      {
-        'key': 'icon_obsidian_glass',
-        'name': 'Obsidian Glass',
-        'unlock': 13,
-        'imageAsset': 'assets/app_icon/icon_obsidian_glass.png'
-      },
-      {
-        'key': 'icon_prism_glass',
-        'name': 'Prism Glass',
-        'unlock': 14,
-        'imageAsset': 'assets/app_icon/icon_prism_glass.png'
-      },
-      {
-        'key': 'icon_rose_gold',
-        'name': 'Rose Gold',
-        'unlock': 15,
-        'imageAsset': 'assets/app_icon/icon_rose_gold.png'
-      },
-      {
-        'key': 'icon_ruby_crystal',
-        'name': 'Ruby Crystal',
-        'unlock': 16,
-        'imageAsset': 'assets/app_icon/icon_ruby_crystal.png'
-      },
-      {
-        'key': 'icon_titanium',
-        'name': 'Titanium',
-        'unlock': 18,
-        'imageAsset': 'assets/app_icon/icon_titanium.png'
-      },
-    ];
+    final icons = kAppIconCatalog;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -447,56 +265,7 @@ class _PersonalizationHubPageState extends State<PersonalizationHubPage>
   // ──────────────────────────────────────────────────────────
   Widget _buildProfileFramesTab(BuildContext context,
       PersonalizationProvider provider, bool isDarkMode, bool hasSub) {
-    final frames = [
-      {
-        'key': 'frame_none',
-        'name': 'No Frame',
-        'unlock': 0,
-        'icon': Icons.account_circle_rounded
-      },
-      {
-        'key': 'frame_gold_vip',
-        'name': 'Gold VIP',
-        'unlock': 0,
-        'imageAsset': 'assets/frame_gold_vip.png'
-      },
-      {
-        'key': 'frame_neon_v2',
-        'name': 'Neon Pulse',
-        'unlock': 0,
-        'imageAsset': 'assets/frame_neon_v2.png'
-      },
-      {
-        'key': 'frame_aurora',
-        'name': 'Aurora',
-        'unlock': 0,
-        'imageAsset': 'assets/frame_aurora.png'
-      },
-      {
-        'key': 'frame_galaxy',
-        'name': 'Galaxy',
-        'unlock': 0,
-        'imageAsset': 'assets/frame_galaxy.png'
-      },
-      {
-        'key': 'frame_glossy',
-        'name': 'Glossy',
-        'unlock': 0,
-        'imageAsset': 'assets/frame_glossy.png'
-      },
-      {
-        'key': 'frame_metal_fire',
-        'name': 'Metal Fire',
-        'unlock': 0,
-        'imageAsset': 'assets/frame_metal_fire.png'
-      },
-      {
-        'key': 'frame_fifa',
-        'name': 'FIFA',
-        'unlock': 0,
-        'imageAsset': 'assets/frame_fifa.png'
-      },
-    ];
+    final frames = kProfileFrameCatalog;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -504,6 +273,7 @@ class _PersonalizationHubPageState extends State<PersonalizationHubPage>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildCurrentlyActiveFrame(
+            context,
             provider.personalization?.activeProfileFrame ?? 'frame_none',
             frames,
             isDarkMode,
@@ -676,6 +446,7 @@ class _PersonalizationHubPageState extends State<PersonalizationHubPage>
   }
 
   Widget _buildCurrentlyActiveFrame(
+    BuildContext context,
     String activeKey,
     List<Map<String, dynamic>> items,
     bool isDarkMode,
@@ -1092,4 +863,5 @@ class _PersonalizationHubPageState extends State<PersonalizationHubPage>
       ),
     );
   }
+
 }

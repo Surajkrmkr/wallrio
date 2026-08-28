@@ -47,7 +47,7 @@ class PremiumCollectionCard extends StatelessWidget {
     final hasAccess = _hasAccessToCollection(context);
     final unlockPrice = hasAccess ? null : _unlockPrice(context);
     final walls = collection.walls ?? [];
-    final sheetColor = isDarkMode ? const Color(0xFF1E1E1E) : const Color(0xFFF2F2F7);
+    final sheetColor = context.appColors.card;
     final double stackHeight = isTablet ? 270.0 : 320.0;
 
     return GestureDetector(

@@ -87,6 +87,13 @@ android {
 
 dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
+    // Home-screen widget support: native WorkManager refresh job + FileProvider
+    // for serving cached widget thumbnails to RemoteViews without spinning up
+    // the Flutter engine. No Gson/Retrofit/OkHttp added on purpose (org.json +
+    // HttpURLConnection are used instead) to keep this addition minimal.
+    implementation("androidx.work:work-runtime-ktx:2.9.1")
+    implementation("androidx.core:core-ktx:1.13.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
     // ... other dependencies
 }
 

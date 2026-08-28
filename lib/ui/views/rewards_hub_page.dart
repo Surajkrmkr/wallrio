@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallrio/provider/progression_provider.dart';
 import 'package:wallrio/services/theme_data.dart';
+import 'package:wallrio/services/app_theme_tokens.dart';
 import 'package:wallrio/ui/widgets/export.dart';
 import 'package:wallrio/provider/ads.dart';
 import 'package:share_plus/share_plus.dart';
@@ -44,7 +45,7 @@ class RewardsHubPage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildDiamondBalanceCard(progression.diamondsBalance, isDarkMode),
+                        _buildDiamondBalanceCard(context, progression.diamondsBalance, isDarkMode),
                         const SizedBox(height: 12),
                         _buildDataWarning(isDarkMode),
                         const SizedBox(height: 24),
@@ -215,24 +216,25 @@ class RewardsHubPage extends StatelessWidget {
     );
   }
 
-  Widget _buildDiamondBalanceCard(int balance, bool isDarkMode) {
+  Widget _buildDiamondBalanceCard(BuildContext context, int balance, bool isDarkMode) {
+    final accent = context.appColors.accent;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(28),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            const Color(0xFF37C3A3).withValues(alpha: 0.15),
-            const Color(0xFF37C3A3).withValues(alpha: 0.05),
+            accent.withValues(alpha: 0.15),
+            accent.withValues(alpha: 0.05),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(32),
-        border: Border.all(color: const Color(0xFF37C3A3).withValues(alpha: 0.3), width: 1.5),
+        border: Border.all(color: accent.withValues(alpha: 0.3), width: 1.5),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF37C3A3).withValues(alpha: 0.1),
+            color: accent.withValues(alpha: 0.1),
             blurRadius: 30,
             offset: const Offset(0, 10),
           )
