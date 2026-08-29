@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:auto_start_flutter/auto_start_flutter.dart';
-import 'package:wallrio/services/theme_data.dart';
+import 'package:wallrio/services/app_theme_tokens.dart';
 import 'package:wallrio/services/packages/export.dart';
 import 'package:wallrio/ui/widgets/export.dart';
 
@@ -61,7 +61,7 @@ class _BackgroundReliabilityDialogState extends State<BackgroundReliabilityDialo
   Widget build(BuildContext context) {
     
     if (_isLoading) {
-      return const Center(child: CircularProgressIndicator(color: bgDarkAccentColor));
+      return Center(child: CircularProgressIndicator(color: context.appColors.accent));
     }
 
     return SimpleDialog(
@@ -74,7 +74,7 @@ class _BackgroundReliabilityDialogState extends State<BackgroundReliabilityDialo
       ),
       contentPadding: const EdgeInsets.all(20),
       children: [
-        Icon(Icons.bolt_rounded, size: 54, color: bgDarkAccentColor),
+        Icon(Icons.bolt_rounded, size: 54, color: context.appColors.accent),
         const SizedBox(height: 16),
         Text(
           'Wallpapers change most reliably when these system settings are adjusted:',
@@ -132,12 +132,12 @@ class _BackgroundReliabilityDialogState extends State<BackgroundReliabilityDialo
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: isCompleted 
-              ? bgDarkAccentColor.withValues(alpha: 0.05) 
+          color: isCompleted
+              ? context.appColors.accent.withValues(alpha: 0.05)
               : (isDarkMode ? Colors.white.withValues(alpha: 0.05) : Colors.black.withValues(alpha: 0.05)),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isCompleted ? bgDarkAccentColor.withValues(alpha: 0.2) : Colors.transparent,
+            color: isCompleted ? context.appColors.accent.withValues(alpha: 0.2) : Colors.transparent,
           ),
         ),
         child: Row(
@@ -146,7 +146,7 @@ class _BackgroundReliabilityDialogState extends State<BackgroundReliabilityDialo
               width: 32,
               height: 32,
               decoration: BoxDecoration(
-                color: isCompleted ? bgDarkAccentColor : (isDarkMode ? Colors.white.withValues(alpha: 0.1) : Colors.black.withValues(alpha: 0.1)),
+                color: isCompleted ? context.appColors.accent : (isDarkMode ? Colors.white.withValues(alpha: 0.1) : Colors.black.withValues(alpha: 0.1)),
                 shape: BoxShape.circle,
               ),
               child: Icon(
@@ -163,8 +163,8 @@ class _BackgroundReliabilityDialogState extends State<BackgroundReliabilityDialo
                   Text(
                     title,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontSize: 15, 
-                      color: isCompleted ? bgDarkAccentColor : null,
+                      fontSize: 15,
+                      color: isCompleted ? context.appColors.accent : null,
                     ),
                   ),
                   const SizedBox(height: 2),

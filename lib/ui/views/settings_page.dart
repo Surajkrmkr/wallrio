@@ -259,7 +259,7 @@ class SettingsPage extends StatelessWidget {
           ),
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-          leading: _tileIcon(Icons.person_outline_rounded),
+          leading: _tileIcon(context, Icons.person_outline_rounded),
           title: Text('Signed in as Guest',
               style: Theme.of(context).textTheme.titleMedium),
           subtitle: Text('Tap to sign in & sync your data',
@@ -267,7 +267,7 @@ class SettingsPage extends StatelessWidget {
           trailing: Container(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
             decoration: BoxDecoration(
-              color: bgDarkAccentColor,
+              color: context.appColors.accent,
               borderRadius: BorderRadius.circular(20),
             ),
             child: const Text(
@@ -342,7 +342,7 @@ class SettingsPage extends StatelessWidget {
               },
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-              leading: _tileIcon(Icons.logout_rounded),
+              leading: _tileIcon(context, Icons.logout_rounded),
               title: Text('Log Out',
                   style: Theme.of(context).textTheme.titleMedium),
               subtitle: Text('Sign out of your account',
@@ -850,7 +850,7 @@ class SettingsPage extends StatelessWidget {
           width: 4,
           height: 18,
           decoration: BoxDecoration(
-            color: bgDarkAccentColor,
+            color: context.appColors.accent,
             borderRadius: BorderRadius.circular(4),
           ),
         ),
@@ -887,7 +887,7 @@ class SettingsPage extends StatelessWidget {
 
         if (Platform.isIOS) {
           return ListTile(
-            leading: _tileIcon(Icons.dark_mode_rounded),
+            leading: _tileIcon(context, Icons.dark_mode_rounded),
             title: const Text('Dark Mode'),
             subtitle: Text(
               'Switch to dark theme',
@@ -896,7 +896,7 @@ class SettingsPage extends StatelessWidget {
             trailing: CNSwitch(
               value: isDark,
               onChanged: onChanged,
-              color: bgDarkAccentColor,
+              color: context.appColors.accent,
             ),
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -907,7 +907,7 @@ class SettingsPage extends StatelessWidget {
         return SwitchListTile(
           value: isDark,
           onChanged: onChanged,
-          secondary: _tileIcon(Icons.dark_mode_rounded),
+          secondary: _tileIcon(context, Icons.dark_mode_rounded),
           title: const Text('Dark Mode'),
           subtitle: Text(
             'Switch to dark theme',
@@ -930,7 +930,7 @@ class SettingsPage extends StatelessWidget {
         : (mode == 'datasaver' ? 'Data Saver (Thumbnails only)' : 'Auto (Balanced)');
 
     return ListTile(
-      leading: _tileIcon(Icons.video_settings_rounded),
+      leading: _tileIcon(context, Icons.video_settings_rounded),
       title: const Text('Live Preview Quality'),
       subtitle: Text(modeLabel, style: Theme.of(context).textTheme.labelSmall),
       onTap: () {
@@ -987,7 +987,7 @@ class SettingsPage extends StatelessWidget {
       onTap: onTap,
       contentPadding:
           const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      leading: _tileIcon(icon),
+      leading: _tileIcon(context, icon),
       title: Text(title, style: Theme.of(context).textTheme.titleMedium),
       subtitle:
           Text(subtitle, style: Theme.of(context).textTheme.labelSmall),
@@ -1002,14 +1002,14 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
-  Widget _tileIcon(IconData icon) {
+  Widget _tileIcon(BuildContext context, IconData icon) {
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: bgDarkAccentColor.withValues(alpha: 0.15),
+        color: context.appColors.accent.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(10),
       ),
-      child: Icon(icon, color: bgDarkAccentColor, size: 20),
+      child: Icon(icon, color: context.appColors.accent, size: 20),
     );
   }
 
@@ -1031,10 +1031,10 @@ class SettingsPage extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: bgDarkAccentColor.withValues(alpha: 0.12),
+                    color: context.appColors.accent.withValues(alpha: 0.12),
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(icon, color: bgDarkAccentColor, size: 24),
+                  child: Icon(icon, color: context.appColors.accent, size: 24),
                 ),
                 const SizedBox(height: 6),
                 Text(

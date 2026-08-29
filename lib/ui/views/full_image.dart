@@ -369,7 +369,7 @@ class _FullImageState extends State<FullImage> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 14, color: bgDarkAccentColor),
+            Icon(icon, size: 14, color: context.appColors.accent),
             const SizedBox(width: 6),
             Text(
               label,
@@ -420,7 +420,7 @@ class _FullImageState extends State<FullImage> {
         children: [
           Row(
             children: [
-              const Icon(Icons.palette_outlined, size: 14, color: bgDarkAccentColor),
+              Icon(Icons.palette_outlined, size: 14, color: context.appColors.accent),
               const SizedBox(width: 6),
               Text(
                 'Color palette',
@@ -475,7 +475,7 @@ class _FullImageState extends State<FullImage> {
           width: 4,
           height: 16,
           decoration: BoxDecoration(
-            color: bgDarkAccentColor,
+            color: context.appColors.accent,
             borderRadius: BorderRadius.circular(4),
           ),
         ),
@@ -500,12 +500,12 @@ class _FullImageState extends State<FullImage> {
                 ),
               ),
             ),
-            child: const Text(
+            child: Text(
               'View all',
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
-                color: bgDarkAccentColor,
+                color: context.appColors.accent,
               ),
             ),
           ),
@@ -671,7 +671,7 @@ class _FullImageState extends State<FullImage> {
     final downloadButton = Expanded(
       child: FilledButton(
         style: FilledButton.styleFrom(
-          backgroundColor: bgDarkAccentColor,
+          backgroundColor: context.appColors.accent,
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           padding: EdgeInsets.zero,
@@ -724,8 +724,8 @@ class _FullImageState extends State<FullImage> {
         style: FilledButton.styleFrom(
           backgroundColor: isDarkMode
               ? Colors.white.withValues(alpha: 0.15)
-              : bgDarkAccentColor.withValues(alpha: 0.15),
-          foregroundColor: isDarkMode ? Colors.white : bgDarkAccentColor,
+              : context.appColors.accent.withValues(alpha: 0.15),
+          foregroundColor: isDarkMode ? Colors.white : context.appColors.accent,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           padding: EdgeInsets.zero,
         ),
@@ -738,7 +738,7 @@ class _FullImageState extends State<FullImage> {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.wallpaper_rounded, size: 18, color: isDarkMode ? Colors.white : bgDarkAccentColor),
+            Icon(Icons.wallpaper_rounded, size: 18, color: isDarkMode ? Colors.white : context.appColors.accent),
             const SizedBox(width: 6),
             Flexible(
               child: Text(
@@ -746,7 +746,7 @@ class _FullImageState extends State<FullImage> {
                 style: TextStyle(
                   fontWeight: FontWeight.w900,
                   fontSize: 14,
-                  color: isDarkMode ? Colors.white : bgDarkAccentColor,
+                  color: isDarkMode ? Colors.white : context.appColors.accent,
                 ),
                 overflow: TextOverflow.ellipsis,
               ),

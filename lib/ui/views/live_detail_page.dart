@@ -174,13 +174,13 @@ class _LiveDetailPageState extends State<LiveDetailPage> {
                 children: [
                   CNImage(imageUrl: widget.wall.thumbnail, isOriginalImg: true),
                   if (!_hasVideoError)
-                    const Center(
+                    Center(
                       child: SizedBox(
                         width: 32,
                         height: 32,
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
-                          color: bgDarkAccentColor,
+                          color: context.appColors.accent,
                         ),
                       ),
                     ),
@@ -344,7 +344,7 @@ class _LiveDetailPageState extends State<LiveDetailPage> {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                     decoration: BoxDecoration(
-                      color: bgDarkAccentColor,
+                      color: context.appColors.accent,
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: const Text(
@@ -479,7 +479,7 @@ class _LiveDetailPageState extends State<LiveDetailPage> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 14, color: bgDarkAccentColor),
+            Icon(icon, size: 14, color: context.appColors.accent),
             const SizedBox(width: 6),
             Text(
               label,
@@ -520,7 +520,7 @@ class _LiveDetailPageState extends State<LiveDetailPage> {
         children: [
           Row(
             children: [
-              const Icon(Icons.palette_outlined, size: 14, color: bgDarkAccentColor),
+              Icon(Icons.palette_outlined, size: 14, color: context.appColors.accent),
               const SizedBox(width: 6),
               Text(
                 'Color palette',
@@ -574,7 +574,7 @@ class _LiveDetailPageState extends State<LiveDetailPage> {
           width: 4,
           height: 16,
           decoration: BoxDecoration(
-            color: bgDarkAccentColor,
+            color: context.appColors.accent,
             borderRadius: BorderRadius.circular(4),
           ),
         ),
@@ -761,7 +761,7 @@ class _LiveDetailPageState extends State<LiveDetailPage> {
           Expanded(
             child: FilledButton(
               style: FilledButton.styleFrom(
-                backgroundColor: bgDarkAccentColor,
+                backgroundColor: context.appColors.accent,
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                 padding: EdgeInsets.zero,
@@ -788,8 +788,8 @@ class _LiveDetailPageState extends State<LiveDetailPage> {
               style: FilledButton.styleFrom(
                 backgroundColor: isDarkMode
                     ? Colors.white.withValues(alpha: 0.15)
-                    : bgDarkAccentColor.withValues(alpha: 0.15),
-                foregroundColor: isDarkMode ? Colors.white : bgDarkAccentColor,
+                    : context.appColors.accent.withValues(alpha: 0.15),
+                foregroundColor: isDarkMode ? Colors.white : context.appColors.accent,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                 padding: EdgeInsets.zero,
               ),
@@ -799,7 +799,7 @@ class _LiveDetailPageState extends State<LiveDetailPage> {
                 style: TextStyle(
                   fontWeight: FontWeight.w900,
                   fontSize: 13,
-                  color: isDarkMode ? Colors.white : bgDarkAccentColor,
+                  color: isDarkMode ? Colors.white : context.appColors.accent,
                 ),
               ),
             ),
@@ -815,7 +815,7 @@ class _LiveDetailPageState extends State<LiveDetailPage> {
     final downloadButton = Expanded(
       child: FilledButton(
         style: FilledButton.styleFrom(
-          backgroundColor: bgDarkAccentColor,
+          backgroundColor: context.appColors.accent,
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           padding: EdgeInsets.zero,
@@ -859,8 +859,8 @@ class _LiveDetailPageState extends State<LiveDetailPage> {
         style: FilledButton.styleFrom(
           backgroundColor: isDarkMode
               ? Colors.white.withValues(alpha: 0.15)
-              : bgDarkAccentColor.withValues(alpha: 0.15),
-          foregroundColor: isDarkMode ? Colors.white : bgDarkAccentColor,
+              : context.appColors.accent.withValues(alpha: 0.15),
+          foregroundColor: isDarkMode ? Colors.white : context.appColors.accent,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           padding: EdgeInsets.zero,
         ),
@@ -868,14 +868,14 @@ class _LiveDetailPageState extends State<LiveDetailPage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.wallpaper_rounded, size: 18, color: isDarkMode ? Colors.white : bgDarkAccentColor),
+            Icon(Icons.wallpaper_rounded, size: 18, color: isDarkMode ? Colors.white : context.appColors.accent),
             const SizedBox(width: 6),
             Text(
               Platform.isAndroid ? "Apply" : "Share",
               style: TextStyle(
                 fontWeight: FontWeight.w900,
                 fontSize: 14,
-                color: isDarkMode ? Colors.white : bgDarkAccentColor,
+                color: isDarkMode ? Colors.white : context.appColors.accent,
               ),
             ),
           ],

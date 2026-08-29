@@ -103,7 +103,7 @@ class PrimaryBtnWidget extends StatelessWidget {
                             widthFactor: progress == null ? 0 : value,
                             child: Container(
                               height: 50,
-                              color: bgDarkAccentColor.withValues(alpha: 0.9),
+                              color: context.appColors.accent.withValues(alpha: 0.9),
                             ),
                           ),
                         ),
@@ -121,7 +121,7 @@ class PrimaryBtnWidget extends StatelessWidget {
                             minHeight: 3,
                             backgroundColor: Colors.transparent,
                             valueColor: AlwaysStoppedAnimation<Color>(
-                                bgDarkAccentColor),
+                                context.appColors.accent),
                           ),
                         ),
                       ),

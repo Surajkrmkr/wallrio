@@ -26,7 +26,7 @@ class RewardsHubPage extends StatelessWidget {
           builder: (context, progressionProvider, _) {
             final progression = progressionProvider.progression;
             if (progressionProvider.isLoading || progression == null) {
-              return const Center(child: CircularProgressIndicator(color: bgDarkAccentColor));
+              return Center(child: CircularProgressIndicator(color: context.appColors.accent));
             }
 
             return CustomScrollView(
@@ -56,7 +56,7 @@ class RewardsHubPage extends StatelessWidget {
                         _buildQuestsList(context, progressionProvider, isDarkMode),
                         if (progression.dailyShares >= 2) ...[
                           const SizedBox(height: 16),
-                          _buildShareLimitWarning(isDarkMode),
+                          _buildShareLimitWarning(context, isDarkMode),
                         ],
                         const SizedBox(height: 32),
                         _buildStreakSection(context, progressionProvider, isDarkMode),
@@ -117,9 +117,9 @@ class RewardsHubPage extends StatelessWidget {
                       width: 42,
                       height: 42,
                       decoration: BoxDecoration(
-                        color: isCompleted ? bgDarkAccentColor : (isDarkMode ? Colors.white.withValues(alpha: 0.05) : Colors.black.withValues(alpha: 0.05)),
+                        color: isCompleted ? context.appColors.accent : (isDarkMode ? Colors.white.withValues(alpha: 0.05) : Colors.black.withValues(alpha: 0.05)),
                         shape: BoxShape.circle,
-                        boxShadow: isCompleted ? [BoxShadow(color: bgDarkAccentColor.withValues(alpha: 0.3), blurRadius: 10, spreadRadius: 1)] : null,
+                        boxShadow: isCompleted ? [BoxShadow(color: context.appColors.accent.withValues(alpha: 0.3), blurRadius: 10, spreadRadius: 1)] : null,
                       ),
                       child: Icon(m['icon'], color: isCompleted ? Colors.white : Colors.grey, size: 20),
                     ),
@@ -127,7 +127,7 @@ class RewardsHubPage extends StatelessWidget {
                       Expanded(
                         child: Container(
                           width: 2,
-                          color: isCompleted ? bgDarkAccentColor.withValues(alpha: 0.5) : Colors.grey.withValues(alpha: 0.2),
+                          color: isCompleted ? context.appColors.accent.withValues(alpha: 0.5) : Colors.grey.withValues(alpha: 0.2),
                         ),
                       ),
                   ],
@@ -157,7 +157,7 @@ class RewardsHubPage extends StatelessWidget {
                   ),
                 ),
                 if (isCompleted)
-                  const Icon(Icons.check_circle_rounded, color: bgDarkAccentColor, size: 20)
+                  Icon(Icons.check_circle_rounded, color: context.appColors.accent, size: 20)
                 else
                    Text('LOCKED', style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: Colors.grey.withValues(alpha: 0.5), letterSpacing: 1)),
               ],
@@ -192,23 +192,23 @@ class RewardsHubPage extends StatelessWidget {
     );
   }
 
-  Widget _buildShareLimitWarning(bool isDarkMode) {
+  Widget _buildShareLimitWarning(BuildContext context, bool isDarkMode) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: bgDarkAccentColor.withValues(alpha: 0.1),
+        color: context.appColors.accent.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: bgDarkAccentColor.withValues(alpha: 0.2)),
+        border: Border.all(color: context.appColors.accent.withValues(alpha: 0.2)),
       ),
-      child: const Row(
+      child: Row(
         children: [
-          Icon(Icons.info_outline, size: 20, color: bgDarkAccentColor),
-          SizedBox(width: 12),
+          Icon(Icons.info_outline, size: 20, color: context.appColors.accent),
+          const SizedBox(width: 12),
           Expanded(
             child: Text(
               "You've reached today's sharing reward limit. Come back tomorrow to earn more Diamonds.",
-              style: TextStyle(fontSize: 12, color: bgDarkAccentColor, fontWeight: FontWeight.w600, height: 1.4),
+              style: TextStyle(fontSize: 12, color: context.appColors.accent, fontWeight: FontWeight.w600, height: 1.4),
             ),
           ),
         ],
@@ -242,9 +242,9 @@ class RewardsHubPage extends StatelessWidget {
       ),
       child: Column(
         children: [
-          const Text(
+          Text(
             'DIAMOND BALANCE',
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, letterSpacing: 2, color: bgDarkAccentColor),
+            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, letterSpacing: 2, color: accent),
           ),
           const SizedBox(height: 16),
           Row(
@@ -302,15 +302,15 @@ class RewardsHubPage extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
-                  color: bgDarkAccentColor.withValues(alpha: 0.15),
+                  color: context.appColors.accent.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
                   costStr,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 10.5,
                     fontWeight: FontWeight.w900,
-                    color: bgDarkAccentColor,
+                    color: context.appColors.accent,
                   ),
                 ),
               ),
@@ -363,9 +363,9 @@ class RewardsHubPage extends StatelessWidget {
                         width: 36,
                         height: 36,
                         decoration: BoxDecoration(
-                          color: isPassed ? bgDarkAccentColor : (isDarkMode ? Colors.white.withValues(alpha: 0.05) : Colors.black.withValues(alpha: 0.05)),
+                          color: isPassed ? context.appColors.accent : (isDarkMode ? Colors.white.withValues(alpha: 0.05) : Colors.black.withValues(alpha: 0.05)),
                           shape: BoxShape.circle,
-                          border: isCurrent && !checkedIn ? Border.all(color: bgDarkAccentColor, width: 2) : null,
+                          border: isCurrent && !checkedIn ? Border.all(color: context.appColors.accent, width: 2) : null,
                         ),
                         child: Center(
                           child: isPassed 
@@ -388,16 +388,16 @@ class RewardsHubPage extends StatelessWidget {
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   decoration: BoxDecoration(
-                    color: bgDarkAccentColor.withValues(alpha: 0.1),
+                    color: context.appColors.accent.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  child: const Center(
+                  child: Center(
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.check_circle_rounded, color: bgDarkAccentColor, size: 18),
-                        SizedBox(width: 8),
-                        Text('CHECKED IN', style: TextStyle(color: bgDarkAccentColor, fontWeight: FontWeight.w900, fontSize: 13, letterSpacing: 1)),
+                        Icon(Icons.check_circle_rounded, color: context.appColors.accent, size: 18),
+                        const SizedBox(width: 8),
+                        Text('CHECKED IN', style: TextStyle(color: context.appColors.accent, fontWeight: FontWeight.w900, fontSize: 13, letterSpacing: 1)),
                       ],
                     ),
                   ),
@@ -523,10 +523,10 @@ class RewardsHubPage extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: isActionable ? bgDarkAccentColor.withValues(alpha: 0.1) : Colors.grey.withValues(alpha: 0.1),
+                      color: isActionable ? context.appColors.accent.withValues(alpha: 0.1) : Colors.grey.withValues(alpha: 0.1),
                       shape: BoxShape.circle,
                     ),
-                    child: Icon(icon, size: 22, color: isActionable ? bgDarkAccentColor : Colors.grey),
+                    child: Icon(icon, size: 22, color: isActionable ? context.appColors.accent : Colors.grey),
                   ),
                   if (isActionable)
                     const Icon(Icons.arrow_outward_rounded, size: 14, color: Colors.grey),
@@ -595,10 +595,10 @@ class RewardsHubPage extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 18,
-                  backgroundColor: tx.isCredit ? bgDarkAccentColor.withValues(alpha: 0.1) : Colors.red.withValues(alpha: 0.1),
+                  backgroundColor: tx.isCredit ? context.appColors.accent.withValues(alpha: 0.1) : Colors.red.withValues(alpha: 0.1),
                   child: Icon(
                     tx.isCredit ? Icons.add_rounded : Icons.remove_rounded,
-                    color: tx.isCredit ? bgDarkAccentColor : Colors.redAccent,
+                    color: tx.isCredit ? context.appColors.accent : Colors.redAccent,
                     size: 20,
                   ),
                 ),
@@ -618,7 +618,7 @@ class RewardsHubPage extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 14, 
                     fontWeight: FontWeight.w900,
-                    color: tx.isCredit ? bgDarkAccentColor : Colors.redAccent,
+                    color: tx.isCredit ? context.appColors.accent : Colors.redAccent,
                   ),
                 ),
               ],
@@ -638,7 +638,7 @@ class RewardsHubPage extends StatelessWidget {
             width: 4,
             height: 18,
             decoration: BoxDecoration(
-              color: bgDarkAccentColor,
+              color: context.appColors.accent,
               borderRadius: BorderRadius.circular(4),
             ),
           ),

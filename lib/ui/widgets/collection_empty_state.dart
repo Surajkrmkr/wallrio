@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wallrio/services/theme_data.dart';
+import 'package:wallrio/services/app_theme_tokens.dart';
 
 /// Empty/error state for the Collections page.
 class CollectionEmptyState extends StatelessWidget {
@@ -22,12 +23,12 @@ class CollectionEmptyState extends StatelessWidget {
               height: 88,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: bgDarkAccentColor.withValues(alpha: 0.12),
+                color: context.appColors.accent.withValues(alpha: 0.12),
               ),
               child: Icon(
                 Icons.collections_bookmark_rounded,
                 size: 38,
-                color: bgDarkAccentColor,
+                color: context.appColors.accent,
               ),
             ),
             const SizedBox(height: 20),

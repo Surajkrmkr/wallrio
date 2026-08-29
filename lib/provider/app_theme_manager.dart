@@ -188,7 +188,9 @@ class AppThemeManager extends ChangeNotifier {
   /// in the spec.
   ThemeData buildThemeData({required BuildContext context, required bool isDarkTheme}) {
     final base = WallRioThemeData.getLightThemeData(
-        context: context, isDarkTheme: isDarkTheme);
+        context: context,
+        isDarkTheme: isDarkTheme,
+        accentColor: _effectivePrimary);
 
     if (!isDarkTheme) {
       // Light mode: keep WallRioThemeData's improved light palette, but
@@ -233,6 +235,24 @@ class AppThemeManager extends ChangeNotifier {
       scaffoldBackgroundColor: bgSet.background,
       colorScheme:
           ColorScheme.fromSeed(seedColor: palette.primary, brightness: Brightness.dark),
+      // `copyWith` on ThemeData does not reach into already-built sub-themes,
+      // so the app bar/dialog/bottom sheet/nav bar would otherwise stay
+      // pinned to WallRioThemeData's base black regardless of the selected
+      // background style. Re-derive them from the same BackgroundColorSet
+      // that already drives scaffoldBackgroundColor/AppSemanticColors.
+      appBarTheme: base.appBarTheme.copyWith(
+        backgroundColor: bgSet.background,
+        surfaceTintColor: bgSet.background,
+      ),
+      bottomSheetTheme: base.bottomSheetTheme.copyWith(
+        backgroundColor: bgSet.bottomSheet,
+      ),
+      dialogTheme: base.dialogTheme.copyWith(
+        backgroundColor: bgSet.dialog,
+      ),
+      navigationBarTheme: base.navigationBarTheme.copyWith(
+        backgroundColor: bgSet.navBar,
+      ),
       extensions: [
         AppSemanticColors(
           background: bgSet.background,

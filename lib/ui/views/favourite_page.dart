@@ -65,12 +65,12 @@ class FavouritePage extends StatelessWidget {
                 width: 84,
                 height: 84,
                 decoration: BoxDecoration(
-                  color: bgDarkAccentColor.withValues(alpha: 0.15),
+                  color: context.appColors.accent.withValues(alpha: 0.15),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.favorite_rounded,
-                  color: bgDarkAccentColor,
+                  color: context.appColors.accent,
                   size: 40,
                 ),
               ),
@@ -105,10 +105,10 @@ class FavouritePage extends StatelessWidget {
                   ),
                   style: ElevatedButton.styleFrom(
                     minimumSize: Size.zero,
-                    backgroundColor: bgDarkAccentColor,
+                    backgroundColor: context.appColors.accent,
                     foregroundColor: Colors.white,
                     elevation: 4,
-                    shadowColor: bgDarkAccentColor.withValues(alpha: 0.4),
+                    shadowColor: context.appColors.accent.withValues(alpha: 0.4),
                     padding: const EdgeInsets.symmetric(horizontal: 28),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(24),

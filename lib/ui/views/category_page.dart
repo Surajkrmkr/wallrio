@@ -116,7 +116,7 @@ class CategoryPage extends StatelessWidget {
             width: 4,
             height: 22,
             decoration: BoxDecoration(
-              color: bgDarkAccentColor,
+              color: context.appColors.accent,
               borderRadius: BorderRadius.circular(4),
             ),
           ),
@@ -132,13 +132,13 @@ class CategoryPage extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
             decoration: BoxDecoration(
-              color: bgDarkAccentColor.withValues(alpha: 0.15),
+              color: context.appColors.accent.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
               '${walls.length}',
-              style: const TextStyle(
-                color: bgDarkAccentColor,
+              style: TextStyle(
+                color: context.appColors.accent,
                 fontSize: 11,
                 fontWeight: FontWeight.w700,
               ),
@@ -157,29 +157,29 @@ class CategoryPage extends StatelessWidget {
               padding:
                   const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
               decoration: BoxDecoration(
-                color: bgDarkAccentColor.withValues(alpha: 0.12),
+                color: context.appColors.accent.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                  color: bgDarkAccentColor.withValues(alpha: 0.3),
+                  color: context.appColors.accent.withValues(alpha: 0.3),
                   width: 1,
                 ),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text(
+                  Text(
                     'View all',
                     style: TextStyle(
-                      color: bgDarkAccentColor,
+                      color: context.appColors.accent,
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                   const SizedBox(width: 4),
-                  const Icon(
+                  Icon(
                     Icons.arrow_forward_rounded,
                     size: 13,
-                    color: bgDarkAccentColor,
+                    color: context.appColors.accent,
                   ),
                 ],
               ),

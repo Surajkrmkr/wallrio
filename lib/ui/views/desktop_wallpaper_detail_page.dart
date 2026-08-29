@@ -245,18 +245,18 @@ class _DesktopWallpaperDetailPageState extends State<DesktopWallpaperDetailPage>
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
-                    color: bgDarkAccentColor.withValues(alpha: 0.15),
+                    color: context.appColors.accent.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: const Row(
+                  child: Row(
                     children: [
                       Icon(Icons.desktop_windows_rounded,
-                          color: bgDarkAccentColor, size: 13),
-                      SizedBox(width: 5),
+                          color: context.appColors.accent, size: 13),
+                      const SizedBox(width: 5),
                       Text(
                         'DESKTOP',
                         style: TextStyle(
-                          color: bgDarkAccentColor,
+                          color: context.appColors.accent,
                           fontSize: 10,
                           fontWeight: FontWeight.w800,
                           letterSpacing: 0.5,
@@ -379,7 +379,7 @@ class _DesktopWallpaperDetailPageState extends State<DesktopWallpaperDetailPage>
                 padding:
                     const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
                 decoration: BoxDecoration(
-                  color: bgDarkAccentColor,
+                  color: context.appColors.accent,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
@@ -740,7 +740,7 @@ class _DesktopWallpaperDetailPageState extends State<DesktopWallpaperDetailPage>
               child: ElevatedButton.icon(
                 onPressed: () => _showPlusDialog(context),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: bgDarkAccentColor,
+                  backgroundColor: context.appColors.accent,
                   foregroundColor: Colors.white,
                   elevation: 0,
                   padding: const EdgeInsets.symmetric(horizontal: 16),

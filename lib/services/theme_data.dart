@@ -2,7 +2,14 @@ import 'package:flutter/material.dart';
 
 class WallRioThemeData {
   static ThemeData getLightThemeData(
-          {required bool isDarkTheme, required BuildContext context}) =>
+          {required bool isDarkTheme,
+          required BuildContext context,
+          Color? accentColor}) =>
+      _buildThemeData(
+          isDarkTheme: isDarkTheme, accent: accentColor ?? bgDarkAccentColor);
+
+  static ThemeData _buildThemeData(
+          {required bool isDarkTheme, required Color accent}) =>
       ThemeData(
           useMaterial3: true,
           scaffoldBackgroundColor: isDarkTheme ? bgDarkColor : whiteColor,
@@ -18,7 +25,7 @@ class WallRioThemeData {
             labelTextStyle: WidgetStateProperty.resolveWith<TextStyle>(
               (states) {
                 if (states.contains(WidgetState.selected)) {
-                  return TextStyle(color: bgDarkAccentColor, fontSize: 12);
+                  return TextStyle(color: accent, fontSize: 12);
                 }
                 return TextStyle(
                     color: isDarkTheme ? whiteColor : blackColor, fontSize: 12);
@@ -45,7 +52,7 @@ class WallRioThemeData {
             }),
             trackColor: WidgetStateProperty.resolveWith((states) {
               if (states.contains(WidgetState.selected)) {
-                return bgDarkAccentColor;
+                return accent;
               }
               return isDarkTheme ? Colors.grey.shade800 : Colors.grey.shade300;
             }),
@@ -61,7 +68,7 @@ class WallRioThemeData {
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
                 minimumSize: const Size.fromHeight(60),
-                backgroundColor: isDarkTheme ? bgDarkAccentColor : blackColor,
+                backgroundColor: isDarkTheme ? accent : blackColor,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15))),
           ),
@@ -73,7 +80,7 @@ class WallRioThemeData {
           filledButtonTheme: FilledButtonThemeData(
               style: ButtonStyle(
                   backgroundColor: WidgetStateProperty.all(
-                      isDarkTheme ? bgDarkAccentColor : blackColor),
+                      isDarkTheme ? accent : blackColor),
                   foregroundColor: WidgetStateProperty.all(whiteColor))),
           outlinedButtonTheme: OutlinedButtonThemeData(
               style: ButtonStyle(
@@ -107,7 +114,7 @@ class WallRioThemeData {
               bodyLarge: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
               bodyMedium: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
           colorScheme: ColorScheme.fromSeed(
-              seedColor: bgDarkAccentColor,
+              seedColor: accent,
               brightness: isDarkTheme ? Brightness.dark : Brightness.light));
 
   static ThemeData getDarkThemeData() =>

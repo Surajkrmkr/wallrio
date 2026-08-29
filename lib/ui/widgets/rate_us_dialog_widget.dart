@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wallrio/services/theme_data.dart';
+import 'package:wallrio/services/app_theme_tokens.dart';
 
 class RateUsDialog extends StatelessWidget {
   final VoidCallback onRateNow;
@@ -18,7 +19,7 @@ class RateUsDialog extends StatelessWidget {
     final titleColor = isDark ? Colors.white : const Color(0xFF1A1D26);
     final subtitleColor = isDark ? Colors.grey.shade400 : const Color(0xFF3A3D4A);
 
-    final btnBg = isDark ? bgDarkAccentColor : const Color(0xFF191C26);
+    final btnBg = isDark ? context.appColors.accent : const Color(0xFF191C26);
     final btnTextColor = isDark ? Colors.black : Colors.white;
 
     return Dialog(

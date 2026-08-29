@@ -162,7 +162,7 @@ class RemotePopupDialog extends StatelessWidget {
                             }
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: bgDarkAccentColor,
+                            backgroundColor: context.appColors.accent,
                             foregroundColor: Colors.white,
                             elevation: 0,
                             shape: RoundedRectangleBorder(

@@ -92,8 +92,8 @@ class _OnboardingScreen3State extends State<OnboardingScreen3> {
   Widget _buildCategoryGrid(
       BuildContext context, Map<String, List<Walls?>> categories) {
     if (categories.isEmpty) {
-      return const Center(
-        child: CircularProgressIndicator(color: bgDarkAccentColor),
+      return Center(
+        child: CircularProgressIndicator(color: context.appColors.accent),
       );
     }
     final names = categories.keys.toList();
@@ -225,11 +225,11 @@ class _OnboardingScreen3State extends State<OnboardingScreen3> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: isSelected
-                      ? bgDarkAccentColor
+                      ? context.appColors.accent
                       : Colors.black.withValues(alpha: 0.25),
                   border: Border.all(
                     color: isSelected
-                        ? bgDarkAccentColor
+                        ? context.appColors.accent
                         : whiteColor.withValues(alpha: 0.75),
                     width: 1.5,
                   ),

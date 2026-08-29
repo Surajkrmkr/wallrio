@@ -180,7 +180,7 @@ class AdsWidget extends StatefulWidget {
                 height: 50,
                 child: FilledButton.icon(
                   style: FilledButton.styleFrom(
-                    backgroundColor: bgDarkAccentColor,
+                    backgroundColor: context.appColors.accent,
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),

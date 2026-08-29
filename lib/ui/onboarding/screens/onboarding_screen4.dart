@@ -287,7 +287,7 @@ class _OnboardingScreen4State extends State<OnboardingScreen4> {
   Widget _buildFeatureRow(String text) {
     return Row(
       children: [
-        const Icon(Icons.check_rounded, color: bgDarkAccentColor, size: 16),
+        Icon(Icons.check_rounded, color: context.appColors.accent, size: 16),
         const SizedBox(width: 8),
         Expanded(
           child: Text(
@@ -322,10 +322,10 @@ class _OnboardingScreen4State extends State<OnboardingScreen4> {
             duration: const Duration(milliseconds: 200),
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
-              color: isSelected ? bgDarkAccentColor.withValues(alpha: 0.12) : _textColor.withValues(alpha: 0.04),
+              color: isSelected ? context.appColors.accent.withValues(alpha: 0.12) : _textColor.withValues(alpha: 0.04),
               borderRadius: BorderRadius.circular(18),
               border: Border.all(
-                color: isSelected ? bgDarkAccentColor.withValues(alpha: 0.6) : Colors.transparent,
+                color: isSelected ? context.appColors.accent.withValues(alpha: 0.6) : Colors.transparent,
                 width: 1.5,
               ),
             ),
@@ -348,13 +348,13 @@ class _OnboardingScreen4State extends State<OnboardingScreen4> {
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
                             decoration: BoxDecoration(
-                              color: bgDarkAccentColor.withValues(alpha: 0.2),
+                              color: context.appColors.accent.withValues(alpha: 0.2),
                               borderRadius: BorderRadius.circular(6),
                             ),
-                            child: const Text(
+                            child: Text(
                               "LIMITED TIME",
                               style: TextStyle(
-                                color: bgDarkAccentColor,
+                                color: context.appColors.accent,
                                 fontSize: 9,
                                 fontWeight: FontWeight.w800,
                                 letterSpacing: 0.5,
@@ -436,13 +436,13 @@ class _OnboardingScreen4State extends State<OnboardingScreen4> {
               badgeWidget = Container(
                 padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
                 decoration: BoxDecoration(
-                  color: bgDarkAccentColor.withValues(alpha: 0.2),
+                  color: context.appColors.accent.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(6),
                 ),
-                child: const Text(
+                child: Text(
                   "POPULAR",
                   style: TextStyle(
-                    color: bgDarkAccentColor,
+                    color: context.appColors.accent,
                     fontSize: 9,
                     fontWeight: FontWeight.w800,
                     letterSpacing: 0.5,
@@ -467,10 +467,10 @@ class _OnboardingScreen4State extends State<OnboardingScreen4> {
                 margin: const EdgeInsets.only(bottom: 6),
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                 decoration: BoxDecoration(
-                  color: isSelected ? bgDarkAccentColor.withValues(alpha: 0.12) : _textColor.withValues(alpha: 0.04),
+                  color: isSelected ? context.appColors.accent.withValues(alpha: 0.12) : _textColor.withValues(alpha: 0.04),
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                    color: isSelected ? bgDarkAccentColor.withValues(alpha: 0.6) : Colors.transparent,
+                    color: isSelected ? context.appColors.accent.withValues(alpha: 0.6) : Colors.transparent,
                     width: 1.5,
                   ),
                 ),
@@ -567,9 +567,9 @@ class _OnboardingScreen4State extends State<OnboardingScreen4> {
               child: ElevatedButton(
                 onPressed: hasProducts ? _purchase : null,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: bgDarkAccentColor,
+                  backgroundColor: context.appColors.accent,
                   foregroundColor: Colors.white,
-                  disabledBackgroundColor: bgDarkAccentColor.withValues(alpha: 0.5),
+                  disabledBackgroundColor: context.appColors.accent.withValues(alpha: 0.5),
                   elevation: 0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(28),
@@ -609,14 +609,14 @@ class _OnboardingScreen4State extends State<OnboardingScreen4> {
                       minimumSize: Size.zero,
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
-                    child: const Text(
+                    child: Text(
                       "Restore Purchases",
                       style: TextStyle(
-                        color: bgDarkAccentColor,
+                        color: context.appColors.accent,
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
                         decoration: TextDecoration.underline,
-                        decorationColor: bgDarkAccentColor,
+                        decorationColor: context.appColors.accent,
                       ),
                     ),
                   ),
@@ -701,10 +701,10 @@ class _RadioDot extends StatelessWidget {
       height: 20,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: isSelected ? bgDarkAccentColor : Colors.transparent,
+        color: isSelected ? context.appColors.accent : Colors.transparent,
         border: Border.all(
           color: isSelected
-              ? bgDarkAccentColor
+              ? context.appColors.accent
               : (isDark ? Colors.white : Colors.black).withValues(alpha: 0.35),
           width: 2,
         ),
@@ -986,10 +986,10 @@ class _SubscriptionTopAnimatedBannerState
                     ),
                     children: [
                       TextSpan(text: "Wall", style: TextStyle(color: _textColor)),
-                      const TextSpan(
+                      TextSpan(
                         text: "Rio",
                         style: TextStyle(
-                          color: bgDarkAccentColor,
+                          color: context.appColors.accent,
                           fontWeight: FontWeight.w900,
                         ),
                       ),

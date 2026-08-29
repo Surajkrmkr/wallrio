@@ -235,7 +235,7 @@ class _OnboardingScreen2State extends State<OnboardingScreen2>
               style: Theme.of(context)
                   .textTheme
                   .bodyMedium!
-                  .copyWith(color: bgDarkAccentColor, fontSize: 16),
+                  .copyWith(color: context.appColors.accent, fontSize: 16),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 20),

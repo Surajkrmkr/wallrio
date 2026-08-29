@@ -202,9 +202,9 @@ class _CollectionUnlockSheetState extends State<CollectionUnlockSheet> {
                         }
                       },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: bgDarkAccentColor,
+                  backgroundColor: context.appColors.accent,
                   foregroundColor: Colors.white,
-                  disabledBackgroundColor: bgDarkAccentColor.withValues(alpha: 0.5),
+                  disabledBackgroundColor: context.appColors.accent.withValues(alpha: 0.5),
                   elevation: 0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(28),
@@ -250,7 +250,7 @@ class _CollectionUnlockSheetState extends State<CollectionUnlockSheet> {
   }) {
     return Row(
       children: [
-        Icon(icon, color: bgDarkAccentColor, size: 18),
+        Icon(icon, color: context.appColors.accent, size: 18),
         const SizedBox(width: 12),
         Expanded(
           child: Text(

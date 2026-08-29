@@ -100,14 +100,14 @@ class PremiumCollectionCard extends StatelessWidget {
                       ),
                       const SizedBox(width: 12),
                       if (hasAccess)
-                        _buildUnlockedBadge(isDarkMode)
+                        _buildUnlockedBadge(context, isDarkMode)
                       else
                         GestureDetector(
                           onTap: () {
                             final subProvider = Provider.of<SubscriptionProvider>(context, listen: false);
                             subProvider.buyProductById(collection.productId);
                           },
-                          child: _buildBadge(unlockPrice ?? 'Unlock'),
+                          child: _buildBadge(context, unlockPrice ?? 'Unlock'),
                         ),
                     ],
                   ),
@@ -120,36 +120,36 @@ class PremiumCollectionCard extends StatelessWidget {
     );
   }
 
-  Widget _buildUnlockedBadge(bool isDarkMode) {
+  Widget _buildUnlockedBadge(BuildContext context, bool isDarkMode) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: bgDarkAccentColor.withValues(alpha: 0.15),
+        color: context.appColors.accent.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: bgDarkAccentColor.withValues(alpha: 0.4), width: 1),
+        border: Border.all(color: context.appColors.accent.withValues(alpha: 0.4), width: 1),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.check_circle_rounded, color: bgDarkAccentColor, size: 14),
+          Icon(Icons.check_circle_rounded, color: context.appColors.accent, size: 14),
           const SizedBox(width: 4),
           Text(
             'Unlocked',
-            style: TextStyle(color: bgDarkAccentColor, fontSize: 11, fontWeight: FontWeight.w800),
+            style: TextStyle(color: context.appColors.accent, fontSize: 11, fontWeight: FontWeight.w800),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildBadge(String unlockPrice) {
+  Widget _buildBadge(BuildContext context, String unlockPrice) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: bgDarkAccentColor,
+        color: context.appColors.accent,
         borderRadius: BorderRadius.circular(30),
         boxShadow: [
-          BoxShadow(color: bgDarkAccentColor.withValues(alpha: 0.35), blurRadius: 10, offset: const Offset(0, 3)),
+          BoxShadow(color: context.appColors.accent.withValues(alpha: 0.35), blurRadius: 10, offset: const Offset(0, 3)),
         ],
       ),
       child: Row(

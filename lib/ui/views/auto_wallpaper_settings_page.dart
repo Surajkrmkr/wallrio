@@ -5,6 +5,7 @@ import 'package:auto_start_flutter/auto_start_flutter.dart';
 import 'package:wallrio/model/export.dart';
 import 'package:wallrio/provider/export.dart';
 import 'package:wallrio/services/theme_data.dart';
+import 'package:wallrio/services/app_theme_tokens.dart';
 import 'package:wallrio/ui/widgets/export.dart';
 import 'package:wallrio/ui/onboarding/export.dart';
 
@@ -366,7 +367,7 @@ class _AutoWallpaperSettingsPageState extends State<AutoWallpaperSettingsPage> w
             width: 4,
             height: 18,
             decoration: BoxDecoration(
-              color: bgDarkAccentColor,
+              color: context.appColors.accent,
               borderRadius: BorderRadius.circular(4),
             ),
           ),

@@ -148,11 +148,11 @@ class PersonalizationHubPage extends StatelessWidget {
                   builder: (context, personalization, _) {
                     if (personalization.isLoading ||
                         personalization.personalization == null) {
-                      return const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 60),
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 60),
                         child: Center(
                             child: CircularProgressIndicator(
-                                color: bgDarkAccentColor)),
+                                color: context.appColors.accent)),
                       );
                     }
 
@@ -476,7 +476,7 @@ class PersonalizationHubPage extends StatelessWidget {
                     child: Image.asset(active['imageAsset'] as String,
                         fit: BoxFit.cover))
                 : Icon(active['icon'] as IconData,
-                    size: 28, color: bgDarkAccentColor),
+                    size: 28, color: context.appColors.accent),
           ),
           const SizedBox(width: 14),
           Expanded(
@@ -499,16 +499,16 @@ class PersonalizationHubPage extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             decoration: BoxDecoration(
-              color: bgDarkAccentColor.withValues(alpha: 0.15),
+              color: context.appColors.accent.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: const Text(
+            child: Text(
               'IN USE',
               style: TextStyle(
                 fontSize: 10,
                 fontWeight: FontWeight.w900,
                 letterSpacing: 1,
-                color: bgDarkAccentColor,
+                color: context.appColors.accent,
               ),
             ),
           ),
@@ -631,19 +631,19 @@ class PersonalizationHubPage extends StatelessWidget {
         curve: Curves.easeOutCubic,
         decoration: BoxDecoration(
           color: isActive
-              ? bgDarkAccentColor.withValues(alpha: 0.15)
+              ? context.appColors.accent.withValues(alpha: 0.15)
               : (isDarkMode ? bgDark2Color : const Color(0xFFF2F2F7)),
           borderRadius: BorderRadius.circular(22),
           border: Border.all(
             color: isActive
-                ? bgDarkAccentColor.withValues(alpha: 0.5)
+                ? context.appColors.accent.withValues(alpha: 0.5)
                 : Colors.transparent,
             width: isActive ? 1.8 : 1,
           ),
           boxShadow: isActive
               ? [
                   BoxShadow(
-                    color: bgDarkAccentColor.withValues(alpha: 0.08),
+                    color: context.appColors.accent.withValues(alpha: 0.08),
                     blurRadius: 16,
                     spreadRadius: 0,
                   )
@@ -664,9 +664,9 @@ class PersonalizationHubPage extends StatelessWidget {
                         top: Radius.circular(22)),
                     gradient: LinearGradient(
                       colors: [
-                        bgDarkAccentColor.withValues(alpha: 0),
-                        bgDarkAccentColor.withValues(alpha: 0.6),
-                        bgDarkAccentColor.withValues(alpha: 0),
+                        context.appColors.accent.withValues(alpha: 0),
+                        context.appColors.accent.withValues(alpha: 0.6),
+                        context.appColors.accent.withValues(alpha: 0),
                       ],
                     ),
                   ),
@@ -695,7 +695,7 @@ class PersonalizationHubPage extends StatelessWidget {
                                 boxShadow: isActive
                                     ? [
                                         BoxShadow(
-                                          color: bgDarkAccentColor
+                                          color: context.appColors.accent
                                               .withValues(alpha: 0.2),
                                           blurRadius: 12,
                                           spreadRadius: 1,
@@ -717,7 +717,7 @@ class PersonalizationHubPage extends StatelessWidget {
                                 icon ?? Icons.account_circle_rounded,
                                 size: 36,
                                 color: isActive
-                                    ? bgDarkAccentColor
+                                    ? context.appColors.accent
                                     : (isDarkMode
                                         ? Colors.white.withValues(alpha: 0.5)
                                         : Colors.black.withValues(alpha: 0.4)),
@@ -735,7 +735,7 @@ class PersonalizationHubPage extends StatelessWidget {
                         fontWeight: FontWeight.w700,
                         color: isUnlocked
                             ? (isActive
-                                ? bgDarkAccentColor
+                                ? context.appColors.accent
                                 : (isDarkMode
                                     ? Colors.white.withValues(alpha: 0.85)
                                     : Colors.black.withValues(alpha: 0.75)))
@@ -744,7 +744,7 @@ class PersonalizationHubPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     _buildStatusChip(
-                        isActive, isUnlocked, unlockMonth, isDarkMode),
+                        context, isActive, isUnlocked, unlockMonth, isDarkMode),
                   ],
                 ),
               ),
@@ -773,22 +773,22 @@ class PersonalizationHubPage extends StatelessWidget {
   // ──────────────────────────────────────────────────────────
   // STATUS CHIP — Active / Locked badge
   // ──────────────────────────────────────────────────────────
-  Widget _buildStatusChip(
-      bool isActive, bool isUnlocked, int unlockMonth, bool isDarkMode) {
+  Widget _buildStatusChip(BuildContext context, bool isActive,
+      bool isUnlocked, int unlockMonth, bool isDarkMode) {
     if (isActive) {
       return Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
         decoration: BoxDecoration(
-          color: bgDarkAccentColor.withValues(alpha: 0.15),
+          color: context.appColors.accent.withValues(alpha: 0.15),
           borderRadius: BorderRadius.circular(6),
         ),
-        child: const Text(
+        child: Text(
           '✓ ACTIVE',
           style: TextStyle(
             fontSize: 9,
             fontWeight: FontWeight.w900,
             letterSpacing: 0.8,
-            color: bgDarkAccentColor,
+            color: context.appColors.accent,
           ),
         ),
       );

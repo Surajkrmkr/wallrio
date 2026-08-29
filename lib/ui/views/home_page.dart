@@ -295,7 +295,7 @@ class _HomePageState extends State<HomePage> {
             width: 4,
             height: 18,
             decoration: BoxDecoration(
-              color: bgDarkAccentColor,
+              color: context.appColors.accent,
               borderRadius: BorderRadius.circular(4),
             ),
           ),
@@ -315,29 +315,29 @@ class _HomePageState extends State<HomePage> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
-                  color: bgDarkAccentColor.withValues(alpha: 0.12),
+                  color: context.appColors.accent.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: bgDarkAccentColor.withValues(alpha: 0.3),
+                    color: context.appColors.accent.withValues(alpha: 0.3),
                     width: 1,
                   ),
                 ),
-                child: const Row(
+                child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       'View all',
                       style: TextStyle(
-                        color: bgDarkAccentColor,
+                        color: context.appColors.accent,
                         fontSize: 11,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    SizedBox(width: 3),
+                    const SizedBox(width: 3),
                     Icon(
                       Icons.arrow_forward_rounded,
                       size: 12,
-                      color: bgDarkAccentColor,
+                      color: context.appColors.accent,
                     ),
                   ],
                 ),
@@ -357,7 +357,7 @@ class _HomePageState extends State<HomePage> {
           labels: _filters,
           selectedIndex: _filterIndex,
           onValueChanged: (i) => setState(() => _filterIndex = i),
-          color: bgDarkAccentColor,
+          color: context.appColors.accent,
         ),
       );
     }
@@ -381,7 +381,7 @@ class _HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   decoration: BoxDecoration(
                     color: i == _filterIndex
-                        ? bgDarkAccentColor
+                        ? context.appColors.accent
                         : Colors.transparent,
                     borderRadius: BorderRadius.circular(26),
                   ),

@@ -366,7 +366,7 @@ class _NavigationPageState extends State<NavigationPage> with WidgetsBindingObse
     Widget bar = CNTabBar(
       currentIndex: provider.index,
       onTap: (index) => provider.setIndex = index,
-      tint: bgDarkAccentColor,
+      tint: context.appColors.accent,
       items: [
         CNTabBarItem(icon: CNSymbol('safari.fill', size: iconSize)),
         CNTabBarItem(icon: CNSymbol('livephoto', size: iconSize)),
