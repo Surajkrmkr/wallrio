@@ -123,6 +123,15 @@ class _HomeWidgetsSheetState extends State<HomeWidgetsSheet>
     final ok = await HomeWidgetLaunchService.requestPinWidget(spec.type);
     if (!mounted) return;
     setState(() => _isRequesting = false);
+    // requestPinAppWidget hands the foreground briefly to the launcher's own
+    // "place widget?" confirmation UI. Android (and some OEM skins
+    // especially aggressively) silently drops a native Toast fired while
+    // this app isn't the foreground activity — confirmed via
+    // "Blocking custom toast ... package not in the foreground" in logcat
+    // right after this call. A short delay lets our activity regain
+    // foreground before the toast is requested, which reliably avoids that.
+    await Future.delayed(const Duration(milliseconds: 500));
+    if (!mounted) return;
     ToastWidget.showToast(ok
         ? 'Check your home screen to place the widget'
         : 'Long-press your home screen, then find WallRio in Widgets');

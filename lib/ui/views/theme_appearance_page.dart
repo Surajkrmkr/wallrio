@@ -130,16 +130,12 @@ class ThemeAppearanceSheet extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(20, 6, 12, 6),
       child: Row(
         children: [
-          Flexible(
-            child: Text(
-              'Themes',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge
-                  ?.copyWith(fontWeight: FontWeight.w800),
-            ),
+          Text(
+            'Themes',
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge
+                ?.copyWith(fontWeight: FontWeight.w800),
           ),
           const SizedBox(width: 8),
           Container(

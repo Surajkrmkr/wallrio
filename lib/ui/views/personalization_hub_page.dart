@@ -127,16 +127,12 @@ class PersonalizationHubPage extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(20, 6, 12, 6),
                 child: Row(
                   children: [
-                    Flexible(
-                      child: Text(
-                        effectiveShowFrames ? 'Frames' : 'App Icons',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleLarge
-                            ?.copyWith(fontWeight: FontWeight.w800),
-                      ),
+                    Text(
+                      effectiveShowFrames ? 'Frames' : 'App Icons',
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(fontWeight: FontWeight.w800),
                     ),
                     const Spacer(),
                     IconButton(
@@ -206,6 +202,7 @@ class PersonalizationHubPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildCurrentlyActive(
+            context,
             provider.personalization?.activeAppIcon ?? 'icon_default',
             icons,
             isDarkMode,
@@ -334,6 +331,7 @@ class PersonalizationHubPage extends StatelessWidget {
   // CURRENTLY ACTIVE INDICATOR — Shows selected icon/frame
   // ──────────────────────────────────────────────────────────
   Widget _buildCurrentlyActive(
+    BuildContext context,
     String activeKey,
     List<Map<String, dynamic>> items,
     bool isDarkMode,
@@ -409,7 +407,7 @@ class PersonalizationHubPage extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 9,
                     fontWeight: FontWeight.w900,
-                    color: bgDarkAccentColor,
+                    color: context.appColors.accent,
                     letterSpacing: 1.5,
                   ),
                 ),
@@ -427,7 +425,7 @@ class PersonalizationHubPage extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: const Color(0xFFFFE600),
+              color: context.appColors.accent,
               borderRadius: BorderRadius.circular(20),
             ),
             child: const Text(
@@ -435,7 +433,7 @@ class PersonalizationHubPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 10,
                 fontWeight: FontWeight.w900,
-                color: Colors.black,
+                color: Colors.white,
                 letterSpacing: 0.5,
               ),
             ),
@@ -540,14 +538,14 @@ class PersonalizationHubPage extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: isActive
-                ? const Color(0xFFFFE600)
+                ? context.appColors.accent
                 : (isDarkMode ? Colors.white.withValues(alpha: 0.1) : Colors.black.withValues(alpha: 0.08)),
             width: isActive ? 3.0 : 1.0,
           ),
           boxShadow: isActive
               ? [
                   BoxShadow(
-                    color: const Color(0xFFFFE600).withValues(alpha: 0.25),
+                    color: context.appColors.accent.withValues(alpha: 0.25),
                     blurRadius: 10,
                     spreadRadius: 1,
                   )
@@ -580,14 +578,14 @@ class PersonalizationHubPage extends StatelessWidget {
                 right: 6,
                 child: Container(
                   padding: const EdgeInsets.all(2),
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFFFE600),
+                  decoration: BoxDecoration(
+                    color: context.appColors.accent,
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
                     Icons.check_rounded,
                     size: 12,
-                    color: Colors.black,
+                    color: Colors.white,
                   ),
                 ),
               ),
