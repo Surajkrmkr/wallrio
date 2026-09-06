@@ -36,6 +36,7 @@ export 'social_icon_button.dart';
 export 'sponsored_ad_card.dart';
 export 'inline_banner_ad_widget.dart';
 export 'sticky_bottom_banner_widget.dart';
+export 'simple_banner_ad_widget.dart';
 export 'remote_popup_dialog.dart';
 export 'theme_appearance_controls.dart';
 

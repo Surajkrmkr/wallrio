@@ -6,7 +6,18 @@ import 'package:wallrio/ui/widgets/shimmer_widget.dart';
 
 class SponsoredAdCard extends StatefulWidget {
   final double borderRadius;
-  const SponsoredAdCard({super.key, this.borderRadius = 18.0});
+  final String adUnitId;
+
+  // Homepage Grid Ad Unit ID
+  static const String homepageGridNativeAdUnitId = 'ca-app-pub-4861691653340010/6870759126';
+  // Default Native Ad Unit ID for other screens / carousels
+  static const String defaultNativeAdUnitId = 'ca-app-pub-4861691653340010/7683720298';
+
+  const SponsoredAdCard({
+    super.key,
+    this.borderRadius = 18.0,
+    this.adUnitId = defaultNativeAdUnitId,
+  });
 
   @override
   State<SponsoredAdCard> createState() => _SponsoredAdCardState();
@@ -18,9 +29,6 @@ class _SponsoredAdCardState extends State<SponsoredAdCard>
   BannerAd? _bannerAd;
   bool _isAdLoaded = false;
   bool _isLoading = false;
-
-  // Native advanced ad unit specified for grid tiles
-  static const String _adUnitId = 'ca-app-pub-4861691653340010/6870759126';
 
   @override
   bool get wantKeepAlive => _isAdLoaded || _nativeAd != null || _bannerAd != null;
@@ -43,14 +51,10 @@ class _SponsoredAdCardState extends State<SponsoredAdCard>
       return;
     }
     _isLoading = true;
-    // DIAGNOSTIC ONLY: this path is independent of BannerAdManager and its
-    // own instance-local `_isLoading` guard, so it is not subject to the
-    // global 2-concurrent-load throttle. Tagged so it can be counted/attributed
-    // separately from BannerAdManager loads.
     debugPrint('[NativeTelemetry][LOAD_CALL] ts=${DateTime.now().toIso8601String()} '
-        'type=NativeAd source=SponsoredAdCard.initState');
+        'type=NativeAd unitId=${widget.adUnitId} source=SponsoredAdCard.initState');
     _nativeAd = NativeAd(
-      adUnitId: _adUnitId,
+      adUnitId: widget.adUnitId,
       request: const AdRequest(),
       listener: NativeAdListener(
         onAdLoaded: (ad) {
@@ -88,9 +92,9 @@ class _SponsoredAdCardState extends State<SponsoredAdCard>
     _isLoading = true;
     // DIAGNOSTIC ONLY: fallback ad load, also independent of BannerAdManager.
     debugPrint('[NativeTelemetry][LOAD_CALL] ts=${DateTime.now().toIso8601String()} '
-        'type=BannerFallback source=SponsoredAdCard.onNativeAdFailed');
+        'type=BannerFallback unitId=${widget.adUnitId} source=SponsoredAdCard.onNativeAdFailed');
     _bannerAd = BannerAd(
-      adUnitId: _adUnitId,
+      adUnitId: widget.adUnitId,
       request: const AdRequest(),
       size: AdSize.mediumRectangle,
       listener: BannerAdListener(

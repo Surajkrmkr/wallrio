@@ -1,10 +1,10 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:wallrio/model/export.dart';
 import 'package:wallrio/provider/export.dart';
 import 'package:wallrio/services/export.dart';
 import 'package:wallrio/services/packages/export.dart';
 import 'package:wallrio/ui/onboarding/export.dart';
+import 'package:wallrio/ui/widgets/simple_banner_ad_widget.dart';
 
 class AdsWidget extends StatefulWidget {
   final double bottomPadding;
@@ -12,6 +12,7 @@ class AdsWidget extends StatefulWidget {
   final bool clearNavBar;
   final String screenName;
   final String placementName;
+  final String adUnitId;
 
   const AdsWidget({
     super.key,
@@ -20,6 +21,7 @@ class AdsWidget extends StatefulWidget {
     this.clearNavBar = true,
     this.screenName = 'General',
     this.placementName = 'AdsWidget',
+    this.adUnitId = BannerAdUnits.homepageGridBanner,
   });
 
   @override
@@ -220,71 +222,63 @@ class AdsWidget extends StatefulWidget {
 
 class _AdsWidgetState extends State<AdsWidget>
     with AutomaticKeepAliveClientMixin {
-  bool _isBannerFailed = false;
   BannerAd? bannerAd;
-  Timer? _retryTimer;
-  int _retryAttempts = 0;
-  static const int _maxRetries = 2;
+  bool _isAdLoaded = false;
 
   @override
-  bool get wantKeepAlive => bannerAd != null;
+  bool get wantKeepAlive => _isAdLoaded;
 
   @override
   void initState() {
     super.initState();
-    if (!UserProfile.plusMember) {
-      _acquireBannerAd();
-    }
+    _loadBannerAd();
   }
 
   @override
   void dispose() {
-    _retryTimer?.cancel();
-    _retryTimer = null;
-    if (bannerAd != null) {
-      BannerAdManager.instance.releaseBanner(
-        bannerAd,
-        screen: widget.screenName,
-        placement: widget.placementName,
-      );
-      bannerAd = null;
-    }
+    bannerAd?.dispose();
+    bannerAd = null;
     super.dispose();
   }
 
-  void _acquireBannerAd() {
-    if (bannerAd != null) return;
+  void _loadBannerAd() {
+    if (UserProfile.plusMember || !ConsentManager.instance.canRequestAds) {
+      return;
+    }
 
-    final ad = BannerAdManager.instance.acquireBanner(
-      screen: widget.screenName,
-      placement: widget.placementName,
-      // DIAGNOSTIC ONLY: tags whether this call is the initial acquire or a
-      // widget-level retry, and which retry attempt number.
-      source: _retryAttempts == 0 ? 'initState' : 'widgetRetry#$_retryAttempts',
+    final unitId = BannerAdUnits.resolveAdUnitId(widget.adUnitId);
+
+    bannerAd = BannerAd(
+      adUnitId: unitId,
+      size: widget.size,
+      request: const AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          if (mounted) {
+            setState(() {
+              _isAdLoaded = true;
+            });
+          }
+        },
+        onAdFailedToLoad: (ad, error) {
+          ad.dispose();
+          bannerAd = null;
+          if (mounted) {
+            setState(() {
+              _isAdLoaded = false;
+            });
+          }
+        },
+      ),
     );
 
-    if (mounted) {
-      setState(() {
-        bannerAd = ad;
-        _isBannerFailed = (ad == null);
-      });
-    }
-
-    if (ad == null && mounted && _retryAttempts < _maxRetries) {
-      _retryAttempts++;
-      _retryTimer?.cancel();
-      _retryTimer = Timer(const Duration(milliseconds: 1500), () {
-        if (mounted && bannerAd == null && !UserProfile.plusMember) {
-          _acquireBannerAd();
-        }
-      });
-    }
+    bannerAd!.load();
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    if (UserProfile.plusMember || _isBannerFailed || bannerAd == null) {
+    if (UserProfile.plusMember || !_isAdLoaded || bannerAd == null) {
       return const SizedBox.shrink();
     }
 

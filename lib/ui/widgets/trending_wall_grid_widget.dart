@@ -87,7 +87,7 @@ class TrendingWallGridWidget extends StatelessWidget {
     final feed = <dynamic>[];
     for (int i = 0; i < rows.length; i++) {
       feed.add(rows[i]);
-      if (!UserProfile.plusMember && (i + 1) % 4 == 0 && (i + 1) < rows.length) {
+      if (!UserProfile.plusMember && (i + 1) % 3 == 0 && (i + 1) < rows.length) {
         feed.add('INLINE_BANNER_AD');
       }
     }
@@ -139,6 +139,7 @@ class TrendingWallGridWidget extends StatelessWidget {
                 return const InlineBannerAdWidget(
                   screenName: 'ExploreFeed',
                   placementName: 'GridChunkBanner',
+                  adUnitId: BannerAdUnits.homepageGridBanner,
                 );
               }
               final row = item as List<dynamic>;
@@ -214,7 +215,9 @@ class TrendingWallGridWidget extends StatelessWidget {
                       aspectRatio: 0.55,
                       child: rowItems[i] is Walls
                           ? _buildImgUI(rowItems[i] as Walls, context)
-                          : const SponsoredAdCard(),
+                          : const SponsoredAdCard(
+                              adUnitId: SponsoredAdCard.homepageGridNativeAdUnitId,
+                            ),
                     )
                   : const SizedBox(),
             ),

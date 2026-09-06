@@ -72,6 +72,7 @@ class LiveWallsGridSliver extends StatelessWidget {
                   return const InlineBannerAdWidget(
                     screenName: 'LiveWallpapersGrid',
                     placementName: 'GridChunkBanner',
+                    adUnitId: BannerAdUnits.liveWallpaperBanner,
                   );
                 }
                 return _buildWallRow(item as List<dynamic>, columnsCount, context);

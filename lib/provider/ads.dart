@@ -125,7 +125,7 @@ class AdsProvider extends ChangeNotifier {
 
     logger.i("Wallpaper download successful. Count is now: $currentCount");
 
-    if (currentCount >= 3) {
+    if (currentCount >= 2) {
       await prefs.setInt(keyDownloadCount, 0); // Reset immediately
 
       if (_interstitialAd != null) {

@@ -1,8 +1,8 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:wallrio/model/export.dart';
-import 'package:wallrio/services/export.dart';
+import 'package:wallrio/services/consent_manager.dart';
+import 'package:wallrio/ui/widgets/simple_banner_ad_widget.dart';
 
 /// Sticky compact bottom banner ad positioned above the navigation bar.
 class StickyBottomBannerWidget extends StatefulWidget {
@@ -21,72 +21,62 @@ class StickyBottomBannerWidget extends StatefulWidget {
 
 class _StickyBottomBannerWidgetState extends State<StickyBottomBannerWidget> {
   BannerAd? _bannerAd;
-  bool _isBannerFailed = false;
-  Timer? _retryTimer;
-  int _retryAttempts = 0;
-  static const int _maxRetries = 2;
+  bool _isAdLoaded = false;
 
   @override
   void initState() {
     super.initState();
-    if (!UserProfile.plusMember) {
-      _acquireBanner();
-    }
+    _loadBanner();
   }
 
-  void _acquireBanner() {
-    if (_bannerAd != null) return;
+  void _loadBanner() {
+    if (UserProfile.plusMember || !ConsentManager.instance.canRequestAds) return;
 
-    final ad = BannerAdManager.instance.acquireBanner(
-      screen: widget.screenName,
-      placement: widget.placementName,
-      // DIAGNOSTIC ONLY: tags whether this call is the initial acquire or a
-      // widget-level retry, and which retry attempt number.
-      source: _retryAttempts == 0 ? 'initState' : 'widgetRetry#$_retryAttempts',
+    final unitId = BannerAdUnits.resolveAdUnitId(BannerAdUnits.navbarBanner);
+
+    _bannerAd = BannerAd(
+      adUnitId: unitId,
+      size: AdSize.banner,
+      request: const AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          if (mounted) {
+            setState(() {
+              _isAdLoaded = true;
+            });
+          }
+        },
+        onAdFailedToLoad: (ad, error) {
+          ad.dispose();
+          _bannerAd = null;
+          if (mounted) {
+            setState(() {
+              _isAdLoaded = false;
+            });
+          }
+        },
+      ),
     );
 
-    if (mounted) {
-      setState(() {
-        _bannerAd = ad;
-        _isBannerFailed = (ad == null);
-      });
-    }
-
-    if (ad == null && mounted && _retryAttempts < _maxRetries) {
-      _retryAttempts++;
-      _retryTimer?.cancel();
-      _retryTimer = Timer(const Duration(milliseconds: 1500), () {
-        if (mounted && _bannerAd == null && !UserProfile.plusMember) {
-          _acquireBanner();
-        }
-      });
-    }
+    _bannerAd!.load();
   }
 
   @override
   void dispose() {
-    _retryTimer?.cancel();
-    _retryTimer = null;
-    if (_bannerAd != null) {
-      BannerAdManager.instance.releaseBanner(
-        _bannerAd,
-        screen: widget.screenName,
-        placement: widget.placementName,
-      );
-      _bannerAd = null;
-    }
+    _bannerAd?.dispose();
+    _bannerAd = null;
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (UserProfile.plusMember || _isBannerFailed || _bannerAd == null) {
-      return const IgnorePointer(child: SizedBox.shrink());
+    if (UserProfile.plusMember || !_isAdLoaded || _bannerAd == null) {
+      return const SizedBox.shrink();
     }
 
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final double adWidth = _bannerAd!.size.width.toDouble();
-    final double adHeight = _bannerAd!.size.height.toDouble().clamp(50.0, 60.0);
+    final double adHeight = _bannerAd!.size.height.toDouble().clamp(48.0, 60.0);
 
     return Container(
       margin: const EdgeInsets.only(
@@ -132,3 +122,4 @@ class _StickyBottomBannerWidgetState extends State<StickyBottomBannerWidget> {
     );
   }
 }
+

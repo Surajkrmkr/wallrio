@@ -2,8 +2,6 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:wallrio/model/export.dart';
-import 'package:wallrio/services/banner_ad_manager.dart';
 
 /// Centralized Google User Messaging Platform (UMP) Consent Manager.
 ///
@@ -163,10 +161,7 @@ class ConsentManager extends ChangeNotifier {
         );
       }
 
-      // Warm up banner preload queue for non-Plus users
-      if (!UserProfile.plusMember) {
-        BannerAdManager.instance.warmUp();
-      }
+      // MobileAds initialized successfully
     } catch (err) {
       debugPrint('[GMA] Next-Gen SDK initialization failed: $err');
     }
